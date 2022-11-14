@@ -3,6 +3,7 @@ package com.didichuxing.doraemonkit.kit.blockmonitor.core;
 import android.os.SystemClock;
 import android.util.Printer;
 
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo;
 
 import java.util.ArrayList;
@@ -44,10 +45,11 @@ class MonitorCore implements Printer {
                 final ArrayList<String> entries = mStackSampler.getThreadStackEntries(mStartTime, endTime);
                 if (entries.size() > 0) {
                     final BlockInfo blockInfo = BlockInfo.newInstance()
-                            .setMainThreadTimeCost(mStartTime, endTime, mStartThreadTime, endThreadTime)
-                            .setThreadStackEntries(entries)
-                            .flushString();
+                        .setMainThreadTimeCost(mStartTime, endTime, mStartThreadTime, endThreadTime)
+                        .setThreadStackEntries(entries)
+                        .flushString();
                     BlockMonitorManager.getInstance().notifyBlockEvent(blockInfo);
+                    FileManager.INSTANCE.save(blockInfo);
                 }
             }
             mStackSampler.stopDump();
