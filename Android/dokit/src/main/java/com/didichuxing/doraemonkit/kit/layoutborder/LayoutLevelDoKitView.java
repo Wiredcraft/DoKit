@@ -117,8 +117,6 @@ public class LayoutLevelDoKitView extends AbsDoKitView {
                     if (mScalpelFrameLayout != null) {
                         mScalpelFrameLayout.setLayerInteractionEnabled(true);
                     }
-                    //发送埋点
-                    DataPickManager.getInstance().addData("dokit_sdk_ui_ck_widget_3d");
                 } else {
                     if (mScalpelFrameLayout != null) {
                         mScalpelFrameLayout.setLayerInteractionEnabled(false);

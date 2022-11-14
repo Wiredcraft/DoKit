@@ -151,18 +151,6 @@ object DoKitReal {
         //addSystemKitForTest(app)
         //初始化悬浮窗管理类
         DoKitViewManager.INSTANCE.init()
-        //上传app基本信息便于统计
-        if (DoKitManager.ENABLE_UPLOAD) {
-            try {
-                DoraemonStatisticsUtil.uploadUserInfo(app)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-
-        //上传埋点
-        DataPickManager.getInstance().postData()
         isInit = true
     }
 
