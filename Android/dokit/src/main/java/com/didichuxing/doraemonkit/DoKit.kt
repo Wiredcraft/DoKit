@@ -243,6 +243,13 @@ object DoKit {
         }
 
         /**
+         * 设置卡顿阈值
+         */
+        fun blockThresholdMillis(blockMillis: Int): Builder = this.apply {
+            DoKitReal.setBlockThresholdMillis(blockMillis)
+        }
+
+        /**
          * 设置加密数据库密码
          */
         fun databasePass(map: Map<String, String>): Builder = this.apply {

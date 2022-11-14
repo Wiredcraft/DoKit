@@ -501,6 +501,13 @@ object DoKitReal {
     }
 
     /**
+     * 设置卡顿阈值。单位ms
+     */
+    fun setBlockThresholdMillis(blockMillis:Int){
+        DoKitManager.BLOCK_THRESHOLD_MILLIS = blockMillis
+    }
+
+    /**
      * 设置平台端文件管理端口号
      */
     fun setFileManagerHttpPort(port: Int) {

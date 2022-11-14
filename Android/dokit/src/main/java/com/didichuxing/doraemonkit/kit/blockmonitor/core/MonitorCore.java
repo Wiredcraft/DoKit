@@ -5,6 +5,8 @@ import android.util.Printer;
 
 import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo;
+import com.didichuxing.doraemonkit.kit.core.DoKitManager;
+import com.didichuxing.doraemonkit.util.LogHelper;
 
 import java.util.ArrayList;
 
@@ -13,10 +15,6 @@ import java.util.ArrayList;
  */
 class MonitorCore implements Printer {
     private static final String TAG = "MonitorCore";
-    /**
-     * 卡顿阈值
-     */
-    private static final int BLOCK_THRESHOLD_MILLIS = 200;
 
     private long mStartTime = 0;
     private long mStartThreadTime = 0;
@@ -57,9 +55,9 @@ class MonitorCore implements Printer {
     }
 
     private boolean isBlock(long endTime) {
-        return endTime - mStartTime > BLOCK_THRESHOLD_MILLIS;
+        LogHelper.d(TAG, endTime - mStartTime + "ms");
+        return endTime - mStartTime > DoKitManager.BLOCK_THRESHOLD_MILLIS;
     }
-
 
     public void shutDown() {
         mStackSampler.shutDown();

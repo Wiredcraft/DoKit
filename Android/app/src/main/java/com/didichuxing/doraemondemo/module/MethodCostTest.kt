@@ -9,7 +9,7 @@ object MethodCostTest {
 
     private fun test1() {
         try {
-            Thread.sleep(1000)
+            Thread.sleep(100)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
@@ -27,7 +27,7 @@ object MethodCostTest {
 
     private fun test3() {
         try {
-            Thread.sleep(200)
+            Thread.sleep(300)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
@@ -36,7 +36,7 @@ object MethodCostTest {
 
     private fun test4() {
         try {
-            Thread.sleep(200)
+            Thread.sleep(500)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
