@@ -5,18 +5,20 @@ import android.os.*
 import android.util.Log
 import com.didichuxing.doraemonkit.DoKitEnv.requireApp
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo
+import com.didichuxing.doraemonkit.kit.health.model.FileConstants
 import java.io.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 object FileManager {
-    private const val TAG = "BlockFile"
-    private const val DIR_BLOCK = "BlockLogs"
-    val mHandlerThread = HandlerThread(DIR_BLOCK)
-    private fun createBlockDir(mContext: Context) {
+    private const val TAG = "FileManager"
+
+    val mHandlerThread = HandlerThread(FileConstants.THREAD_NAME)
+
+    private fun createDir(dirName: String, mContext: Context) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            val dir = mContext.getExternalFilesDir(DIR_BLOCK)
+            val dir = mContext.getExternalFilesDir(dirName)
             if (dir?.exists() == false) {
                 dir.mkdirs()
             }
@@ -27,18 +29,19 @@ object FileManager {
         mHandlerThread.start()
     }
 
-    fun save(info: BlockInfo) {
+    fun save(dirName: String, fileNamePrefix: String, info: BlockInfo) {
         val mContext: Context = requireApp().applicationContext
 
-        createBlockDir(mContext)
+        createDir(dirName, mContext)
+
         val mDateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
         val saveHandler = Handler(mHandlerThread.looper) {
             val currentTime = System.currentTimeMillis()
             val time = mDateFormat.format(Date())
-            val fileName = "block-$time-$currentTime.txt"
+            val fileName = "$fileNamePrefix-$time-$currentTime.txt"
 
-            val file = File(mContext.getExternalFilesDir(DIR_BLOCK), fileName)
+            val file = File(mContext.getExternalFilesDir(dirName), fileName)
             if (!file.exists()) file.createNewFile()
 
             var fos = FileOutputStream(file)
@@ -56,7 +59,7 @@ object FileManager {
 
         val msg = Message.obtain().apply {
             what = 1
-            obj = "block"
+            obj = "appHealth"
         }
         saveHandler.sendMessage(msg)
     }

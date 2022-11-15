@@ -6,6 +6,7 @@ import android.util.Printer;
 import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
+import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
 import com.didichuxing.doraemonkit.util.LogHelper;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ class MonitorCore implements Printer {
                         .setThreadStackEntries(entries)
                         .flushString();
                     BlockMonitorManager.getInstance().notifyBlockEvent(blockInfo);
-                    FileManager.INSTANCE.save(blockInfo);
+                    FileManager.INSTANCE.save(FileConstants.DIR_BLOCK, FileConstants.PREFIX_FILE_BLOCK, blockInfo);
                 }
             }
             mStackSampler.stopDump();

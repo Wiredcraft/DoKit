@@ -50,24 +50,25 @@ public class DoraemonStatisticsUtil {
             LogHelper.e(TAG, e.toString());
         }
 
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(mediaType,
-                jsonObject.toString());
-        Request request = new Request.Builder()
-                .url(NetworkManager.APP_START_DATA_PICK_URL)
-                .post(requestBody)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                response.close();
-            }
-        });
+        //app 启动数据埋点
+//        OkHttpClient client = new OkHttpClient();
+//        RequestBody requestBody = RequestBody.create(mediaType,
+//                jsonObject.toString());
+//        Request request = new Request.Builder()
+//                .url(NetworkManager.APP_START_DATA_PICK_URL)
+//                .post(requestBody)
+//                .build();
+//        Call call = client.newCall(request);
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                response.close();
+//            }
+//        });
     }
 }
