@@ -94,7 +94,7 @@ public class DataPickManager {
         //先检查本地是否存在缓存数据
         String strJson = FileIOUtils.readFile2String(filePath);
         if (!TextUtils.isEmpty(strJson)) {
-            //上传数据
+            //移除上传埋点数据
             try {
                 realPost(jsonFromFile, strJson);
             } catch (Exception e) {
@@ -117,33 +117,22 @@ public class DataPickManager {
     }
 
     /**
+     * 业务埋点的网络接口
      * 真正需要上传的方法
      */
     private void realPost(final int from, String content) throws Exception {
-
-        //LogHelper.i(TAG,"content===>" + content);
-        //LogHelper.i(TAG, "====realPost======from==>" + from);
-        Request requset = new JsonObjectRequest(Request.Method.POST, NetworkManager.APP_DATA_PICK_URL, new JSONObject(content), new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-//                LogHelper.e(TAG, "success===>" + response.toString());
-                if (from == jsonFromFile) {
-                    FileUtils.delete(filePath);
-                }
-                if (from == jsonFromMemory) {
-                    events.clear();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                LogHelper.e(TAG, "error===>" + error.getMessage());
-                //ToastUtils.showShort("上传埋点失败");
-            }
-        });
-
-        VolleyManager.INSTANCE.add(requset);
+//        Request requset = new JsonObjectRequest(Request.Method.POST, NetworkManager.APP_DATA_PICK_URL, new JSONObject(content), response -> {
+//            if (from == jsonFromFile) {
+//                FileUtils.delete(filePath);
+//            }
+//            if (from == jsonFromMemory) {
+//                events.clear();
+//            }
+//        }, error -> {
+//            LogHelper.e(TAG, "error===>" + error.getMessage());
+//        });
+//
+//        VolleyManager.INSTANCE.add(requset);
     }
 
     private String filePath = PathUtils.getInternalAppFilesPath() + File.separator + "dokit.json";
