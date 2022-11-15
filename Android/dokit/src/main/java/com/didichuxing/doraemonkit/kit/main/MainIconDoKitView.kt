@@ -28,6 +28,7 @@ class MainIconDoKitView : AbsDoKitView() {
         doKitView?.id = R.id.float_icon_id
         //设置icon 点击事件
         doKitView?.setOnClickListener { //统计入口
+            DataPickManager.getInstance().addData("dokit_sdk_home_ck_entry")
             DoKit.showToolPanel()
         }
     }

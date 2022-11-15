@@ -122,6 +122,8 @@ class DoKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
             //通知app退出到后台
             if (startedActivityCounts == 0) {
                 DoKitViewManager.INSTANCE.notifyBackground()
+                //app 切换到后台 上传埋点数据
+                DataPickManager.getInstance().postData()
             }
             DoKitViewManager.INSTANCE.onActivityStopped(activity)
         } catch (e: Exception) {

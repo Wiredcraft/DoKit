@@ -283,6 +283,35 @@ public class AppHealthInfoUtil {
         bigFiles.add(bigFileBean);
     }
 
+
+    /**
+     * 上传健康体检数据到服务器
+     */
+    public void post(final UploadAppHealthCallback uploadAppHealthCallBack) throws Exception {
+        if (mAppHealthInfo == null) {
+            return;
+        }
+        //线上地址：https://www.dokit.cn/healthCheck/addCheckData
+        //测试环境地址:http://dokit-test.intra.xiaojukeji.com/healthCheck/addCheckData
+
+        Request<JSONObject> request = new JsonObjectRequest(Request.Method.POST, NetworkManager.APP_HEALTH_URL, new JSONObject(GsonUtils.toJson(mAppHealthInfo)), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (uploadAppHealthCallBack != null) {
+                    uploadAppHealthCallBack.onSuccess(response.toString());
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (uploadAppHealthCallBack != null) {
+                    uploadAppHealthCallBack.onError(error.getMessage());
+                }
+            }
+        });
+        VolleyManager.INSTANCE.add(request);
+    }
+
     /**
      * 获取data对象
      *
