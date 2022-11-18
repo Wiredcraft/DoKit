@@ -1,7 +1,6 @@
 package com.didichuxing.doraemonkit.kit.toolpanel
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.R
-import com.didichuxing.doraemonkit.datapick.DataPickManager
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
 import com.didichuxing.doraemonkit.kit.core.DoKitManager
 import com.didichuxing.doraemonkit.kit.core.DoKitViewLayoutParams
@@ -126,14 +124,6 @@ class ToolPanelDoKitView : AbsDoKitView() {
                         if (it.onClickWithReturn(ActivityUtils.getTopActivity())) {
                             DoKitViewManager.INSTANCE.detachToolPanel()
                         }
-
-                        //添加埋点
-                        if (it.isInnerKit && !TextUtils.isEmpty(it.innerKitId())) {
-                            DataPickManager.getInstance().addData(it.innerKitId())
-                        } else {
-                            DataPickManager.getInstance().addData("dokit_sdk_business_ck")
-                        }
-
                     }
                 }
             } catch (e: Exception) {
