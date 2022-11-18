@@ -7,41 +7,61 @@
 
 #import "CMMotionManager+Monitor.h"
 #import "Aspects.h"
+#import "DoraemonMotionDataModel.h"
+#import "DoraemonMotionDataSource.h"
+#import "DoraemonMotionMonitorManager.h"
 
 @implementation CMMotionManager (Monitor)
 
 + (void)load {
+    if (!DoraemonMotionMonitorManager.shareInstance.enable) { return; }
     [CMMotionManager aspect_hookSelector:@selector(startDeviceMotionUpdates) withOptions: AspectPositionAfter usingBlock: ^(id<AspectInfo> aspectInfo) {
         CMMotionManager *manager = aspectInfo.instance;
-        NSLog(@"勾住了 陀螺仪开始运行 %@", [NSDate date]);
-        NSLog(@"UpdateInterval = %f", manager.deviceMotionUpdateInterval);
+        [self handleBeginUseMotionWith:manager];
     } error:NULL];
     [CMMotionManager aspect_hookSelector:@selector(startDeviceMotionUpdatesUsingReferenceFrame:) withOptions: AspectPositionAfter usingBlock: ^(id<AspectInfo> aspectInfo) {
         CMMotionManager *manager = aspectInfo.instance;
-        NSLog(@"勾住了 陀螺仪开始运行 %@", [NSDate date]);
-        NSLog(@"UpdateInterval = %f", manager.deviceMotionUpdateInterval);
+        [self handleBeginUseMotionWith:manager];
     } error:NULL];
     [CMMotionManager aspect_hookSelector:@selector(startDeviceMotionUpdatesToQueue:withHandler:) withOptions: AspectPositionAfter usingBlock: ^(id<AspectInfo> aspectInfo) {
         CMMotionManager *manager = aspectInfo.instance;
-        NSLog(@"勾住了 陀螺仪开始运行 %@", [NSDate date]);
-        NSLog(@"UpdateInterval = %f", manager.deviceMotionUpdateInterval);
+        [self handleBeginUseMotionWith:manager];
     } error:NULL];
     [CMMotionManager aspect_hookSelector:@selector(startDeviceMotionUpdatesUsingReferenceFrame:toQueue:withHandler:) withOptions: AspectPositionAfter usingBlock: ^(id<AspectInfo> aspectInfo) {
         CMMotionManager *manager = aspectInfo.instance;
-        NSLog(@"勾住了 陀螺仪开始运行 %@", [NSDate date]);
-        NSLog(@"UpdateInterval = %f", manager.deviceMotionUpdateInterval);
+        [self handleBeginUseMotionWith:manager];
     } error:NULL];
 
     [CMMotionManager aspect_hookSelector:@selector(stopDeviceMotionUpdates) withOptions: AspectPositionAfter usingBlock: ^(id<AspectInfo> aspectInfo) {
         CMMotionManager *manager = aspectInfo.instance;
-        NSLog(@"勾住了 陀螺仪停止运行 %@", [NSDate date]);
-        NSLog(@"UpdateInterval = %f", manager.deviceMotionUpdateInterval);
+        [self handleEndUseMotionWith:manager];
     } error:NULL];
+}
 
-//    [[[CMMotionManager alloc] init] startDeviceMotionUpdates];
-//    [[[CMMotionManager alloc] init] startDeviceMotionUpdatesUsingReferenceFrame:<#(CMAttitudeReferenceFrame)#>];
-//    [[[CMMotionManager alloc] init] startDeviceMotionUpdatesToQueue:<#(nonnull NSOperationQueue *)#> withHandler:<#^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error)handler#>];
-//    [[[CMMotionManager alloc] init] startDeviceMotionUpdatesUsingReferenceFrame:<#(CMAttitudeReferenceFrame)#> toQueue:<#(nonnull NSOperationQueue *)#> withHandler:<#^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error)handler#>];
++ (void)handleBeginUseMotionWith: (CMMotionManager *)manager {
+    NSString *modelID = manager.description;
+    for (DoraemonMotionDataModel *model in [DoraemonMotionDataSource shareInstance].motionUseModelArray) {
+        if ([model.modelId isEqualToString:modelID]) {
+            model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+            return;
+        }
+    }
+    DoraemonMotionDataModel *model = [[DoraemonMotionDataModel alloc] init];
+    model.modelId = modelID;
+    model.beginDate = [NSDate date];
+    model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+    [[DoraemonMotionDataSource shareInstance] addUseModel:model];
+}
+
++ (void)handleEndUseMotionWith: (CMMotionManager *)manager {
+    NSString *modelID = manager.description;
+    for (DoraemonMotionDataModel *model in [DoraemonMotionDataSource shareInstance].motionUseModelArray) {
+        if ([model.modelId isEqualToString:modelID]) {
+            model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+            model.endDate = [NSDate date];
+            return;
+        }
+    }
 }
 
 @end

@@ -6,7 +6,6 @@
 //
 
 #import <CoreMotion/CoreMotion.h>
-#import <UIKit/UIkit>
 
 NS_ASSUME_NONNULL_BEGIN
 

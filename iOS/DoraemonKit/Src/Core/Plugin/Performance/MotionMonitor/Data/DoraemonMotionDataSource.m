@@ -40,4 +40,23 @@
     dispatch_semaphore_signal(semaphore);
 }
 
+- (NSString *)toJson {
+    NSMutableArray *dicArray = @[].mutableCopy;
+    for (DoraemonMotionDataModel *model in _motionUseModelArray) {
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        dic[@"id"] = model.modelId;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+        NSString *beginDateString = [dateFormatter stringFromDate:model.beginDate];
+        NSString *endDateString = [dateFormatter stringFromDate:model.endDate];
+        dic[@"beginDate"] = beginDateString;
+        dic[@"endDate"] = endDateString;
+        dic[@"deviceMotionUpdateInterval"] = @(model.deviceMotionUpdateInterval);
+        [dicArray addObject:dic];
+    }
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicArray options:NSJSONWritingPrettyPrinted error:&error];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
+}
+
 @end

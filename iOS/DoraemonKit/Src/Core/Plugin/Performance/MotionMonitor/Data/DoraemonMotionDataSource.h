@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)clear;
 
+- (NSString *)toJson;
+
 @end
 
 NS_ASSUME_NONNULL_END
