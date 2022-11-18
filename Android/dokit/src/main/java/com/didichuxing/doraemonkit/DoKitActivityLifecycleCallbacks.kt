@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.didichuxing.doraemonkit.datapick.DataPickManager
 import com.didichuxing.doraemonkit.kit.core.ActivityLifecycleStatusInfo
 import com.didichuxing.doraemonkit.kit.core.DoKitLifeCycleStatus
 import com.didichuxing.doraemonkit.kit.core.DoKitManager
@@ -122,8 +121,6 @@ class DoKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
             //通知app退出到后台
             if (startedActivityCounts == 0) {
                 DoKitViewManager.INSTANCE.notifyBackground()
-                //app 切换到后台 上传埋点数据
-                DataPickManager.getInstance().postData()
             }
             DoKitViewManager.INSTANCE.onActivityStopped(activity)
         } catch (e: Exception) {
