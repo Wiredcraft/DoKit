@@ -82,6 +82,12 @@ object DoKitManager {
     val GLOBAL_SYSTEM_KITS: LinkedHashMap<String, MutableList<KitWrapItem>> = LinkedHashMap()
 
     /**
+     * 卡顿阈值
+     */
+    @JvmField
+    var BLOCK_THRESHOLD_MILLIS = 200
+
+    /**
      * 加密数据库账号密码配置
      */
     var DATABASE_PASS = mapOf<String, String>()

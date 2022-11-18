@@ -69,6 +69,7 @@ class App : Application() {
                 //测试环境pid
 //            .productId("277016abcc33bff1e6a4f1afdf14b8e1")
             .disableUpload()
+            .blockThresholdMillis(200)
             .customKits(mapKits)
             .fileManagerHttpPort(9001)
             .databasePass(mapOf("Person.db" to "a_password"))
