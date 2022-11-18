@@ -56,8 +56,10 @@ public class BlockMonitorFragment extends BaseFragment {
             public void onSettingItemSwitch(View view, SettingItem data, boolean on) {
                 if (data.desc == R.string.dk_item_block_switch) {
                     if (on) {
+                        FileManager.INSTANCE.startSave();
                         BlockMonitorManager.getInstance().start();
                     } else {
+                        FileManager.INSTANCE.stopSave();
                         BlockMonitorManager.getInstance().stop();
                     }
                 }
