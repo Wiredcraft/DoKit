@@ -1,11 +1,9 @@
 package com.didichuxing.doraemonkit.kit.health;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.didichuxing.doraemonkit.util.ToastUtils;
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.widget.dialog.DialogListener;
 import com.didichuxing.doraemonkit.widget.dialog.DialogProvider;
@@ -58,42 +56,6 @@ public class UserInfoDialogProvider<T> extends DialogProvider<T> {
     @Override
     protected View getCancelView() {
         return mClose;
-    }
-
-    /**
-     * 上传健康体检数据
-     */
-    boolean uploadAppHealthInfo(UploadAppHealthCallback uploadAppHealthCallBack) {
-        if (!userInfoCheck()) {
-            ToastUtils.showShort("请填写测试用例和测试人");
-            return false;
-        }
-        String caseName = mCaseName.getText().toString();
-        String userName = mUserName.getText().toString();
-
-        AppHealthInfoUtil.getInstance().setBaseInfo(caseName, userName);
-        //上传数据
-        try {
-            AppHealthInfoUtil.getInstance().post(uploadAppHealthCallBack);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    /**
-     * 检查用户数据
-     */
-    private boolean userInfoCheck() {
-        if (mCaseName == null || TextUtils.isEmpty(mCaseName.getText().toString())) {
-            return false;
-        }
-
-        if (mUserName == null || TextUtils.isEmpty(mUserName.getText().toString())) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override

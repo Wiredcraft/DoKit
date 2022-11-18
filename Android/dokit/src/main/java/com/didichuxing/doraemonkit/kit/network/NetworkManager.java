@@ -23,10 +23,8 @@ public class NetworkManager {
 
     public static final String MOCK_SCHEME_HTTP = "http://";
     public static final String MOCK_SCHEME_HTTPS = "https://";
-    //    private static final String MOCK_HOST_DEBUG = "xyrd.intra.xiaojukeji.com";
     public static final String DOKIT_HOST = "www.dokit.cn";
     public static final String MOCK_HOST_DEBUG = "mock.dokit.cn";
-    //    private static final String MOCK_HOST_DEBUG = "pre.dokit.cn";
     public static final String MOCK_HOST_RELEASE = "mock.dokit.cn";
     private static final String MOCK_DEBUG_DOMAIN = MOCK_SCHEME_HTTPS + MOCK_HOST_DEBUG;
     private static final String MOCK_RELEASE_DOMAIN = MOCK_SCHEME_HTTPS + MOCK_HOST_RELEASE;
@@ -38,47 +36,15 @@ public class NetworkManager {
 
 
     /**
-     * ########app健康体检相关接口 的相关网络接口#########
-     * 线上地址：https://www.dokit.cn/healthCheck/addCheckData
-     * 测试环境地址:http://dokit-test.intra.xiaojukeji.com/healthCheck/addCheckData
-     */
-    public static final String APP_HEALTH_URL = "https://www.dokit.cn/healthCheck/addCheckData";
-    /**
-     * ########业务埋点的网络接口#########
-     */
-    public static final String APP_DATA_PICK_URL = "https://www.dokit.cn/pointData/addPointData";
-    //public static final String APP_DATA_PICK_URL = "http://dokit-test.intra.xiaojukeji.com/pointData/addPointData";
-    /**
      * 慢函数操作文档
      */
 
     public static final String APP_DOCUMENT_URL = "https://xingyun.xiaojukeji.com/docs/dokit/#/TimeProfiler";
 
     /**
-     * 文件同步助手操作文档
-     */
-
-    public static final String FILE_MANAGER_DOCUMENT_URL = "https://xingyun.xiaojukeji.com/docs/dokit/#/FileList";
-    /**
-     * 线上环境
-     * app 启动数据埋点
-     */
-    public static final String APP_START_DATA_PICK_URL = "https://doraemon.xiaojukeji.com/uploadAppData";
-
-    /**
-     * 测试环境
-     */
-    //public static final String APP_START_DATA_PICK_URL = "http://dokit-test.intra.xiaojukeji.com/uploadAppData";
-
-    /**
      * dokit 更多页面接口请求
      */
     public static final String DOKIT_MORE_PAGE_URL = "http://star.xiaojukeji.com/config/get.node?city=-1&areaid=&name=group";
-    /**
-     * 预发环境
-     */
-    //public static final String APP_START_DATA_PICK_URL = "http://pre.dokit.cn/uploadAppData";
-
 
     private static final int MAX_SIZE = 100;
 
