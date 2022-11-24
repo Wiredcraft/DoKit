@@ -13,7 +13,6 @@ import androidx.core.view.ViewCompat;
 import com.didichuxing.doraemonkit.util.ToastUtils;
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.constant.CachesKey;
-import com.didichuxing.doraemonkit.datapick.DataPickManager;
 import com.didichuxing.doraemonkit.util.DoKitCacheUtils;
 import com.didichuxing.doraemonkit.util.DoKitFileUtil;
 import com.didichuxing.doraemonkit.util.DoKitImageUtil;
@@ -72,8 +71,7 @@ public class CrashCaptureManager implements Thread.UncaughtExceptionHandler {
         asyncSaveCrashScreenshot();
         //保存崩溃信息
         DoKitCacheUtils.saveObject((Serializable) Log.getStackTraceString(e), getCrashCacheFile());
-        //保存埋点数据
-        DataPickManager.getInstance().saveData2Local();
+
         post(new Runnable() {
             @Override
             public void run() {

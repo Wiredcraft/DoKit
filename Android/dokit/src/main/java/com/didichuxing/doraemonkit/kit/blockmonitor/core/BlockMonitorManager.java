@@ -17,11 +17,14 @@ import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.constant.BundleKey;
 import com.didichuxing.doraemonkit.constant.FragmentIndex;
 import com.didichuxing.doraemonkit.kit.blockmonitor.BlockMonitorFragment;
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
 import com.didichuxing.doraemonkit.kit.core.UniversalActivity;
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
 import com.didichuxing.doraemonkit.kit.health.model.AppHealthInfo;
+import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
+import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
 import com.didichuxing.doraemonkit.kit.timecounter.TimeCounterManager;
 import com.didichuxing.doraemonkit.util.ActivityUtils;
 import com.didichuxing.doraemonkit.util.DoKitNotificationUtils;
@@ -131,6 +134,11 @@ public class BlockMonitorManager {
                 addBlockInfoInAppHealth(blockInfo);
             }
             showNotification(blockInfo);
+
+            String activityName = ActivityUtils.getTopActivity().getClass().getCanonicalName();
+            LocalFile localFile = new LocalFile(activityName,blockInfo.timeCost,blockInfo.toString());
+            FileManager.INSTANCE.save(FileConstants.DIR_BLOCK, FileConstants.PREFIX_FILE_BLOCK, localFile);
+
             if (mBlockInfoList.size() > MAX_SIZE) {
                 mBlockInfoList.remove(0);
             }

@@ -7,7 +7,6 @@ import android.widget.FrameLayout
 import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.R
 import com.didichuxing.doraemonkit.config.FloatIconConfig
-import com.didichuxing.doraemonkit.datapick.DataPickManager
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
 import com.didichuxing.doraemonkit.kit.core.DoKitViewLayoutParams
 
@@ -28,7 +27,6 @@ class MainIconDoKitView : AbsDoKitView() {
         doKitView?.id = R.id.float_icon_id
         //设置icon 点击事件
         doKitView?.setOnClickListener { //统计入口
-            DataPickManager.getInstance().addData("dokit_sdk_home_ck_entry")
             DoKit.showToolPanel()
         }
     }
