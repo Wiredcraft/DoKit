@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.SystemClock;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
+import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
+import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.kit.timecounter.Counter;
 import com.didichuxing.doraemonkit.util.ActivityUtils;
@@ -135,6 +138,14 @@ public class ActivityCounter {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        //如果文件记录已启用
+        if (DoKitManager.SAVE_LOCAL_FILE_START) {
+            if (mTotalCostTime > DoKitManager.PAGE_LOAD_SPEED_THRESHOLD_MILLIS) {
+                LocalFile localFile = new LocalFile(counterInfo.title, counterInfo.totalCost, counterInfo.toString());
+                FileManager.INSTANCE.save(FileConstants.DIR_PAGE_LOAD_SPEED, FileConstants.PREFIX_FILE_PAGE_LOAD_SPEED, localFile);
+            }
         }
 
         mCounterInfos.add(counterInfo);

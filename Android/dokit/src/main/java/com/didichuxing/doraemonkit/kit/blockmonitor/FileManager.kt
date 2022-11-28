@@ -5,6 +5,7 @@ import android.os.*
 import android.util.Log
 import com.didichuxing.doraemonkit.DoKitEnv.requireApp
 import com.didichuxing.doraemonkit.kit.blockmonitor.bean.BlockInfo
+import com.didichuxing.doraemonkit.kit.core.DoKitManager
 import com.didichuxing.doraemonkit.kit.health.model.FileConstants
 import com.didichuxing.doraemonkit.kit.health.model.LocalFile
 import java.io.*
@@ -27,6 +28,10 @@ object FileManager {
     }
 
     fun startSave() {
+        if (DoKitManager.SAVE_LOCAL_FILE_START) {
+            return
+        }
+        DoKitManager.SAVE_LOCAL_FILE_START = true
         mHandlerThread.start()
     }
 
@@ -67,6 +72,7 @@ object FileManager {
     }
 
     fun stopSave() {
+        DoKitManager.SAVE_LOCAL_FILE_START = false
         mHandlerThread.quit()
     }
 }

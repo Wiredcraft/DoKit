@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit.kit.timecounter;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.didichuxing.doraemonkit.R;
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
 import com.didichuxing.doraemonkit.kit.core.SettingItem;
 import com.didichuxing.doraemonkit.kit.core.SettingItemAdapter;
@@ -52,8 +54,10 @@ public class TimeCounterFragment extends BaseFragment {
             public void onSettingItemSwitch(View view, SettingItem data, boolean on) {
                 if (data.desc == R.string.dk_item_time_counter_switch) {
                     if (on) {
+                        FileManager.INSTANCE.startSave();
                         TimeCounterManager.get().start();
                     } else {
+                        FileManager.INSTANCE.stopSave();
                         TimeCounterManager.get().stop();
                     }
                 }
