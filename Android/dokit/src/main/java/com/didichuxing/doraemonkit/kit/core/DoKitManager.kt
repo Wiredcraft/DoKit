@@ -122,6 +122,12 @@ object DoKitManager {
     var APP_HEALTH_RUNNING = GlobalConfig.getAppHealth()
 
     /**
+     * 是否开启保存文件
+     */
+    @JvmField
+    var SAVE_LOCAL_FILE_START = false
+
+    /**
      * 是否是普通的浮标模式
      */
     @JvmField
