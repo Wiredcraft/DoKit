@@ -254,7 +254,8 @@ object DoKitReal {
         }
         return ""
     }
-    private fun initGpsMock(){
+
+    private fun initGpsMock() {
         val map = mapOf(
             "action" to "init_gps_mock"
         )
@@ -490,8 +491,15 @@ object DoKitReal {
     /**
      * 设置卡顿阈值。单位ms
      */
-    fun setBlockThresholdMillis(blockMillis:Int){
+    fun setBlockThresholdMillis(blockMillis: Int) {
         DoKitManager.BLOCK_THRESHOLD_MILLIS = blockMillis
+    }
+
+    /**
+     * 设置页面加载阈值。单位ms
+     */
+    fun setPageLoadSpeedThresholdMillis(pageLoadMillis: Int) {
+        DoKitManager.PAGE_LOAD_SPEED_THRESHOLD_MILLIS = pageLoadMillis
     }
 
     /**
