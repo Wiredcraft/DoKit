@@ -88,6 +88,13 @@ object DoKitManager {
     var BLOCK_THRESHOLD_MILLIS = 200
 
     /**
+     * 页面跳转阈值
+     */
+    @JvmField
+    var PAGE_LOAD_SPEED_THRESHOLD_MILLIS = 1000
+
+
+    /**
      * 加密数据库账号密码配置
      */
     var DATABASE_PASS = mapOf<String, String>()
