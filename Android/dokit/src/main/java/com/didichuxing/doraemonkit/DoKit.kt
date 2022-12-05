@@ -193,7 +193,7 @@ object DoKit {
      */
     @JvmStatic
     fun mcMode(): String {
-       return DoKitReal.getMode()
+        return DoKitReal.getMode()
     }
 
     class Builder(private val app: Application) {
@@ -247,6 +247,13 @@ object DoKit {
          */
         fun blockThresholdMillis(blockMillis: Int): Builder = this.apply {
             DoKitReal.setBlockThresholdMillis(blockMillis)
+        }
+
+        /**
+         * 设置页面加载阈值
+         */
+        fun pageLoadSpeedThresholdMillis(pageLoadMillis: Int): Builder = this.apply {
+            DoKitReal.setPageLoadSpeedThresholdMillis(pageLoadMillis)
         }
 
         /**

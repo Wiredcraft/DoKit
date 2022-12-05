@@ -88,6 +88,13 @@ object DoKitManager {
     var BLOCK_THRESHOLD_MILLIS = 200
 
     /**
+     * 页面跳转阈值
+     */
+    @JvmField
+    var PAGE_LOAD_SPEED_THRESHOLD_MILLIS = 1000
+
+
+    /**
      * 加密数据库账号密码配置
      */
     var DATABASE_PASS = mapOf<String, String>()
@@ -113,6 +120,12 @@ object DoKitManager {
      */
     @JvmField
     var APP_HEALTH_RUNNING = GlobalConfig.getAppHealth()
+
+    /**
+     * 是否开启保存文件
+     */
+    @JvmField
+    var SAVE_LOCAL_FILE_START = false
 
     /**
      * 是否是普通的浮标模式
