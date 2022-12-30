@@ -257,6 +257,7 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonStartTimePlugin];
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonUIProfilePlugin];
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonTimeProfilePlugin];
+    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonMotionMonitorPlugin];
 #if DoraemonWithLoad
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonMethodUseTimePlugin];
 #endif
@@ -694,6 +695,14 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
                                      @{kAtModule:DoraemonLocalizedString(@"性能检测")},
                                      @{kBuriedPoint:@"dokit_sdk_comm_ck_weaknetwork"}
                              ],
+                           @(DoraemonManagerPluginType_DoraemonMotionMonitorPlugin) : @[
+                                   @{kTitle:DoraemonLocalizedString(@"陀螺仪")},
+                                   @{kDesc:DoraemonLocalizedString(@"陀螺仪")},
+                                   @{kIcon:@"doraemon_fps"},
+                                   @{kPluginName:@"DoraemonMotionPlugin"},
+                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_motionMonitor"}
+                                   ],
                            // 视觉工具
                            @(DoraemonManagerPluginType_DoraemonColorPickPlugin) : @[
                                    @{kTitle:DoraemonLocalizedString(@"取色器")},
