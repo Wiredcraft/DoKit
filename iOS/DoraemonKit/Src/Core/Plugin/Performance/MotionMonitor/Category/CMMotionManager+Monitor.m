@@ -10,6 +10,8 @@
 #import "DoraemonMotionDataModel.h"
 #import "DoraemonMotionDataSource.h"
 #import "DoraemonMotionMonitorManager.h"
+#import "DoraemonBacktraceLogger.h"
+#import "DLADDRParser.h"
 
 @implementation CMMotionManager (Monitor)
 
@@ -50,6 +52,15 @@
     model.modelId = modelID;
     model.beginDate = [NSDate date];
     model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+    NSString *namespace = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
+    NSArray * callBack = [NSThread callStackSymbols];
+    for (NSInteger i = 0; i < callBack.count; i++) {
+        NSString *track = callBack[i];
+        DLADDR *dladd = [DLADDRParser parseWithInput:track];
+        if (dladd && [namespace isEqualToString:dladd.fname]) {
+            model.callerInfo = dladd.sname;
+        }
+    }
     [[DoraemonMotionDataSource shareInstance] addUseModel:model];
 }
 
@@ -62,6 +73,11 @@
             return;
         }
     }
+}
+
++ (NSString *)getProjectName {
+    NSString *namespace = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
+    return namespace;
 }
 
 @end
