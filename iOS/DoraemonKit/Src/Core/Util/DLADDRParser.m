@@ -30,11 +30,8 @@
     NSString *fname = [array objectAtIndex:1];
 
     NSMutableArray *marray = [array mutableCopy];
-    [marray removeObjectAtIndex:0];
-    [marray removeObjectAtIndex:0];
-    [marray removeObjectAtIndex:0];
-    [marray removeLastObject];
-    [marray removeLastObject];
+    if (marray.count >= 3) [marray removeObjectsInRange:NSMakeRange(0, 3)];
+    if (marray.count >= 2) [marray removeObjectsInRange:NSMakeRange(marray.count - 2, 2)];
     NSString *sname = [marray componentsJoinedByString:@" "];
     return [[DLADDR alloc] initWithDepth:[depthNumberString integerValue] fname:fname sname:sname];
 }
