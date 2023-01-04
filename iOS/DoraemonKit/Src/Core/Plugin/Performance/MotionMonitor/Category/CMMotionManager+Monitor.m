@@ -59,6 +59,7 @@
         DLADDR *dladd = [DLADDRParser parseWithInput:track];
         if (dladd && [namespace isEqualToString:dladd.fname]) {
             model.callerInfo = dladd.sname;
+            break;
         }
     }
     [[DoraemonMotionDataSource shareInstance] addUseModel:model];
