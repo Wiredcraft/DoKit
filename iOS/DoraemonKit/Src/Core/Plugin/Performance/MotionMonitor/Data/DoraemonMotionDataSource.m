@@ -52,6 +52,7 @@
         dic[@"beginDate"] = beginDateString;
         dic[@"endDate"] = endDateString;
         dic[@"deviceMotionUpdateInterval"] = @(model.deviceMotionUpdateInterval);
+        dic[@"callerInfo"] = model.callerInfo;
         [dicArray addObject:dic];
     }
     NSError *error = nil;

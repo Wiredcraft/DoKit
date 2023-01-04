@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDate *endDate;
 @property (nonatomic, copy) NSString *modelId;
 @property (nonatomic, assign) NSTimeInterval deviceMotionUpdateInterval;
+@property (nonatomic, copy) NSString *callerInfo;
 
 @property (nonatomic, assign, readonly) NSInteger useTime;
 @end
