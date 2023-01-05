@@ -163,7 +163,7 @@
     NSString *upLoad = [DoraemonUtil formatByte:totalUploadFlow];
     NSString *downLoad = [DoraemonUtil formatByte:totalDownFlow];
 
-    dic[@"summaryRequestTime"] = @(totalTime);
+    dic[@"summaryRequestTime"] = @(totalTime * 1000);
     dic[@"summaryRequestUploadFlow"] = upLoad;
     dic[@"summaryRequestDownFlow"] = downLoad;
 
