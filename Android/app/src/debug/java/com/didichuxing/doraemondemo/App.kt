@@ -20,6 +20,7 @@ import com.didichuxing.doraemonkit.kit.AbstractKit
 import com.didichuxing.doraemonkit.kit.core.McClientProcessor
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord
 import com.didichuxing.doraemonkit.kit.network.okhttp.interceptor.DokitExtInterceptor
+import com.didichuxing.doraemonkit.kit.parameter.matrix.MatrixApplication
 import com.didichuxing.doraemonkit.util.LogUtils
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
@@ -174,6 +175,8 @@ class App : Application() {
             // log 栈深度，默认为 1
             .setStackDeep(1)
             .stackOffset = 1
+
+        MatrixApplication.init(this)
     }
 
     override fun attachBaseContext(base: Context) {

@@ -64,7 +64,7 @@ dependencies {
     } else {
         implementation rootProject.ext.dependencies["kotlin_v13"]
     }
-    def matrixVersion = "2.0.2"
+    def matrixVersion = "2.0.8"
     implementation "com.tencent.matrix:matrix-hooks:$matrixVersion"
     implementation "com.tencent.matrix:matrix-fd:$matrixVersion"
 //    implementation('com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.2') {
