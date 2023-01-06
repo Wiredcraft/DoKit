@@ -1,5 +1,6 @@
 package com.didichuxing.doraemonkit.kit.parameter.ram;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.config.DokitMemoryConfig;
 import com.didichuxing.doraemonkit.constant.BundleKey;
 import com.didichuxing.doraemonkit.kit.parameter.AbsParameterFragment;
+import com.didichuxing.doraemonkit.kit.parameter.matrix.MatrixApplication;
 import com.didichuxing.doraemonkit.kit.performance.PerformanceDataManager;
 import com.didichuxing.doraemonkit.kit.performance.PerformanceFragment;
 import com.didichuxing.doraemonkit.kit.performance.datasource.DataSourceFactory;
@@ -18,6 +20,7 @@ import com.didichuxing.doraemonkit.kit.core.SettingItemAdapter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class RamMainPageFragment extends AbsParameterFragment {
     private static final String TAG = "RamMainPageFragment";
@@ -57,6 +60,7 @@ public class RamMainPageFragment extends AbsParameterFragment {
             public void onSettingItemSwitch(View view, SettingItem data, boolean on) {
                 if (on) {
                     startMonitor();
+                    MatrixApplication.initMemoryCanary(getActivity());
                 } else {
                     stopMonitor();
                 }
