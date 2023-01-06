@@ -156,6 +156,10 @@ ext {
                     "sandhook_xposedcompat"         : 'com.swift.sandhook:xposedcompat:4.2.1',
                     "epic"                          : 'me.weishu:epic:0.11.1',
 //                    "epic"                          : 'com.github.tiann:epic:0.11.2',
+                    "mmkv"                          : "com.tencent:mmkv:1.2.13",
+                    "matrix_memory_canary"          : "com.tencent.matrix:matrix-memory-canary:2.0.8",
+                    "matrix_android_lib"            : "com.tencent.matrix:matrix-android-lib:2.0.8",
+                    "matrix_android_commons"        : "com.tencent.matrix:matrix-android-commons:2.0.8",
 
     ]
     //定义全局方法

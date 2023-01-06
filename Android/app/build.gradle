@@ -3,7 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: 'doraemonkit.gradle'
 //apply plugin: 'com.didiglobal.booster'
+apply plugin: 'com.tencent.matrix-plugin'
 
+matrix {
+    trace {
+        enable = false	//if you don't want to use trace canary, set false
+        baseMethodMapFile = "${project.buildDir}/matrix_output/Debug.methodmap"
+        blackListFile = "${project.projectDir}/matrixTrace/blackMethodList.txt"
+    }
+}
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     defaultConfig {
@@ -214,7 +222,7 @@ dependencies {
 //    implementation files('libs/BaiduLBS_Android.jar')
     //腾讯x5
     implementation rootProject.ext.dependencies["tbs"]
-    debugImplementation rootProject.ext.dependencies["leakcanary_android"]
+    //debugImplementation rootProject.ext.dependencies["leakcanary_android"]
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation project(":dokit-pthread-hook")
 
