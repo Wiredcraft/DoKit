@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.SystemClock;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
+import com.didichuxing.doraemonkit.kit.timecounter.Counter;
 import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
 import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
@@ -16,6 +18,7 @@ import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 统计一个打开Activity操作的耗时分三个阶段，以A打开B为例，第一个阶段是A的pause操作，主要是onPause方法的耗时，第二个阶段是B的Launch操作，主要是
@@ -146,6 +149,17 @@ public class ActivityCounter {
         }
 
         mCounterInfos.add(counterInfo);
+        DoKitViewManager.getINSTANCE().getCounterDb().counterDao().insert(new Counter(
+            System.currentTimeMillis(),
+            counterInfo.title,
+            counterInfo.time,
+            counterInfo.type,
+            counterInfo.totalCost,
+            counterInfo.pauseCost,
+            counterInfo.launchCost,
+            counterInfo.renderCost,
+            counterInfo.otherCost
+        ));
 
         TimeCounterDoKitView dokitView = DoKit.getDoKitView(ActivityUtils.getTopActivity(), TimeCounterDoKitView.class);
         if (dokitView != null) {
