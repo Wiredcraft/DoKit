@@ -3,9 +3,10 @@ package com.didichuxing.doraemonkit.kit.parameter.matrix;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Debug;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
@@ -14,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import com.didichuxing.doraemonkit.kit.parameter.matrix.config.DynamicConfigImplDemo;
 import com.didichuxing.doraemonkit.kit.parameter.matrix.listener.TestPluginListener;
 import com.tencent.matrix.Matrix;
+//import com.tencent.matrix.backtrace.WarmUpReporter;
+//import com.tencent.matrix.backtrace.WeChatBacktrace;
 import com.tencent.matrix.backtrace.WarmUpReporter;
 import com.tencent.matrix.backtrace.WeChatBacktrace;
 import com.tencent.matrix.hook.HookManager;
@@ -25,6 +28,8 @@ import com.tencent.matrix.lifecycle.supervisor.SupervisorConfig;
 import com.tencent.matrix.memory.canary.MemoryCanaryPlugin;
 import com.tencent.matrix.memory.canary.trim.TrimCallback;
 import com.tencent.matrix.memory.canary.trim.TrimMemoryNotifier;
+//import com.tencent.matrix.resource.ResourcePlugin;
+//import com.tencent.matrix.resource.config.ResourceConfig;
 import com.tencent.matrix.resource.ResourcePlugin;
 import com.tencent.matrix.resource.config.ResourceConfig;
 import com.tencent.matrix.util.MatrixLog;
@@ -44,7 +49,7 @@ public class MatrixApplication {
             || "mips64".equalsIgnoreCase(currRuntimeABI);
     }
 
-    public static void initMemoryCanary(Activity app){
+    public static void initMemoryCanary(Context app){
 
         // Reporter
         WeChatBacktrace.setReporter((type, args) -> {
@@ -101,31 +106,13 @@ public class MatrixApplication {
             e.printStackTrace();
         }
 
-        // mmap
-        final JNIObj jniObj = new JNIObj();
-        jniObj.doMmap();
-
-        // realloc
-        for (int i = 0; i < 30; i++) {
-            new Thread(jniObj::reallocTest).start();
-        }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // malloc
-        Log.d(TAG, "mallocTest: native heap:" + Debug.getNativeHeapSize() + ", allocated:"
-            + Debug.getNativeHeapAllocatedSize() + ", free:" + Debug.getNativeHeapFreeSize());
-        JNIObj.mallocTest();
-        Log.d(TAG,
-            "mallocTest after malloc: native heap:" + Debug.getNativeHeapSize() + ", allocated:"
-                + Debug.getNativeHeapAllocatedSize() + ", free:"
-                + Debug.getNativeHeapFreeSize());
-
-        String output = app.getExternalCacheDir() + "/memory_hook77.log";
-        MemoryHook.INSTANCE.dump(output, output + ".json");
+//        Log.d(TAG,
+//            "mallocTest after malloc: native heap:" + Debug.getNativeHeapSize() + ", allocated:"
+//                + Debug.getNativeHeapAllocatedSize() + ", free:"
+//                + Debug.getNativeHeapFreeSize());
+//
+//        String output = app.getExternalCacheDir() + "/memory_hook77.log";
+//        MemoryHook.INSTANCE.dump(output, output + ".json");
     }
 
 
@@ -150,8 +137,7 @@ public class MatrixApplication {
         builder.pluginListener(new TestPluginListener(app));
         MemoryCanaryPlugin memoryCanaryPlugin = new MemoryCanaryPlugin(MemoryCanaryBoot.configure(app));
         builder.plugin(memoryCanaryPlugin);
-        // Configure resource canary.
-        ResourcePlugin resourcePlugin = configureResourcePlugin(dynamicConfig);
+        ResourcePlugin resourcePlugin = configureResourcePlugin(dynamicConfig,app);
         builder.plugin(resourcePlugin);
         builder.matrixLifecycleConfig(configureMatrixLifecycle());
         Matrix.init(builder.build());
@@ -173,22 +159,21 @@ public class MatrixApplication {
 
     }
 
-    private static ResourcePlugin configureResourcePlugin(DynamicConfigImplDemo dynamicConfig) {
-        //Intent intent = new Intent();
+    private static ResourcePlugin configureResourcePlugin(DynamicConfigImplDemo dynamicConfig,Application app) {
+        Intent intent = new Intent();
         ResourceConfig.DumpMode mode = ResourceConfig.DumpMode.MANUAL_DUMP;
         MatrixLog.i(TAG, "Dump Activity Leak Mode=%s", mode);
-        //intent.setClassName(this.getPackageName(), "com.tencent.mm.ui.matrix.ManualDumpActivity");
+        intent.setClassName(app.getPackageName(), "sample.didichuxing.doraemonkit.kit.parameter.matrix.ManualDumpActivity");
         ResourceConfig resourceConfig = new ResourceConfig.Builder()
             .dynamicConfig(dynamicConfig)
             .setAutoDumpHprofMode(mode)
-            //.setManualDumpTargetActivity(ManualDumpActivity.class.getName())
+            .setManualDumpTargetActivity(ManualDumpActivity.class.getName())
             .setManufacture(Build.MANUFACTURER)
             .build();
-       // ResourcePlugin.activityLeakFixer(this);
+        ResourcePlugin.activityLeakFixer(app);
 
         return new ResourcePlugin(resourceConfig);
     }
-
 
     public static boolean checkPermission(Activity app) {
         // Here, thisActivity is the current activity

@@ -78,24 +78,24 @@ android {
     }
 
     // Encapsulates your external native build configurations.
-    externalNativeBuild {
-
-        // Encapsulates your CMake build configurations.
-        cmake {
-
-            // Provides a relative path to your CMake build script.
-            path "CMakeLists.txt"
-        }
-    }
-    sourceSets {
-        main {
-            jniLibs {
-                setSrcDirs (['./libs'] as Set)
-            }
-        }
-
-    }
-    ndkVersion '21.4.7075529'
+//    externalNativeBuild {
+//
+//        // Encapsulates your CMake build configurations.
+//        cmake {
+//
+//            // Provides a relative path to your CMake build script.
+//            path "CMakeLists.txt"
+//        }
+//    }
+//    sourceSets {
+//        main {
+//            jniLibs {
+//                setSrcDirs (['./libs'] as Set)
+//            }
+//        }
+//
+//    }
+//    ndkVersion '21.4.7075529'
 
 }
 
@@ -136,14 +136,19 @@ dependencies {
     implementation project(':dokit-util')
 
     //  matrix
-//    api rootProject.ext.dependencies[':matrix_memory_canary']
-//    implementation rootProject.ext.dependencies[':matrix_android_lib']
-//    implementation rootProject.ext.dependencies[':matrix_android_commons']
-//    api rootProject.ext.dependencies[':mmkv']
+
+
+//    api "com.tencent.matrix:matrix-memory-canary:2.0.8"
+//    implementation group: "com.tencent.matrix", name: "matrix-android-lib", version: '2.0.8', changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-android-commons", version: '2.0.8', changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-hooks", version: '2.0.8', changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-backtrace", version: '2.0.8', changing: true
+    //api 'com.tencent:mmkv:1.2.13'
+
     api group: "com.tencent.matrix", name: "matrix-memory-canary", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-android-lib", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-android-commons", version: MATRIX_VERSION, changing: true
-    //api group: "com.tencent.matrix", name: "matrix-trace-canary", version: MATRIX_VERSION, changing: true
+    api group: "com.tencent.matrix", name: "matrix-trace-canary", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-resource-canary-android", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-resource-canary-common", version: MATRIX_VERSION, changing: true
    // implementation group: "com.tencent.matrix", name: "matrix-io-canary", version: MATRIX_VERSION, changing: true
@@ -151,7 +156,7 @@ dependencies {
     //implementation group: "com.tencent.matrix", name: "matrix-battery-canary", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-hooks", version: MATRIX_VERSION, changing: true
     api group: "com.tencent.matrix", name: "matrix-backtrace", version: MATRIX_VERSION, changing: true
-    //api 'com.tencent:mmkv:1.2.13'
+//    //api 'com.tencent:mmkv:1.2.13'
 
 //    implementation rootProject.ext.dependencies["mimecraft"]
     //会合滴滴内部的spi-plugin冲突

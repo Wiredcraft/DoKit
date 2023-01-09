@@ -54,6 +54,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
 
+        <activity
+            android:name=".kit.parameter.matrix.ManualDumpActivity" />
         <provider
             android:name=".DebugFileProvider"
             android:authorities="${applicationId}.debugfileprovider"

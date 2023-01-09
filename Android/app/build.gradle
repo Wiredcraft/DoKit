@@ -7,7 +7,7 @@ apply plugin: 'com.tencent.matrix-plugin'
 
 matrix {
     trace {
-        enable = false	//if you don't want to use trace canary, set false
+        enable = true	//if you don't want to use trace canary, set false
         baseMethodMapFile = "${project.buildDir}/matrix_output/Debug.methodmap"
         blackListFile = "${project.projectDir}/matrixTrace/blackMethodList.txt"
     }
@@ -109,6 +109,8 @@ android {
         pickFirst 'lib/armeabi-v7a/libc++_shared.so'
         pickFirst 'lib/x86/libc++_shared.so'
         pickFirst 'lib/armeabi/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libwechatbacktrace.so'
+        pickFirst 'lib/arm64-v8a/libwechatbacktrace.so'
     }
 }
 
