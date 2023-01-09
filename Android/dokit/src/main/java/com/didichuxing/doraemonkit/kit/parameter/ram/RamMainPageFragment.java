@@ -60,7 +60,7 @@ public class RamMainPageFragment extends AbsParameterFragment {
             public void onSettingItemSwitch(View view, SettingItem data, boolean on) {
                 if (on) {
                     startMonitor();
-                    MatrixApplication.initMemoryCanary(getActivity());
+                    MatrixApplication.initMemoryCanary(getContext());
                 } else {
                     stopMonitor();
                 }
