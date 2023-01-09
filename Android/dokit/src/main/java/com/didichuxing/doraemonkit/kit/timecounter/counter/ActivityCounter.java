@@ -163,7 +163,6 @@ public class ActivityCounter {
             counterInfo.renderCost,
             counterInfo.otherCost
         ));
-
         TimeCounterDoKitView dokitView = DoKit.getDoKitView(ActivityUtils.getTopActivity(), TimeCounterDoKitView.class);
         if (dokitView != null) {
             dokitView.showInfo(counterInfo);
