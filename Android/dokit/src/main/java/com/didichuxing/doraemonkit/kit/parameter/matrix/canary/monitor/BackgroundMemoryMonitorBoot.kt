@@ -1,4 +1,4 @@
-package sample.tencent.matrix.kt.memory.canary.monitor
+package com.didichuxing.doraemonkit.kit.parameter.matrix.canary.monitor
 
 import com.tencent.matrix.lifecycle.owners.ProcessDeepBackgroundOwner
 import com.tencent.matrix.lifecycle.owners.ProcessStagedBackgroundOwner

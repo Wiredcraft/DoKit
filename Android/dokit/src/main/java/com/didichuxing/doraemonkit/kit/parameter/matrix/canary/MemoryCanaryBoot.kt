@@ -2,7 +2,7 @@ package com.didichuxing.doraemonkit.kit.parameter.matrix.canary
 
 import android.app.Application
 import com.tencent.matrix.memory.canary.MemoryCanaryConfig
-import sample.tencent.matrix.kt.memory.canary.monitor.BackgroundMemoryMonitorBoot
+import com.didichuxing.doraemonkit.kit.parameter.matrix.canary.monitor.BackgroundMemoryMonitorBoot
 
 /**
  * Created by Yves on 2021/11/5
