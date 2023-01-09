@@ -20,7 +20,7 @@ ext {
                applicationId                 : "com.didichuxing.doraemondemo",
                minSdkVersion_16              : 16,
                minSdkVersion_21              : 21,
-               targetSdkVersion              : 31,
+               targetSdkVersion              : 30,
                //app版本号
                versionCode                   : 1,
                versionName                   : "1.0.0",
