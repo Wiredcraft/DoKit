@@ -1,8 +1,7 @@
-package sample.tencent.matrix.kt.lifecycle
+package com.didichuxing.doraemonkit.kit.parameter.matrix.lifecycle
 
 import com.tencent.matrix.lifecycle.IMatrixBackgroundCallback
 import com.tencent.matrix.lifecycle.IMatrixForegroundCallback
-import com.tencent.matrix.lifecycle.IMatrixLifecycleCallback
 import com.tencent.matrix.lifecycle.IStateObserver
 import com.tencent.matrix.lifecycle.owners.*
 import com.tencent.matrix.lifecycle.supervisor.*
@@ -13,7 +12,6 @@ object MatrixLifecycleLogger {
     private const val TAG = "Matrix.sample.LifecycleLogger"
 
     fun start() {
-
         /********************************* readable api ***************************************/
         ProcessUIResumedStateOwner.addLifecycleCallback(object : IMatrixForegroundCallback() {
             override fun onEnterForeground() = MatrixLog.i(TAG, "ON_PROCESS_UI_RESUMED")
