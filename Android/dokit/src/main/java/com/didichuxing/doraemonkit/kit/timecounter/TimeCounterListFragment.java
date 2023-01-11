@@ -77,15 +77,23 @@ public class TimeCounterListFragment extends BaseFragment {
 
 
     private void load() {
-        List<CounterInfo> infos = new ArrayList<>(TimeCounterManager.get().getHistory());
-        infos.add(0, TimeCounterManager.get().getAppSetupInfo());
-        Collections.sort(infos, new Comparator<CounterInfo>() {
-            @Override
-            public int compare(CounterInfo lhs, CounterInfo rhs) {
-                return Long.valueOf(rhs.time)
-                        .compareTo(lhs.time);
-            }
-        });
+//        List<CounterInfo> infos = new ArrayList<>(TimeCounterManager.get().getHistory());
+//        infos.add(0, TimeCounterManager.get().getAppSetupInfo());
+        List<Counter> counters = DoKitViewManager.getINSTANCE().getCounterDb().counterDao().getAll();
+        List<CounterInfo> infos = new ArrayList<>();
+        for (int i = 0; i < counters.size(); i++) {
+            Counter c = counters.get(i);
+            CounterInfo counterInfo = new CounterInfo();
+            counterInfo.title = c.getTitle();
+            counterInfo.time = c.getTime();
+            counterInfo.launchCost = c.getLaunchCost();
+            counterInfo.otherCost = c.getOtherCost();
+            counterInfo.pauseCost = c.getPauseCost();
+            counterInfo.renderCost = c.getRenderCost();
+            counterInfo.totalCost = c.getTotalCost();
+            counterInfo.type = c.getType();
+            infos.add(counterInfo);
+        }
         mAdapter.setData(infos);
     }
 
