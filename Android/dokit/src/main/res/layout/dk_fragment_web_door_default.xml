@@ -3,9 +3,18 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.didichuxing.doraemonkit.widget.webview.MyWebView
+    <com.github.lzyzsd.jsbridge.BridgeWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="call JS"
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
 </LinearLayout>
