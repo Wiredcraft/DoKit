@@ -108,6 +108,8 @@ dependencies {
     implementation project(':dokit-okhttp-api')
     implementation project(':dokit-util')
     implementation rootProject.ext.dependencies["localbroadcastmanager"]
+    //js_bridge
+    implementation rootProject.ext.dependencies["js_bridge"]
 
 
 //    implementation rootProject.ext.dependencies["mimecraft"]

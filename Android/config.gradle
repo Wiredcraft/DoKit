@@ -129,6 +129,7 @@ ext {
                     "room_runtime"                  : 'androidx.room:room-runtime:2.4.3',
                     "room_compile"                  : 'androidx.room:room-compiler:2.4.3',
                     "localbroadcastmanager"         : 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0',
+                    "js_bridge"                     : 'com.github.lzyzsd:jsbridge:1.0.4',
                     "didi_http"                     : 'com.didichuxing.foundation:http:2.1.0.86',
                     "didi_rpc"                      : 'com.didichuxing.foundation:rpc:2.1.0.86',
                     "okgo"                          : "com.lzy.net:okgo:3.0.4",

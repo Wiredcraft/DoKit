@@ -61,6 +61,7 @@ apply from: "./config.gradle"
 allprojects {
     def isRootProject = "Dokit-Android".equals(project.name)
     repositories {
+        maven { url 'https://jitpack.io' }
         google()
         mavenCentral()
         jcenter()
