@@ -81,6 +81,7 @@ iOS各式各样的工具集合
     ss.dependency 'GCDWebServer/WebDAV'
     ss.dependency 'FMDB'
     ss.dependency 'WKWebViewJavascriptBridge'
+    ss.dependency 'Realm'
   end
 
   s.subspec 'WithLogger' do |ss| 

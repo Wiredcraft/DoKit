@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance;
 - (void)appendData:(DoraemonFPSModel *)data;
 - (NSArray<DoraemonFPSModel *> *)allData;
-
+- (NSArray<DoraemonFPSModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp;
 @end
 
 NS_ASSUME_NONNULL_END

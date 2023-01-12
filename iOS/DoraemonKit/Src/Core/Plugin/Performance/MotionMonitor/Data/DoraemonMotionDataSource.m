@@ -6,10 +6,14 @@
 //
 
 #import "DoraemonMotionDataSource.h"
+#import "RealmUtil.h"
 
 @implementation DoraemonMotionDataSource {
-    dispatch_semaphore_t semaphore;
+    dispatch_queue_t _serialQueue;
 }
+
+static NSString *DoraemonMotionDataTable = @"DoraemonMotionDataTable";
+
 + (DoraemonMotionDataSource *)shareInstance{
     static dispatch_once_t once;
     static DoraemonMotionDataSource *instance;
@@ -22,27 +26,36 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        _motionUseModelArray = [NSMutableArray array];
-        semaphore = dispatch_semaphore_create(1);
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonMotionDataTableQueue", NULL);
     }
     return self;
 }
 
-- (void)addUseModel:(DoraemonMotionDataModel *)useModel {
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_motionUseModelArray insertObject:useModel atIndex:0];
-    dispatch_semaphore_signal(semaphore);
+-(NSArray<DoraemonMotionDataModel *> *)motionUseModelArray {
+    return [RealmUtil modelArrayWithTableName:DoraemonMotionDataTable objClass:DoraemonMotionDataModel.self];
 }
 
-- (void)clear{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_motionUseModelArray removeAllObjects];
-    dispatch_semaphore_signal(semaphore);
+- (NSArray<DoraemonMotionDataModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp {
+    NSTimeInterval begin = [beginStamp doubleValue];
+    NSTimeInterval end = [endStamp doubleValue];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timeStamp between {%@, %@}", begin, end];
+    return [RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonMotionDataTable objClass:DoraemonMotionDataModel.self];
+}
+
+- (void)addOrUpdateUseModel:(DoraemonMotionDataModel *)useModel {
+    [RealmUtil addOrUpdateModel:useModel queue:_serialQueue tableName:DoraemonMotionDataTable];
 }
 
 - (NSString *)toJson {
+    NSMutableArray *dicArray = [self modelDics];
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicArray options:NSJSONWritingPrettyPrinted error:&error];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
+}
+
+-(NSArray<NSDictionary *> *)modelDics {
     NSMutableArray *dicArray = @[].mutableCopy;
-    for (DoraemonMotionDataModel *model in _motionUseModelArray) {
+    for (DoraemonMotionDataModel *model in self.motionUseModelArray) {
         NSMutableDictionary *dic = @{}.mutableCopy;
         dic[@"id"] = model.modelId;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -55,9 +68,7 @@
         dic[@"callerInfo"] = model.callerInfo;
         [dicArray addObject:dic];
     }
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicArray options:NSJSONWritingPrettyPrinted error:&error];
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
+    return dicArray;
 }
 
 @end
