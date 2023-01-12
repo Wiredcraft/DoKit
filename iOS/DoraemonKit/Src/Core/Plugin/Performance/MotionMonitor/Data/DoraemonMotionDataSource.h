@@ -12,14 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DoraemonMotionDataSource : NSObject
 
-@property (nonatomic, strong) NSMutableArray<DoraemonMotionDataModel *> *motionUseModelArray;
+@property (nonatomic, strong, readonly) NSArray<DoraemonMotionDataModel *> *motionUseModelArray;
 
 + (DoraemonMotionDataSource *)shareInstance;
 
-- (void)addUseModel:(DoraemonMotionDataModel *)useModel;
+- (void)addOrUpdateUseModel:(DoraemonMotionDataModel *)useModel;
+- (NSArray<DoraemonMotionDataModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp;
 
-- (void)clear;
-
+- (NSArray<NSDictionary *> *)modelDics;
 - (NSString *)toJson;
 
 @end

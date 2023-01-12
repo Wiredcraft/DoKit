@@ -7,15 +7,13 @@
 
 #import "DoraemonFPSDataManager.h"
 #import "DoraemonFPSModel.h"
+#import "RealmUtil.h"
 
-@interface DoraemonFPSDataManager ()
+@implementation DoraemonFPSDataManager {
+    dispatch_queue_t _serialQueue;
+}
 
-@property(nonatomic, copy) dispatch_semaphore_t semaphore;
-@property(nonatomic, strong) NSMutableArray<DoraemonFPSModel *> *models;
-
-@end
-
-@implementation DoraemonFPSDataManager
+static NSString *DoraemonFPSDataTable = @"DoraemonFPSDataTable";
 
 + (instancetype)sharedInstance {
     static dispatch_once_t once;
@@ -29,20 +27,24 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        _semaphore = dispatch_semaphore_create(1);
-        _models = @[].mutableCopy;
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonFPSModelTableQueue", NULL);
     }
     return self;
 }
 
 - (void)appendData:(DoraemonFPSModel *)data {
-    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
-    [self.models addObject:data];
-    dispatch_semaphore_signal(self.semaphore);
+    [RealmUtil addOrUpdateModel:data queue:_serialQueue tableName:DoraemonFPSDataTable];
 }
 
 - (NSArray<DoraemonFPSModel *> *)allData {
-    return self.models.copy;
+    return [RealmUtil modelArrayWithTableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
+}
+
+- (NSArray<DoraemonFPSModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp {
+    NSTimeInterval begin = [beginStamp doubleValue];
+    NSTimeInterval end = [endStamp doubleValue];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp between {%@, %@}", begin, end];
+    return [RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
 }
 
 @end

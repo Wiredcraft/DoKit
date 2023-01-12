@@ -6,11 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DoraemonFPSModel : NSObject
+@interface DoraemonFPSModel : RLMObject
 
+@property(nonatomic, copy) NSString * modelId;
 @property(nonatomic, assign) NSTimeInterval timestamp;
 @property(nonatomic, assign) NSInteger value;
 
