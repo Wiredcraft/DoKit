@@ -8,6 +8,11 @@
 #import "DoraemonMotionDataModel.h"
 
 @implementation DoraemonMotionDataModel
+
++ (NSString *)primaryKey {
+    return @"modelId";
+}
+
 - (NSInteger)useTime {
     if (!(_beginDate && _endDate)) { return 0; }
     NSDateComponents * components = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond fromDate:_beginDate toDate:_endDate options:NSCalendarWrapComponents];

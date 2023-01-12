@@ -44,13 +44,16 @@
     NSString *modelID = manager.description;
     for (DoraemonMotionDataModel *model in [DoraemonMotionDataSource shareInstance].motionUseModelArray) {
         if ([model.modelId isEqualToString:modelID]) {
-            model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+            DoraemonMotionDataModel *updateModel = [[DoraemonMotionDataModel alloc] initWithValue:model];
+            updateModel.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+            [[DoraemonMotionDataSource shareInstance] addOrUpdateUseModel:updateModel];
             return;
         }
     }
     DoraemonMotionDataModel *model = [[DoraemonMotionDataModel alloc] init];
     model.modelId = modelID;
     model.beginDate = [NSDate date];
+    model.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
     NSString *namespace = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
     NSArray * callBack = [NSThread callStackSymbols];
@@ -62,15 +65,17 @@
             break;
         }
     }
-    [[DoraemonMotionDataSource shareInstance] addUseModel:model];
+    [[DoraemonMotionDataSource shareInstance] addOrUpdateUseModel:model];
 }
 
 + (void)handleEndUseMotionWith: (CMMotionManager *)manager {
     NSString *modelID = manager.description;
     for (DoraemonMotionDataModel *model in [DoraemonMotionDataSource shareInstance].motionUseModelArray) {
         if ([model.modelId isEqualToString:modelID]) {
-            model.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
-            model.endDate = [NSDate date];
+            DoraemonMotionDataModel *updateModel = [[DoraemonMotionDataModel alloc] initWithValue:model];
+            updateModel.deviceMotionUpdateInterval = manager.deviceMotionUpdateInterval;
+            updateModel.endDate = [NSDate date];
+            [[DoraemonMotionDataSource shareInstance] addOrUpdateUseModel:updateModel];
             return;
         }
     }

@@ -6,10 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DoraemonMotionDataModel : NSObject
+@interface DoraemonMotionDataModel : RLMObject
+@property (nonatomic, assign) double timeStamp;
 @property (nonatomic, strong) NSDate *beginDate;
 @property (nonatomic, strong) NSDate *endDate;
 @property (nonatomic, copy) NSString *modelId;
