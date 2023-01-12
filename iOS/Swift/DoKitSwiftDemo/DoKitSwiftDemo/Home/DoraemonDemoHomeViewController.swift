@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DoraemonKit
 
 class DoraemonDemoHomeViewController: DoraemonDemoBaseViewController, UITableViewDelegate, UITableViewDataSource {
     var tableView: UITableView!
@@ -34,6 +35,7 @@ class DoraemonDemoHomeViewController: DoraemonDemoBaseViewController, UITableVie
                  "crash触发Demo",
                  "通用测试Demo",
                  "内存泄漏测试",
+                 "性能报告",
                  "Call OC"];
     }
     
@@ -73,6 +75,8 @@ class DoraemonDemoHomeViewController: DoraemonDemoBaseViewController, UITableVie
             vc = DoraemonDemoCommonViewController()
         case 8:
             vc = DoraemonDemoMemoryLeakViewController()
+        case 9:
+            vc = APMReportViewController()
         default:
             vc = DoraemonDemoOCViewController()
         }
