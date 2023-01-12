@@ -8,5 +8,7 @@
 #import "DoraemonFPSModel.h"
 
 @implementation DoraemonFPSModel
-
++ (NSString *)primaryKey {
+    return @"modelId";
+}
 @end

@@ -6,11 +6,10 @@
 //
 
 #import "DoraemonMotionDataSource.h"
-#import <Realm/Realm.h>>
+#import "RealmUtil.h"
 
 @implementation DoraemonMotionDataSource {
     dispatch_queue_t _serialQueue;
-    RLMRealmConfiguration *_realmConfig;
 }
 
 static NSString *DoraemonMotionDataTable = @"DoraemonMotionDataTable";
@@ -28,45 +27,23 @@ static NSString *DoraemonMotionDataTable = @"DoraemonMotionDataTable";
     self = [super init];
     if (self) {
         _serialQueue = dispatch_queue_create("com.wcl.DoraemonMotionDataTableQueue", NULL);
-        NSString *tableName = DoraemonMotionDataTable;
-        RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
-        configuration.fileURL = [[[configuration.fileURL URLByDeletingLastPathComponent]
-                                 URLByAppendingPathComponent:tableName]
-                                 URLByAppendingPathExtension:@"realm"];
-        _realmConfig = configuration;
     }
     return self;
 }
 
 -(NSArray<DoraemonMotionDataModel *> *)motionUseModelArray {
-    NSError *error = nil;
-    RLMRealm *realm = [RLMRealm realmWithConfiguration:_realmConfig error:&error];
-    if (error) {
-        return @[];
-    }
-    return [DoraemonMotionDataModel allObjectsInRealm:realm];
+    return [RealmUtil modelArrayWithTableName:DoraemonMotionDataTable objClass:DoraemonMotionDataModel.self];
 }
 
 - (NSArray<DoraemonMotionDataModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp {
     NSTimeInterval begin = [beginStamp doubleValue];
     NSTimeInterval end = [endStamp doubleValue];
-    NSError *error = nil;
-    RLMRealm *realm = [RLMRealm realmWithConfiguration:_realmConfig error:&error];
-    if (error) {
-        return @[];
-    }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timeStamp between {%@, %@}", begin, end];
-    return [DoraemonMotionDataModel objectsInRealm:realm withPredicate:predicate];
+    return [RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonMotionDataTable objClass:DoraemonMotionDataModel.self];
 }
 
 - (void)addOrUpdateUseModel:(DoraemonMotionDataModel *)useModel {
-    dispatch_async(_serialQueue, ^{
-        NSError *error = nil;
-        RLMRealm *realm = [RLMRealm realmWithConfiguration:_realmConfig error:&error];
-        [realm transactionWithBlock:^{
-            if (useModel) [realm addOrUpdateObject:useModel];
-        }];
-    });
+    [RealmUtil addOrUpdateModel:useModel queue:_serialQueue tableName:DoraemonMotionDataTable];
 }
 
 - (NSString *)toJson {
