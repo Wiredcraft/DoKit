@@ -35,6 +35,15 @@ open class APMReportViewController: UIViewController {
         let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
         let req = URLRequest(url: url)
         self.webView.load(req)
+
+        let dismissButton = UIButton(frame: CGRect(x: 20, y: 80, width: 40, height: 20))
+        dismissButton.setTitle("返回", for: .normal)
+        dismissButton.addTarget(self, action: #selector(clickBack), for: .touchUpInside)
+        view.addSubview(dismissButton)
+    }
+
+    @objc func clickBack() {
+        self.dismiss(animated: true)
     }
 }
 
