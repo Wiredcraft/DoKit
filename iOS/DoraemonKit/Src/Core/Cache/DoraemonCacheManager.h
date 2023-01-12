@@ -25,8 +25,9 @@
 - (CLLocationCoordinate2D)mockCoordinate;
 
 - (void)saveFpsSwitch:(BOOL)on;
-
 - (BOOL)fpsSwitch;
+// Default is YES.
+@property(nonatomic, assign) BOOL storeFPS;
 
 - (void)saveCpuSwitch:(BOOL)on;
 
