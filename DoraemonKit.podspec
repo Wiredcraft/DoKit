@@ -80,6 +80,7 @@ iOS各式各样的工具集合
     ss.dependency 'GCDWebServer/WebUploader'
     ss.dependency 'GCDWebServer/WebDAV'
     ss.dependency 'FMDB'
+    ss.dependency 'WKWebViewJavascriptBridge'
   end
 
   s.subspec 'WithLogger' do |ss| 
