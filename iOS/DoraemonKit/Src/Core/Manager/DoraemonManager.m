@@ -224,8 +224,8 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
         
         [_fpsUtil addFPSBlock:^(NSInteger fps) {
             DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
-            model.timestamp = [[NSDate date] timeIntervalSince1970] *1000;
-            model.modelId = [NSString stringWithFormat:@"%ld", model.timestamp];
+            model.timestamp = [[NSDate date] timeIntervalSince1970];
+            model.modelId = [NSString stringWithFormat:@"%ld", model.timestamp * 1000];
             model.value = fps;
             [[DoraemonFPSDataManager sharedInstance] appendData: model];
         }];
