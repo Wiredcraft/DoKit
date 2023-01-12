@@ -57,6 +57,7 @@ static NSString * const kDoraemonHealthStartKey = @"doraemon_health_start_key";
     self  = [super init];
     if (self) {
         _defaults = [NSUserDefaults standardUserDefaults];
+        _storeFPS = YES;
     }
     return self;
 }

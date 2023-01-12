@@ -26,6 +26,9 @@
 #import "DoraemonNetFlowOscillogramWindow.h"
 #import "DoraemonNetFlowManager.h"
 #import "DoraemonHealthManager.h"
+#import "DoraemonFPSUtil.h"
+#import "DoraemonFPSModel.h"
+#import "DoraemonFPSDataManager.h"
 
 #if DoraemonWithGPS
 #import "DoraemonGPSMocker.h"
@@ -72,6 +75,9 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
 
 // 定制位置
 @property (nonatomic) CGPoint startingPosition;
+
+// store FPS
+@property (nonatomic, copy) DoraemonFPSUtil *fpsUtil;
 
 @end
 
@@ -210,6 +216,21 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
         [[DoraemonHealthManager sharedInstance] startHealthCheck];
     }
     
+    //记录 FPS 数据
+    if ([DoraemonCacheManager sharedInstance].storeFPS) {
+        if (!_fpsUtil) {
+            _fpsUtil = [[DoraemonFPSUtil alloc] init];
+        }
+        
+        [_fpsUtil addFPSBlock:^(NSInteger fps) {
+            DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
+            model.timestamp = [[NSDate date] timeIntervalSince1970];
+            model.value = fps;
+            [[DoraemonFPSDataManager sharedInstance] appendData: model];
+        }];
+        
+        [_fpsUtil start];
+    }
 }
 
 
