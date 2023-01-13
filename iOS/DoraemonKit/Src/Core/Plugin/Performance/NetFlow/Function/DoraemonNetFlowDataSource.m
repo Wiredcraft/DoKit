@@ -6,10 +6,13 @@
 //
 
 #import "DoraemonNetFlowDataSource.h"
+#import "RealmUtil.h"
 
-@implementation DoraemonNetFlowDataSource{
-    dispatch_semaphore_t semaphore;
+@implementation DoraemonNetFlowDataSource {
+    dispatch_queue_t _serialQueue;
 }
+
+static NSString *DoraemonNetFlowHttpModelTable = @"DoraemonNetFlowHttpModelTable";
 
 + (DoraemonNetFlowDataSource *)shareInstance{
     static dispatch_once_t once;
@@ -23,22 +26,21 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        _httpModelArray = [NSMutableArray array];
-        semaphore = dispatch_semaphore_create(1);
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonNetFlowHttpModelTableQueue", NULL);
     }
     return self;
 }
 
 - (void)addHttpModel:(DoraemonNetFlowHttpModel *)httpModel{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_httpModelArray insertObject:httpModel atIndex:0];
-    dispatch_semaphore_signal(semaphore);
+    [RealmUtil addOrUpdateModel:httpModel queue:_serialQueue tableName:DoraemonNetFlowHttpModelTable];
 }
 
 - (void)clear{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_httpModelArray removeAllObjects];
-    dispatch_semaphore_signal(semaphore);
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonNetFlowHttpModelTable];
+}
+
+-(NSMutableArray<DoraemonNetFlowHttpModel *> *)httpModelArray {
+    return [RealmUtil modelArrayWithTableName:DoraemonNetFlowHttpModelTable objClass:DoraemonNetFlowHttpModel.self];
 }
 
 @end

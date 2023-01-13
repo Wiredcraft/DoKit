@@ -8,5 +8,7 @@
 #import "DoraemonUseLocationDataModel.h"
 
 @implementation DoraemonUseLocationDataModel
-
++ (NSString *)primaryKey {
+    return @"modelId";
+}
 @end

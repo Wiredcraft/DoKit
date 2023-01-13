@@ -6,12 +6,14 @@
 //
 
 #import "DoraemonUseLocationManager.h"
+#import "RealmUtil.h"
 
 @implementation DoraemonUseLocationManager {
-    dispatch_semaphore_t semaphore;
+    dispatch_queue_t _serialQueue;
 }
 
 static NSString *doraemonUseLocationMonitorEnableKey = @"doraemonUseLocationMonitorEnableKey";
+static NSString *DoraemonUseLocationDataModelTable = @"DoraemonUseLocationDataModelTable";
 
 + (DoraemonUseLocationManager *)shareInstance {
     static dispatch_once_t once;
@@ -25,7 +27,7 @@ static NSString *doraemonUseLocationMonitorEnableKey = @"doraemonUseLocationMoni
 - (instancetype) init {
     self = [super init];
     if (self) {
-        _useModelArray = @[].mutableCopy;
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonUseLocationDataModelTableQueue", NULL);
         NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
         _enable = [userDefaults boolForKey:doraemonUseLocationMonitorEnableKey];
     }
@@ -37,22 +39,23 @@ static NSString *doraemonUseLocationMonitorEnableKey = @"doraemonUseLocationMoni
     [userDefaults setBool:enable forKey:doraemonUseLocationMonitorEnableKey];
 }
 
+-(NSArray<DoraemonUseLocationDataModel *> *)useModelArray {
+    return [RealmUtil modelArrayWithTableName:DoraemonUseLocationDataModelTable objClass:DoraemonUseLocationDataModel.self];
+}
+
 - (void)addUseDataModel:(DoraemonUseLocationDataModel *)useModel {
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_useModelArray insertObject:useModel atIndex:0];
-    dispatch_semaphore_signal(semaphore);
+    [RealmUtil addOrUpdateModel:useModel queue:_serialQueue tableName:DoraemonUseLocationDataModelTable];
 }
 
 - (void)clear {
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    [_useModelArray removeAllObjects];
-    dispatch_semaphore_signal(semaphore);
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonUseLocationDataModelTable];
 }
 
 - (NSString *)toJson {
     NSMutableArray *dicArray = @[].mutableCopy;
-    for (DoraemonUseLocationDataModel *model in _useModelArray) {
+    for (DoraemonUseLocationDataModel *model in [self useModelArray]) {
         NSMutableDictionary *dic = @{}.mutableCopy;
+        dic[@"modelId"] = model.modelId;
         dic[@"timeStamp"] = @(model.timeStamp);
         dic[@"useDuration"] = @(model.useDuration);
         dic[@"distanceFilter"] = @(model.distanceFilter);

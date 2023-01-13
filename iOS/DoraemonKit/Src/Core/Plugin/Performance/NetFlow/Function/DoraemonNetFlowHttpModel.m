@@ -12,11 +12,22 @@
 
 @implementation DoraemonNetFlowHttpModel
 
++ (NSString *)primaryKey {
+    return @"requestId";
+}
+
++ (NSArray<NSString *> *)requiredProperties {
+    return @[
+        @"requestId", @"url", @"method", @"requestBody", @"statusCode", @"responseData", @"mineType", @"startTime", @"endTime", @"totalDuration", @"uploadFlow", @"downFlow"
+    ];
+}
+
 + (void)dealWithResponseData:(NSData *)responseData response:(NSURLResponse*)response request:(NSURLRequest *)request complete:(void (^)(DoraemonNetFlowHttpModel *model))complete {
     DoraemonNetFlowHttpModel *httpModel = [[DoraemonNetFlowHttpModel alloc] init];
     //request
     httpModel.request = request;
-    httpModel.requestId = request.requestId;
+//    httpModel.requestId = request.requestId;
+    httpModel.requestId = [NSUUID UUID];
     httpModel.url = [request.URL absoluteString];
     httpModel.method = request.HTTPMethod;
     //response
