@@ -72,7 +72,7 @@ iOS各式各样的工具集合
   end
 
   s.subspec 'Core' do |ss| 
-    ss.source_files = 'iOS/DoraemonKit/Src/Core/**/*.{h,m,c,mm}'
+    ss.source_files = 'iOS/DoraemonKit/Src/Core/**/*.{h,m,c,mm,swift}'
     ss.resource_bundle = {
       'DoraemonKit' => 'iOS/DoraemonKit/Resource/**/*'
     }

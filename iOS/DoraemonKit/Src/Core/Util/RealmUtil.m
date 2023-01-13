@@ -28,6 +28,18 @@
     });
 }
 
++ (void)clearWithqueue: (dispatch_queue_t)queue tableName: (NSString *)tableName {
+    RLMRealmConfiguration *config = [self getRealmConfig:tableName];
+    dispatch_async(queue, ^{
+        NSError *error = nil;
+        RLMRealm *realm = [RLMRealm realmWithConfiguration:config error:&error];
+        [realm transactionWithBlock:^{
+            [realm deleteAllObjects];
+        }];
+    });
+}
+
+
 + (NSArray<RLMObject *> *)modelArrayWithTableName: (NSString *)tableName objClass: (Class)objClass {
     RLMRealmConfiguration *config = [self getRealmConfig:tableName];
     NSError *error = nil;
