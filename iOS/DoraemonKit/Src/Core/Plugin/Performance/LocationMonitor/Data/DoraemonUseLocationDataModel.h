@@ -6,9 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 
-@interface DoraemonUseLocationDataModel : NSObject
+@interface DoraemonUseLocationDataModel : RLMObject
 
+@property (nonatomic, copy) NSString * modelId;
 @property (nonatomic, assign) double timeStamp;
 @property (nonatomic, assign) double useDuration;
 

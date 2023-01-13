@@ -10,7 +10,7 @@
 
 @interface DoraemonNetFlowDataSource : NSObject
 
-@property (nonatomic, strong) NSMutableArray<DoraemonNetFlowHttpModel *> *httpModelArray;
+@property (nonatomic, strong, readonly) NSArray<DoraemonNetFlowHttpModel *> *httpModelArray;
 
 + (DoraemonNetFlowDataSource *)shareInstance;
 

@@ -47,6 +47,7 @@
     if (!baseLineTimeStamp) useDuration = 0;
 
     DoraemonUseLocationDataModel *useModel = [[DoraemonUseLocationDataModel alloc] init];
+    useModel.modelId = [NSUUID UUID];
     useModel.timeStamp = currenntTimeStamp;
     useModel.distanceFilter = locationManager.distanceFilter;
     useModel.desiredAccuracy = locationManager.desiredAccuracy;

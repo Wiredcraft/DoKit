@@ -15,7 +15,7 @@
 @property (nonatomic, assign) BOOL enable;
 @property (nonatomic, assign) double useLocationBaseTimeStamp;
 
-@property (nonatomic, strong) NSMutableArray<DoraemonUseLocationDataModel *> *useModelArray;
+@property (nonatomic, strong) NSArray<DoraemonUseLocationDataModel *> *useModelArray;
 
 - (void)addUseDataModel:(DoraemonUseLocationDataModel *)useModel;
 

@@ -6,8 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 
-@interface DoraemonNetFlowHttpModel : NSObject
+@interface DoraemonNetFlowHttpModel : RLMObject
 
 @property (nonatomic, copy) NSString *requestId;
 @property (nonatomic, copy) NSString *url;
