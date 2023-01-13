@@ -98,6 +98,7 @@ public class WebDoorFragment extends BaseFragment {
         mUrlExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                doSearch("http://192.168.3.12:3000/wiredexam-react-app");
                 doSearch(mWebAddressInput.getText().toString());
             }
         });
