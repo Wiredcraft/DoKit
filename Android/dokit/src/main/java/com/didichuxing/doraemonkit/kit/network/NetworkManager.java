@@ -6,7 +6,9 @@ import android.os.Looper;
 
 import com.didichuxing.doraemonkit.BuildConfig;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord;
+import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -98,6 +100,20 @@ public class NetworkManager {
         }
         mTotalCount++;
         mRecords.add(record);
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
+            record.mRequestId,
+            record.mRequest.url,
+            record.mRequest.method,
+            record.mRequest.headers,
+            record.mRequest.postData,
+            record.mRequest.encode,
+            record.mPlatform,
+            record.mResponseBody,
+            record.requestLength,
+            record.responseLength,
+            record.startTime,
+            record.endTime
+        ));
 
         updateRecord(record, true);
     }
