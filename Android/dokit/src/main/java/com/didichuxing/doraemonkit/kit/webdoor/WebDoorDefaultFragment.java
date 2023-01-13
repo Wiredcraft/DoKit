@@ -15,12 +15,19 @@ import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 
 import com.didichuxing.doraemonkit.R;
+import com.didichuxing.doraemonkit.database.FpsEntity;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
-import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsBridgeBean;
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
+import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
+import com.didichuxing.doraemonkit.kit.health.model.AppHealthInfo;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBean;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBeanKt;
 import com.didichuxing.doraemonkit.kit.webview.WebViewManager;
 import com.didichuxing.doraemonkit.util.GsonUtils;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
+
+import java.util.List;
 
 /**
  * Created by wanglikun on 2019/4/4
@@ -49,17 +56,18 @@ public class WebDoorDefaultFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initWebView();
         AppCompatButton button = findViewById(R.id.button);
+        List<FpsEntity> fpsEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllFpsEntity();
 
         if (WebViewManager.INSTANCE.getUrl() != null && !WebViewManager.INSTANCE.getUrl().isEmpty()) {
             mWebView.loadUrl(WebViewManager.INSTANCE.getUrl());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FpsJsBridgeBean fpsJsBridgeBean = new FpsJsBridgeBean(new FpsJsBridgeBean.Fps(new double[]{12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7}, new int[]{120, 100, 150, 80, 70, 110, 130}));
+                    FpsJsbridgeBean fpsJsBridgeBean = new FpsJsbridgeBean("Android", "15", FpsJsbridgeBeanKt.convertToFpsFromList(fpsEntities));
                     mWebView.callHandler("testJavascriptHandler", GsonUtils.toJson(fpsJsBridgeBean), new CallBackFunction() {
                         @Override
                         public void onCallBack(String data) {
-                            Log.i("Testtt","call succeed,return value is "+data);
+                            Log.i(TAG,"call succeed,return value is "+data);
                         }
                     });
                 }
@@ -86,7 +94,7 @@ public class WebDoorDefaultFragment extends BaseFragment {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.i("Testtt", consoleMessage.message() + " -- From line "
+                Log.i(TAG, consoleMessage.message() + " -- From line "
                     + consoleMessage.lineNumber() + " of "
                     + consoleMessage.sourceId());
                 return true;

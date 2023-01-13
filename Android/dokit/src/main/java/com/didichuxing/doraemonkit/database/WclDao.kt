@@ -15,4 +15,10 @@ interface WclDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNetworkRequest(networkReqDBEntity: NetworkRecordDBEntity)
+
+    @Query("SELECT * FROM fpsEntity")
+    fun getAllFpsEntity(): List<FpsEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertFps(fpsEntity: FpsEntity)
 }
