@@ -5,25 +5,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.view.View;
 
-import com.didichuxing.doraemonkit.DoKitEnv;
 import com.didichuxing.doraemonkit.R;
+import com.didichuxing.doraemonkit.database.Counter;
+import com.didichuxing.doraemonkit.database.WclDao;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
-import com.didichuxing.doraemonkit.kit.network.room_db.DokitDatabase;
-import com.didichuxing.doraemonkit.kit.network.room_db.DokitDbManager;
 import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
 import com.didichuxing.doraemonkit.widget.recyclerview.DividerItemDecoration;
 import com.didichuxing.doraemonkit.widget.titlebar.TitleBar;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @desc: 跳转耗时历史记录列表
@@ -46,8 +41,8 @@ public class TimeCounterListFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
         load();
-        CounterDao dao = DoKitViewManager.getINSTANCE().getCounterDb().counterDao();
-        dao.getAll();
+        WclDao dao = DoKitViewManager.getINSTANCE().getCounterDb().wclDao();
+        dao.getAllCounter();
     }
 
 
@@ -79,7 +74,7 @@ public class TimeCounterListFragment extends BaseFragment {
     private void load() {
 //        List<CounterInfo> infos = new ArrayList<>(TimeCounterManager.get().getHistory());
 //        infos.add(0, TimeCounterManager.get().getAppSetupInfo());
-        List<Counter> counters = DoKitViewManager.getINSTANCE().getCounterDb().counterDao().getAll();
+        List<Counter> counters = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllCounter();
         List<CounterInfo> infos = new ArrayList<>();
         for (int i = 0; i < counters.size(); i++) {
             Counter c = counters.get(i);

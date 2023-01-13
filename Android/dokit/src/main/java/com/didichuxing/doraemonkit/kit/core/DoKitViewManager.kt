@@ -10,7 +10,7 @@ import androidx.room.Room
 import com.didichuxing.doraemonkit.DoKitEnv
 import com.didichuxing.doraemonkit.kit.network.room_db.DokitDatabase
 import com.didichuxing.doraemonkit.kit.network.room_db.DokitDbManager
-import com.didichuxing.doraemonkit.kit.timecounter.CounterDatabase
+import com.didichuxing.doraemonkit.database.WclDatabase
 import com.didichuxing.doraemonkit.util.ScreenUtils
 
 /**
@@ -58,10 +58,10 @@ internal class DoKitViewManager : DoKitViewManagerInterface {
             .build()
     }
 
-    val counterDb: CounterDatabase by lazy {
+    val counterDb: WclDatabase by lazy {
         Room.databaseBuilder(
             DoKitEnv.requireApp(),
-            CounterDatabase::class.java,
+            WclDatabase::class.java,
             "counter-database"
         ) //下面注释表示允许主线程进行数据库操作，但是不推荐这样做。
             //他可能造成主线程lock以及anr

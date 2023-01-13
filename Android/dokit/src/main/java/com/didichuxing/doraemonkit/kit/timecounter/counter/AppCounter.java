@@ -1,10 +1,8 @@
 package com.didichuxing.doraemonkit.kit.timecounter.counter;
 
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
-import com.didichuxing.doraemonkit.kit.timecounter.Counter;
+import com.didichuxing.doraemonkit.database.Counter;
 import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
-
-import java.util.UUID;
 
 /**
  * @desc: App启动耗时
@@ -51,7 +49,7 @@ public class AppCounter {
         mCounterInfo.totalCost = mAttachCountTime + mStartCountTime;
         mCounterInfo.type = CounterInfo.TYPE_APP;
         mCounterInfo.time = System.currentTimeMillis();
-        DoKitViewManager.getINSTANCE().getCounterDb().counterDao().insert(new Counter(
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCounter(new Counter(
             System.currentTimeMillis(),
             mCounterInfo.title,
             mCounterInfo.time,
