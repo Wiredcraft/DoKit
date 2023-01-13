@@ -1,4 +1,4 @@
-package com.didichuxing.doraemonkit.kit.timecounter
+package com.didichuxing.doraemonkit.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

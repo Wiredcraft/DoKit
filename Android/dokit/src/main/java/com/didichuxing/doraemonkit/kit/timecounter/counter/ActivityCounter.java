@@ -8,10 +8,7 @@ import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
 import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
-import com.didichuxing.doraemonkit.kit.timecounter.Counter;
-import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
-import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
-import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
+import com.didichuxing.doraemonkit.database.Counter;
 import com.didichuxing.doraemonkit.util.ActivityUtils;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
@@ -21,7 +18,6 @@ import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 统计一个打开Activity操作的耗时分三个阶段，以A打开B为例，第一个阶段是A的pause操作，主要是onPause方法的耗时，第二个阶段是B的Launch操作，主要是
@@ -152,7 +148,7 @@ public class ActivityCounter {
         }
 
         mCounterInfos.add(counterInfo);
-        DoKitViewManager.getINSTANCE().getCounterDb().counterDao().insert(new Counter(
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCounter(new Counter(
             System.currentTimeMillis(),
             counterInfo.title,
             counterInfo.time,

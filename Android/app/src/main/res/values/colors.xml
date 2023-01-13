@@ -7,4 +7,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCircleMarkerFill">#750090FF</color>
     <color name="colorCircleMarkerStroke">#684C00FF</color>
+    <color name="color_white">#FFFFFF</color>
 </resources>
