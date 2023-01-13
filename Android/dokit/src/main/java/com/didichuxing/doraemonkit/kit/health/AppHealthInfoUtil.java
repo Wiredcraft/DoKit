@@ -1,5 +1,7 @@
 package com.didichuxing.doraemonkit.kit.health;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -134,6 +136,19 @@ public class AppHealthInfoUtil {
         //不过滤最大最小值
         //fpsBean.setValues(sortValue(fpsBean.getValues()));
         fpsBeans.add(fpsBean);
+    }
+
+    /**
+     * 添加fps信息
+     *
+     * @return List
+     */
+    public List<AppHealthInfo.DataBean.PerformanceBean> getFpsInfo() {
+        List<AppHealthInfo.DataBean.PerformanceBean> fpsBeans = getData().getFps();
+        if (fpsBeans == null) {
+            fpsBeans = new ArrayList<>();
+        }
+        return fpsBeans;
     }
 
     /**

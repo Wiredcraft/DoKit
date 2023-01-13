@@ -18,7 +18,9 @@ import androidx.annotation.RequiresApi;
 import com.didichuxing.doraemonkit.DoKit;
 import com.didichuxing.doraemonkit.DoKitEnv;
 import com.didichuxing.doraemonkit.config.DokitMemoryConfig;
+import com.didichuxing.doraemonkit.database.FpsEntity;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
 import com.didichuxing.doraemonkit.kit.health.model.AppHealthInfo;
 import com.didichuxing.doraemonkit.kit.network.NetworkManager;
@@ -323,6 +325,7 @@ public class PerformanceDataManager {
         if (DoKitManager.INSTANCE.getCALLBACK() != null) {
             DoKitManager.INSTANCE.getCALLBACK().onFpsCallBack(mLastFrameRate, getFpsFilePath());
         }
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(new FpsEntity("" + TimeUtils.getNowMills(), "" + mLastFrameRate));
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastFrameRate > 60 ? 60 : mLastFrameRate, PERFORMANCE_TYPE_FPS);
         }
