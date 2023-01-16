@@ -22,6 +22,10 @@
     ];
 }
 
++ (NSArray<NSString *> *)ignoredProperties {
+    return @[@"request", @"response"];
+}
+
 + (void)dealWithResponseData:(NSData *)responseData response:(NSURLResponse*)response request:(NSURLRequest *)request complete:(void (^)(DoraemonNetFlowHttpModel *model))complete {
     DoraemonNetFlowHttpModel *httpModel = [[DoraemonNetFlowHttpModel alloc] init];
     //request
