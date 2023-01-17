@@ -48,7 +48,14 @@
         return @[];
     }
     if ([objClass isSubclassOfClass: RLMObject.self]) {
-        return (NSArray<RLMObject *> *)[objClass allObjectsInRealm:realm];
+        RLMResults *results = [objClass allObjectsInRealm: realm];
+        if (results == nil || results.count == 0) {
+            return @[];
+        }
+        
+        NSRange range = NSMakeRange(0, results.count);
+        NSIndexSet *indexes = [[NSIndexSet alloc] initWithIndexesInRange:range];
+        return [results objectsAtIndexes:indexes];
     }
     return @[];
 }
@@ -61,7 +68,14 @@
         return @[];
     }
     if ([objClass isSubclassOfClass: RLMObject.self]) {
-        return (NSArray<RLMObject *> *)[objClass objectsInRealm:realm withPredicate:predicate];;
+        RLMResults *results = [objClass objectsInRealm:realm withPredicate:predicate];
+        if (results == nil || results.count == 0) {
+            return @[];
+        }
+        
+        NSRange range = NSMakeRange(0, results.count);
+        NSIndexSet *indexes = [[NSIndexSet alloc] initWithIndexesInRange:range];
+        return [results objectsAtIndexes:indexes];
     }
     return @[];
 }

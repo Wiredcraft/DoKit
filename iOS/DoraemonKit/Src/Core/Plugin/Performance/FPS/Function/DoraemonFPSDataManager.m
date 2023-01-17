@@ -37,14 +37,14 @@ static NSString *DoraemonFPSDataTable = @"DoraemonFPSDataTable";
 }
 
 - (NSArray<DoraemonFPSModel *> *)allData {
-    return [RealmUtil modelArrayWithTableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
+    return (NSArray<DoraemonFPSModel *> *)[RealmUtil modelArrayWithTableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.class];
 }
 
 - (NSArray<DoraemonFPSModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp {
     NSTimeInterval begin = [beginStamp doubleValue];
     NSTimeInterval end = [endStamp doubleValue];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp between {%@, %@}", begin, end];
-    return [RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
+    return (NSArray<DoraemonFPSModel *> *)[RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
 }
 
 @end
