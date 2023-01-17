@@ -37,9 +37,9 @@ PODS:
     - GCDWebServer/Core
   - GCDWebServer/WebUploader (3.5.4):
     - GCDWebServer/Core
-  - Realm (10.33.0):
-    - Realm/Headers (= 10.33.0)
-  - Realm/Headers (10.33.0)
+  - Realm (10.34.0):
+    - Realm/Headers (= 10.34.0)
+  - Realm/Headers (10.34.0)
   - WKWebViewJavascriptBridge (1.2.2)
 
 DEPENDENCIES:
@@ -74,7 +74,7 @@ SPEC CHECKSUMS:
   FBRetainCycleDetector: 46daef95c2dfa9be34b53087edf6a8f34e4c749c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
-  Realm: d4f810e161fa2c2c589b9860b6eb09238deacd73
+  Realm: 991e7c4d6d37f1d6470a48bb072782ef00b91b67
   WKWebViewJavascriptBridge: d7324badf8996486c71648f448617b09bf927b4b
 
 PODFILE CHECKSUM: c2b559984d04a6e76336fd9c997d3e1706ba5326
