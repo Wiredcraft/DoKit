@@ -32,7 +32,8 @@ open class APMReportViewController: UIViewController {
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
-        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
+//        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
+        let url = URL(string: "http://10.10.2.49:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
     }
@@ -44,17 +45,31 @@ extension APMReportViewController: WKNavigationDelegate {
     }
     
     public func updateFps() {
-        let data = DoraemonFPSDataManager.sharedInstance().allData()
-        let time = data.map { self.fpsTimeFormatter.string(from: Date(timeIntervalSince1970: $0.timestamp)) }
-        let value = data.map { $0.value }
-        self.bridge.call(handlerName: "testJavascriptHandler", data: [
-            "fps": [
-                "xValues": time,
-                "data": value
-            ]
-        ]) { responseData in
-            print("back from js: \(String(describing: responseData))")
+        let appName = Bundle.main.infoDictionary?["CFBundleExecutable"]
+        let version = "iOS " + UIDevice.current.systemVersion
+
+        DispatchQueue.global().async {
+            let data = DoraemonFPSDataManager.sharedInstance().allData()
+            let time = data.map { self.fpsTimeFormatter.string(from: Date(timeIntervalSince1970: $0.timestamp)) }
+            let value = data.map { $0.value }
+
+            let netData = DoraemonNetFlowAnalysisReport().reportDic()
+
+            DispatchQueue.main.async {
+                self.bridge.call(handlerName: "testJavascriptHandler", data: [
+                    "appName": appName,
+                    "version": version,
+                    "fps": [
+                        "xValues": time,
+                        "data": value
+                    ],
+                    "network": netData,
+                ]) { responseData in
+                    print("back from js: \(String(describing: responseData))")
+                }
+            }
         }
+
     }
 }
 

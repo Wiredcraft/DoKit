@@ -12,9 +12,9 @@
 
 + (NSString *)convertJsonFromData:(NSData *)data{
     if (!data) {
-        return nil;
+        return @"";
     }
-    NSString *jsonString = nil;
+    NSString *jsonString = @"";
     
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
     if ([NSJSONSerialization isValidJSONObject:jsonObject]) {
@@ -24,7 +24,7 @@
     } else {
         jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
-    return jsonString;
+    return jsonString.length > 0 ? jsonString : @"";
 }
 
 + (NSDictionary *)convertDicFromData:(NSData *)data{
