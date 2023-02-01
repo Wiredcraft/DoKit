@@ -59,23 +59,23 @@
     return [[[self reportDic] objectForKey:@"slowRequestCount"] integerValue];
 }
 
-- (NSArray<NSString *> *)reqCountRank {
+- (NSArray<NSDictionary *> *)reqCountRank {
     return [[self reportDic] objectForKey:@"reqCountRank"];
 }
 
-- (NSArray<NSString *> *)failReqCountRank {
+- (NSArray<NSDictionary *> *)failReqCountRank {
     return [[self reportDic] objectForKey:@"failReqCountRank"];
 }
 
-- (NSArray<NSString *> *)reqTimeRank {
+- (NSArray<NSDictionary *> *)reqTimeRank {
     return [[self reportDic] objectForKey:@"reqTimeRank"];
 }
 
-- (NSArray<NSString *> *)uploadDataRank {
+- (NSArray<NSDictionary *> *)uploadDataRank {
     return [[self reportDic] objectForKey:@"uploadDataRank"];
 }
 
-- (NSArray<NSString *> *)downloadDataRank {
+- (NSArray<NSDictionary *> *)downloadDataRank {
     return [[self reportDic] objectForKey:@"downloadDataRank"];
 }
 
@@ -100,7 +100,8 @@
 
     for (int i=0; i<httpModelArray.count; i++) {
         DoraemonNetFlowHttpModel *httpModel = httpModelArray[i];
-        NSString *rankKey = [NSString stringWithFormat:@"%@ %@", httpModel.method, httpModel.url];
+        NSString * url = [[httpModel.url componentsSeparatedByString:@"?"] firstObject];
+        NSString *rankKey = [NSString stringWithFormat:@"%@ %@", httpModel.method, url];
 
         CGFloat uploadFlow =  [httpModel.uploadFlow floatValue];
         totalUploadFlow += uploadFlow;
@@ -182,46 +183,45 @@
         return NSOrderedDescending;
     }];
     if (reqCountRank.count > 5) {
-        dic[@"reqCountRank"] = [reqCountRank subarrayWithRange:NSMakeRange(0, 5)];
-    } else {
-        dic[@"slowRequestCount"] = reqCountRank;
+        reqCountRank = [reqCountRank subarrayWithRange:NSMakeRange(0, 5)];
     }
+    dic[@"reqCountRank"] = [self getKVPairArayWith:reqCountRank dic:reqCountDic];
+
     // failReqCountRank
     NSArray<NSString *> *failReqCountRank = [failReqCountDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return NSOrderedDescending;
     }];
     if (failReqCountRank.count > 5) {
-        dic[@"failReqCountRank"] = [failReqCountRank subarrayWithRange:NSMakeRange(0, 5)];
-    } else {
-        dic[@"failReqCountRank"] = failReqCountRank;
+        failReqCountRank = [failReqCountRank subarrayWithRange:NSMakeRange(0, 5)];
     }
+    dic[@"failReqCountRank"] = [self getKVPairArayWith:failReqCountRank dic:failReqCountDic];
+
     // reqTimeRank
     NSArray<NSString *> *reqTimeRank = [reqTimeRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return NSOrderedDescending;
     }];
     if (reqTimeRank.count > 5) {
-        dic[@"reqTimeRank"] = [reqTimeRank subarrayWithRange:NSMakeRange(0, 5)];
-    } else {
-        dic[@"reqTimeRank"] = reqTimeRank;
+        reqTimeRank = [reqTimeRank subarrayWithRange:NSMakeRange(0, 5)];
     }
+    dic[@"reqTimeRank"] = [self getKVPairArayWith:reqTimeRank dic:reqTimeRankDic];
+
     // uploadDataRank
     NSArray<NSString *> *uploadDataRank = [uploadDataRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return NSOrderedDescending;
     }];
     if (uploadDataRank.count > 5) {
-        dic[@"uploadDataRank"] = [uploadDataRank subarrayWithRange:NSMakeRange(0, 5)];
-    } else {
-        dic[@"uploadDataRank"] = uploadDataRank;
+        uploadDataRank = [uploadDataRank subarrayWithRange:NSMakeRange(0, 5)];
     }
+    dic[@"uploadDataRank"] = [self getKVPairArayWith:uploadDataRank dic:uploadDataRankDic];
+
     // downloadDataRank
     NSArray<NSString *> *downloadDataRank = [downloadDataRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return NSOrderedDescending;
     }];
     if (downloadDataRank.count > 5) {
-        dic[@"downloadDataRank"] = [downloadDataRank subarrayWithRange:NSMakeRange(0, 5)];
-    } else {
-        dic[@"downloadDataRank"] = downloadDataRank;
+        downloadDataRank = [downloadDataRank subarrayWithRange:NSMakeRange(0, 5)];
     }
+    dic[@"downloadDataRank"] = [self getKVPairArayWith:downloadDataRank dic:downloadDataRankDic];
     return dic;
 }
 
@@ -229,6 +229,18 @@
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self reportDic] options:NSJSONWritingPrettyPrinted error:&error];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
+}
+
+-(NSArray<NSDictionary*> *)getKVPairArayWith: (NSArray<NSString*>*)keys dic: (NSDictionary *)dic {
+    NSMutableArray *pairs = @[].mutableCopy;
+    for (NSInteger i = 0; i<keys.count; i++) {
+        NSString *key = keys[i];
+        NSMutableDictionary *pair = @{}.mutableCopy;
+        pair[@"key"] = key;
+        pair[@"value"] = [dic objectForKey:key];
+        [pairs addObject:pair];
+    }
+    return pairs;
 }
 
 @end

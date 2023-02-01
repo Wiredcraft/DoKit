@@ -18,11 +18,12 @@
 @property (nonatomic, assign, readonly) NSTimeInterval requestAverageTime;
 @property (nonatomic, assign, readonly) double requestSucsessRate;
 @property (nonatomic, assign, readonly) NSInteger slowRequestCount;
-@property (nonatomic, assign, readonly) NSArray<NSString *>* reqCountRank;
-@property (nonatomic, assign, readonly) NSArray<NSString *>* failReqCountRank;
-@property (nonatomic, assign, readonly) NSArray<NSString *>* reqTimeRank;
-@property (nonatomic, assign, readonly) NSArray<NSString *>* uploadDataRank;
-@property (nonatomic, assign, readonly) NSArray<NSString *>* downloadDataRank;
+
+@property (nonatomic, assign, readonly) NSArray<NSDictionary *>* reqCountRank;
+@property (nonatomic, assign, readonly) NSArray<NSDictionary *>* failReqCountRank;
+@property (nonatomic, assign, readonly) NSArray<NSDictionary *>* reqTimeRank;
+@property (nonatomic, assign, readonly) NSArray<NSDictionary *>* uploadDataRank;
+@property (nonatomic, assign, readonly) NSArray<NSDictionary *>* downloadDataRank;
 
 -(instancetype)initWithRequestTimeThreshold: (NSTimeInterval)requestTimeThreshold;
 
