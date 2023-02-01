@@ -31,14 +31,15 @@
     //request
     httpModel.request = request;
 //    httpModel.requestId = request.requestId;
-    httpModel.requestId = [NSUUID UUID];
+    httpModel.requestId = [[NSUUID UUID] UUIDString];
     httpModel.url = [request.URL absoluteString];
     httpModel.method = request.HTTPMethod;
     //response
-    httpModel.mineType = response.MIMEType;
+    httpModel.mineType = response.MIMEType.length > 0 ? response.MIMEType : @"";
     httpModel.response = response;
     NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
     httpModel.statusCode = [NSString stringWithFormat:@"%d",(int)httpResponse.statusCode];
+    if (!httpModel.statusCode) httpModel.statusCode = @"0";
     httpModel.responseData = responseData;
     httpModel.responseBody = [DoraemonUrlUtil convertJsonFromData:responseData];
     httpModel.totalDuration = [NSString stringWithFormat:@"%fs",[[NSDate date] timeIntervalSince1970] - request.startTime.doubleValue];
