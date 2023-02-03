@@ -32,8 +32,8 @@ open class APMReportViewController: UIViewController {
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
-//        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
-        let url = URL(string: "http://10.10.2.49:3000/wiredexam-react-app")!
+        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
+//        let url = URL(string: "http://10.10.2.49:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
     }

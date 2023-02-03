@@ -36,7 +36,12 @@ static NSTimeInterval endTime;
         if (!startClass) {
             startClass = @"AppDelegate";
         }
+        NSString *namespace = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
         Class class = NSClassFromString(startClass);
+        if (!class) {
+           NSString *className = [NSString stringWithFormat:@"%@.%@", namespace, startClass];
+           class = NSClassFromString(className);
+        }
         Method originMethod = class_getInstanceMethod(class, @selector(application:didFinishLaunchingWithOptions:));
         Method swizzledMethod = class_getInstanceMethod([self class], @selector(doraemon_application:didFinishLaunchingWithOptions:));
         class_addMethod(class, method_getName(swizzledMethod), method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
@@ -52,6 +57,7 @@ static NSTimeInterval endTime;
     endTime = [[NSDate date] timeIntervalSince1970];
     
     [DoraemonHealthManager sharedInstance].startTime = (endTime-startTime)*1000;
+    NSLog(@"%lf", [DoraemonHealthManager sharedInstance].startTime);
     return ret;
 }
 
