@@ -13,6 +13,9 @@ interface WclDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCounter(counter: Counter)
 
+    @Query("SELECT * FROM networkrecorddbentity")
+    fun getAllNetWork(): List<NetworkRecordDBEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNetworkRequest(networkReqDBEntity: NetworkRecordDBEntity)
 

@@ -16,12 +16,15 @@ import android.webkit.WebChromeClient;
 
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.database.FpsEntity;
+import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
 import com.didichuxing.doraemonkit.kit.health.model.AppHealthInfo;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBean;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBeanKt;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.NetWorkBean;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.NetWorkBeanKt;
 import com.didichuxing.doraemonkit.kit.webview.WebViewManager;
 import com.didichuxing.doraemonkit.util.GsonUtils;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
@@ -57,13 +60,17 @@ public class WebDoorDefaultFragment extends BaseFragment {
         initWebView();
         AppCompatButton button = findViewById(R.id.button);
         List<FpsEntity> fpsEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllFpsEntity();
-
+        List<NetworkRecordDBEntity> networkRecordDBEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllNetWork();
+        Log.i("networkRecordDBEntities","networkRecordDBEntities"+GsonUtils.toJson(networkRecordDBEntities));
         if (WebViewManager.INSTANCE.getUrl() != null && !WebViewManager.INSTANCE.getUrl().isEmpty()) {
             mWebView.loadUrl(WebViewManager.INSTANCE.getUrl());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FpsJsbridgeBean fpsJsBridgeBean = new FpsJsbridgeBean("Android", "15", FpsJsbridgeBeanKt.convertToFpsFromList(fpsEntities));
+                    FpsJsbridgeBean fpsJsBridgeBean = new FpsJsbridgeBean("Android", "15",
+                        FpsJsbridgeBeanKt.convertToFpsFromList(fpsEntities),
+                        NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities)
+                        );
                     mWebView.callHandler("testJavascriptHandler", GsonUtils.toJson(fpsJsBridgeBean), new CallBackFunction() {
                         @Override
                         public void onCallBack(String data) {
