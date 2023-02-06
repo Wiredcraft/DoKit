@@ -3,4 +3,5 @@
     package="com.didichuxing.doraemonkit.gps_mock">
 
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

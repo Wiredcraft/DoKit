@@ -5,7 +5,8 @@ import com.didichuxing.doraemonkit.database.FpsEntity
 data class FpsJsbridgeBean(
     val appName: String,
     val version: String,
-    val fps: Fps
+    val fps: Fps,
+    val network: NetWorkBean
 ) {
 
     data class Fps(
