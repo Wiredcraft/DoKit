@@ -16,6 +16,7 @@
 #import "DoraemonHealthManager.h"
 #import "DoraemonTimeProfiler.h"
 #import "DoraemonStartTimeProfilerViewController.h"
+#import "DoraemonLaunchTimeNamager.h"
 
 static NSTimeInterval startTime;
 static NSTimeInterval endTime;
@@ -58,6 +59,14 @@ static NSTimeInterval endTime;
     
     [DoraemonHealthManager sharedInstance].startTime = (endTime-startTime)*1000;
     NSLog(@"%lf", [DoraemonHealthManager sharedInstance].startTime);
+
+    // 存入数据库
+    DoraemonLaunchTimeModel *timeModel = [[DoraemonLaunchTimeModel alloc] init];
+    timeModel.uid = [[NSUUID UUID] UUIDString];
+    timeModel.time = endTime;
+    timeModel.launchCost = (endTime - startTime) * 1000;
+    [[DoraemonLaunchTimeNamager shareInstance] addOrUpdateUseModel:timeModel];
+
     return ret;
 }
 
