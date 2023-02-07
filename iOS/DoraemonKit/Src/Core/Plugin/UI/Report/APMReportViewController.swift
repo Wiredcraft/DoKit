@@ -55,8 +55,8 @@ extension APMReportViewController: WKNavigationDelegate {
 
             let netData = DoraemonNetFlowAnalysisReport().reportDic()
 
-            let lanchTimeData = DoraemonLaunchTimeNamager.shareInstance().modelDics()
-            print(lanchTimeData)
+            let launchTimeData = DoraemonLaunchTimeNamager.shareInstance().modelDics()
+
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
                     "appName": appName,
@@ -66,7 +66,7 @@ extension APMReportViewController: WKNavigationDelegate {
                         "data": value
                     ],
                     "network": netData,
-                    "lanchTimeData": lanchTimeData,
+                    "launchTimeData": launchTimeData,
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
