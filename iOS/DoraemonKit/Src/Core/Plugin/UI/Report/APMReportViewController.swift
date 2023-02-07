@@ -55,7 +55,7 @@ extension APMReportViewController: WKNavigationDelegate {
 
             let netData = DoraemonNetFlowAnalysisReport().reportDic()
 
-            let launchTimeData = DoraemonLaunchTimeNamager.shareInstance().modelDics()
+            let launchTimeData = DoraemonLaunchTimeManager.shareInstance().modelDics()
 
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [

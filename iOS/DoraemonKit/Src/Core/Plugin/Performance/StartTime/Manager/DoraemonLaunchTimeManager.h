@@ -1,5 +1,5 @@
 //
-//  DoraemonLaunchTimeNamager.h
+//  DoraemonLaunchTimeManager.h
 //  CocoaAsyncSocket
 //
 //  Created by tiazhao1 on 2023/2/7.
@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DoraemonLaunchTimeNamager : NSObject
+@interface DoraemonLaunchTimeManager : NSObject
 @property (nonatomic, strong, readonly) NSArray<DoraemonLaunchTimeModel *> *launchTimeModelArray;
 
-+ (DoraemonLaunchTimeNamager *)shareInstance;
++ (DoraemonLaunchTimeManager *)shareInstance;
 - (void)addOrUpdateUseModel:(DoraemonLaunchTimeModel *)timeModel;
 - (NSArray<DoraemonLaunchTimeModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp;
 - (NSArray<NSDictionary *> *)modelDics;
