@@ -1,24 +1,24 @@
 //
-//  DoraemonLaunchTimeNamager.m
+//  DoraemonLaunchTimeManager.m
 //  CocoaAsyncSocket
 //
 //  Created by tiazhao1 on 2023/2/7.
 //
 
-#import "DoraemonLaunchTimeNamager.h"
+#import "DoraemonLaunchTimeManager.h"
 #import "RealmUtil.h"
 
-@implementation DoraemonLaunchTimeNamager{
+@implementation DoraemonLaunchTimeManager{
     dispatch_queue_t _serialQueue;
 }
 
 static NSString *DoraemonLaunchTimeDataTable = @"DoraemonLaunchTimeDataTable";
 
-+ (DoraemonLaunchTimeNamager *)shareInstance{
++ (DoraemonLaunchTimeManager *)shareInstance{
     static dispatch_once_t once;
-    static DoraemonLaunchTimeNamager *instance;
+    static DoraemonLaunchTimeManager *instance;
     dispatch_once(&once, ^{
-        instance = [[DoraemonLaunchTimeNamager alloc] init];
+        instance = [[DoraemonLaunchTimeManager alloc] init];
     });
     return instance;
 }
