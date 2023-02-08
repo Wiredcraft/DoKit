@@ -6,7 +6,8 @@ data class FpsJsbridgeBean(
     val appName: String,
     val version: String,
     val fps: Fps,
-    val network: NetWorkBean
+    val network: NetWorkBean,
+    val launchTimeData: MutableList<CounterBean>
 ) {
 
     data class Fps(
