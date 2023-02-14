@@ -20,7 +20,6 @@ import com.didichuxing.doraemonkit.database.FpsEntity;
 import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
-import com.didichuxing.doraemonkit.kit.webdoor.bean.CounterBean;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.CounterBeanKt;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBean;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBeanKt;
