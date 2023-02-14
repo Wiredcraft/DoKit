@@ -113,7 +113,7 @@ public class ActivityCounter {
 
     private void print() {
         CounterInfo counterInfo = new CounterInfo();
-        counterInfo.time = SystemClock.elapsedRealtime();
+        counterInfo.time = System.currentTimeMillis();
         counterInfo.type = CounterInfo.TYPE_ACTIVITY;
         counterInfo.title = mPreviousActivity + " -> " + mCurrentActivity;
         counterInfo.launchCost = mLaunchCostTime;
