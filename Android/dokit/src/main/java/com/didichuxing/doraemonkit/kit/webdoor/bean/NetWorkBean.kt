@@ -68,13 +68,13 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
             }
         }
 
-        if ((net.endTime - net.startTime) > 1000) {
+        if (((net.startTime - net.endTime) / 1000 / 60 / 60) > 1000) {
             slowRequestCount++
         }
         summaryRequestCount++
         summaryRequestDownFlow += net.requestLength
         summaryRequestUploadFlow += net.responseLength
-        summaryRequestTime += (net.endTime - net.startTime)
+        summaryRequestTime += ((net.startTime - net.endTime) / 1000 / 60 / 60)
     }
 
     requestAverageTime = summaryRequestTime / summaryRequestCount
