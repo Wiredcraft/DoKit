@@ -18,12 +18,12 @@
 
 + (NSArray<NSString *> *)requiredProperties {
     return @[
-        @"requestId", @"url", @"method", @"requestBody", @"statusCode", @"responseData", @"mineType", @"startTime", @"endTime", @"totalDuration", @"uploadFlow", @"downFlow"
+        @"requestId", @"url", @"method", @"requestBody", @"statusCode", @"mineType", @"startTime", @"endTime", @"totalDuration", @"uploadFlow", @"downFlow"
     ];
 }
 
 + (NSArray<NSString *> *)ignoredProperties {
-    return @[@"request", @"response"];
+    return @[@"request", @"response", @"responseData"];
 }
 
 + (void)dealWithResponseData:(NSData *)responseData response:(NSURLResponse*)response request:(NSURLRequest *)request complete:(void (^)(DoraemonNetFlowHttpModel *model))complete {

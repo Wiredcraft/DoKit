@@ -18,12 +18,12 @@
 }
 
 + (void)addOrUpdateModel:(RLMObject *)model queue: (dispatch_queue_t)queue tableName: (NSString *)tableName {
-    RLMRealmConfiguration *config = [self getRealmConfig:tableName];
     RLMThreadSafeReference *ref;
     if ([model realm]) {
         ref = [RLMThreadSafeReference referenceWithThreadConfined: model];
     }
     dispatch_async(queue, ^{
+        RLMRealmConfiguration *config = [self getRealmConfig:tableName];
         NSError *error = nil;
         RLMRealm *realm = [RLMRealm realmWithConfiguration:config error:&error];
         RLMObject *obj;
