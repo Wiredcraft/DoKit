@@ -104,9 +104,6 @@
 #pragma mark -- DoraemonNetworkInterceptorDelegate
 - (void)doraemonNetworkInterceptorDidReceiveData:(NSData *)data response:(NSURLResponse *)response request:(NSURLRequest *)request error:(NSError *)error startTime:(NSTimeInterval)startTime {
     [DoraemonNetFlowHttpModel dealWithResponseData:data response:response request:request complete:^(DoraemonNetFlowHttpModel *httpModel) {
-        if (!response) {
-            httpModel.statusCode = error.localizedDescription;
-        }
         httpModel.startTime = startTime;
         httpModel.endTime = [[NSDate date] timeIntervalSince1970];
         

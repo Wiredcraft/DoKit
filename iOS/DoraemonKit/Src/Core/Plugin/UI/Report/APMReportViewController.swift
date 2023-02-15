@@ -19,7 +19,7 @@ open class APMReportViewController: UIViewController {
         f.dateFormat = "mm:ss"
         return f
     }()
-    
+
     open override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,6 +57,8 @@ extension APMReportViewController: WKNavigationDelegate {
 
             let launchTimeData = DoraemonLaunchTimeManager.shareInstance().modelDics()
 
+            let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
+
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
                     "appName": appName,
@@ -67,6 +69,7 @@ extension APMReportViewController: WKNavigationDelegate {
                     ],
                     "network": netData,
                     "launchTimeData": launchTimeData,
+                    "memoryLeakData": leakData,
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }

@@ -25,7 +25,8 @@ Core subspec作为核心，必须引入。
 
 如果你要使用[YYDebugDatabase](https://github.com/y500/iOSDebugDatabase)在网页端调式数据库的话，那就请接入WithDatabase subspec。
 
-如果你要使用[MLeaksFinder](https://github.com/Tencent/MLeaksFinder)查找内存泄漏的问题的话，那就请接入WithMLeaksFinder subspec。
+如果你要使用[MLeaksFinder](https://github.com/Tencent/MLeaksFinder)查找内存泄漏的问题的话，那就请接入WithMLeaksFinder subspec。注意：由于MLeaksFinder依赖的FBRetainCycleDetector，默认pod仓库代码不是最新的，存在bug,请在主项目中添加 pod 'FBRetainCycleDetector', :git => "https://github.com/TrailSquad/FBRetainCycleDetector", :configurations => ['Debug'] 依赖，替换掉MLeaksFinder自身原来的依赖
+
 
 #### 1.2: Carthage依赖
 

@@ -12,6 +12,9 @@
 #endif
 #import "DoraemonHealthManager.h"
 #import "DoraemonDefine.h"
+#import "DoraemonUtil.h"
+#import "RealmUtil.h"
+#import "DoraemonMemoryLeakModel.h"
 
 @interface DoraemonMemoryLeakData()
 
@@ -20,7 +23,11 @@
 
 @end
 
-@implementation DoraemonMemoryLeakData
+@implementation DoraemonMemoryLeakData{
+    dispatch_queue_t _serialQueue;
+}
+
+static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
 
 + (DoraemonMemoryLeakData *)shareInstance{
     static dispatch_once_t once;
@@ -35,6 +42,7 @@
     self = [super init];
     if (self) {
         _dataArray = [NSMutableArray array];
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonMotionDataTableQueue", NULL);
     }
     return self;
 }
@@ -55,6 +63,13 @@
         @"viewStack":STRING_NOT_NULL(viewStack),
         @"retainCycle":STRING_NOT_NULL(retainCycle)
     };
+
+    // 存入数据库
+    DoraemonMemoryLeakModel *leakModel = [[DoraemonMemoryLeakModel alloc] init];
+    leakModel.uid = [[NSUUID UUID] UUIDString];
+    leakModel.info = [DoraemonUtil dictToJsonStr:info];
+    [RealmUtil addOrUpdateModel:leakModel queue:_serialQueue tableName:DoraemonLeakModelTable];
+
     [_dataArray addObject:info];
     [[DoraemonHealthManager sharedInstance] addLeak:info];
     
@@ -122,6 +137,28 @@
     NSMutableArray *result = [[array subarrayWithRange:range] mutableCopy];
     [result addObjectsFromArray:[array subarrayWithRange:NSMakeRange(0, index)]];
     return result;
+}
+
+- (NSArray<NSDictionary *>*)dataForReport {
+    NSMutableArray *resArray = @[].mutableCopy;
+    NSMutableDictionary *dic = @{}.mutableCopy;
+    NSArray *allModelArray = [RealmUtil modelArrayWithTableName:DoraemonLeakModelTable objClass:DoraemonMemoryLeakModel.self];
+    for (DoraemonMemoryLeakModel *model in allModelArray) {
+        if ([dic.allKeys containsObject:model.info]) {
+            NSInteger count = [dic[model.info] intValue];
+            dic[model.info] = @(count + 1);
+        } else {
+            dic[model.info] = @(1);
+        }
+    }
+    NSArray *allInfos = [dic allKeys];
+    for (NSString *info in allInfos) {
+        NSMutableDictionary *item = @{}.mutableCopy;
+        item[@"info"] = info;
+        item[@"count"] = dic[info];
+        [resArray addObject:dic];
+    }
+    return resArray;
 }
 
 @end
