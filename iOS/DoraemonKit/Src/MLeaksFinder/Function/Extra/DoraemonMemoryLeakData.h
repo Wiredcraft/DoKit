@@ -25,6 +25,8 @@ typedef void (^DoraemonLeakManagerBlock)(NSDictionary *leakInfo);
 
 - (void)clearResult;
 
+- (NSArray<NSDictionary *>*)dataForReport;
+
 @end
 
 NS_ASSUME_NONNULL_END
