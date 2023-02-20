@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit.kit.webdoor.bean
 
 import com.didichuxing.doraemonkit.database.FpsEntity
+import com.didichuxing.doraemonkit.util.TimeUtils
 
 data class FpsJsbridgeBean(
     val appName: String,
@@ -11,16 +12,16 @@ data class FpsJsbridgeBean(
 ) {
 
     data class Fps(
-        val xValues: ArrayList<Double>,
+        val xValues: ArrayList<String>,
         val data: ArrayList<Int>,
     )
 }
 
 fun convertToFpsFromList(fpsEntities: MutableList<FpsEntity>): FpsJsbridgeBean.Fps{
-    val timeList = arrayListOf<Double>()
+    val timeList = arrayListOf<String>()
     val valueList = arrayListOf<Int>()
     fpsEntities.forEach {
-        timeList.add(it.time.toDouble())
+        timeList.add(TimeUtils.millis2String(it.time.toLong()))
         valueList.add(it.value.toInt())
     }
     return FpsJsbridgeBean.Fps(
