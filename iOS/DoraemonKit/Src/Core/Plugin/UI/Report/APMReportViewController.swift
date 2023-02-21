@@ -33,7 +33,7 @@ open class APMReportViewController: UIViewController {
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
         let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
-//        let url = URL(string: "http://192.168.31.109:3000/wiredexam-react-app")!
+//        let url = URL(string: "http://10.10.2.49:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
     }
@@ -54,11 +54,9 @@ extension APMReportViewController: WKNavigationDelegate {
             let value = data.map { $0.value }
 
             let netData = DoraemonNetFlowAnalysisReport().reportDic()
-
             let launchTimeData = DoraemonLaunchTimeManager.shareInstance().modelDics()
-
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
-
+            let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
                     "appName": appName,
@@ -70,6 +68,7 @@ extension APMReportViewController: WKNavigationDelegate {
                     "network": netData,
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
+                    "locationData": locationData,
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
