@@ -177,9 +177,7 @@ configurations.all {
 //        }
     }
 }
-repositories {
-    mavenCentral()
-}
+
 
 
 
