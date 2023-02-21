@@ -59,15 +59,22 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
     
     NSDictionary *info = @{
         @"className":STRING_NOT_NULL(className),
-        @"classPtr":STRING_NOT_NULL(classPtr),
         @"viewStack":STRING_NOT_NULL(viewStack),
         @"retainCycle":STRING_NOT_NULL(retainCycle)
     };
 
-    // 存入数据库
+    // save to db
+    NSString *retainCycleStr = STRING_NOT_NULL(retainCycle);
+    if (![@"Fail to find a retain cycle" isEqualToString:retainCycleStr]) {
+        retainCycleStr = [STRING_NOT_NULL(retainCycle) stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+        retainCycleStr = [retainCycleStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        retainCycleStr = [retainCycleStr stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        retainCycleStr = [retainCycleStr stringByReplacingOccurrencesOfString:@")" withString:@""];
+    }
+    NSString *leakInfo = [NSString stringWithFormat:@"className: %@\nviewStack:%@\nretainCycle:%@", STRING_NOT_NULL(className), STRING_NOT_NULL([viewStack componentsJoinedByString:@","]), retainCycleStr];
     DoraemonMemoryLeakModel *leakModel = [[DoraemonMemoryLeakModel alloc] init];
     leakModel.uid = [[NSUUID UUID] UUIDString];
-    leakModel.info = [DoraemonUtil dictToJsonStr:info];
+    leakModel.info = leakInfo;
     [RealmUtil addOrUpdateModel:leakModel queue:_serialQueue tableName:DoraemonLeakModelTable];
 
     [_dataArray addObject:info];
@@ -156,8 +163,9 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
         NSMutableDictionary *item = @{}.mutableCopy;
         item[@"info"] = info;
         item[@"count"] = dic[info];
-        [resArray addObject:dic];
+        [resArray addObject:item];
     }
+//    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonLeakModelTable];
     return resArray;
 }
 
