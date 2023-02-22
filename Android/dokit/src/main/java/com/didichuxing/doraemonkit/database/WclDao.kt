@@ -24,4 +24,10 @@ interface WclDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFps(fpsEntity: FpsEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMemory(memoryEntity: MemoryEntity)
+
+    @Query("SELECT * FROM memoryEntity")
+    fun getAllMemoryEntity(): List<MemoryEntity>
 }
