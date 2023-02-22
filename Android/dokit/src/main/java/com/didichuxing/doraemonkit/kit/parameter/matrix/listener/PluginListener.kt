@@ -17,13 +17,16 @@ package com.didichuxing.doraemonkit.kit.parameter.matrix.listener
 
 import android.content.Context
 import android.os.Handler
-import com.tencent.matrix.plugin.DefaultPluginListener
 import android.os.Looper
 import android.widget.Toast
-import com.tencent.matrix.util.MatrixLog
-import com.didichuxing.doraemonkit.kit.parameter.matrix.issue.IssuesMap
+import com.didichuxing.doraemonkit.database.FpsEntity
+import com.didichuxing.doraemonkit.database.MemoryEntity
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager.Companion.INSTANCE
 import com.didichuxing.doraemonkit.kit.parameter.matrix.issue.IssueFilter
+import com.didichuxing.doraemonkit.kit.parameter.matrix.issue.IssuesMap
+import com.tencent.matrix.plugin.DefaultPluginListener
 import com.tencent.matrix.report.Issue
+import com.tencent.matrix.util.MatrixLog
 import java.lang.ref.SoftReference
 
 class PluginListener(context: Context) : DefaultPluginListener(context) {
@@ -39,7 +42,7 @@ class PluginListener(context: Context) : DefaultPluginListener(context) {
         MatrixLog.e(TAG, issue.toString())
         IssuesMap.put(IssueFilter.getCurrentFilter(), issue)
         mHandler.post { showToast(issue) }
-        jumpToIssueActivity()
+        INSTANCE.counterDb.wclDao().insertMemory(MemoryEntity(type = issue.type, info = issue.toString()))
     }
 
     private fun showToast(issue: Issue) {
@@ -49,8 +52,6 @@ class PluginListener(context: Context) : DefaultPluginListener(context) {
             Toast.makeText(context, message, Toast.LENGTH_LONG)
         }
     }
-
-    fun jumpToIssueActivity() {}
 
     companion object {
         const val TAG = "PluginListener:"
