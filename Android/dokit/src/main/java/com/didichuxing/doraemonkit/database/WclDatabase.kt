@@ -9,7 +9,10 @@ import androidx.room.RoomDatabase
         NetworkRecordDBEntity::class,
         FpsEntity::class,
         MemoryEntity::class,
-    ], version = 4, exportSchema = false
+        LocationEntity::class
+    ],
+    version = 4,
+    exportSchema = false
 )
 abstract class WclDatabase : RoomDatabase() {
     abstract fun wclDao(): WclDao

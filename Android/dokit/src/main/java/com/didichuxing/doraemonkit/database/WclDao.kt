@@ -30,4 +30,10 @@ interface WclDao {
 
     @Query("SELECT * FROM memoryEntity")
     fun getAllMemoryEntity(): List<MemoryEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLocation(locationEntity: LocationEntity)
+
+    @Query("SELECT * FROM locationentity")
+    fun getAllLocationEntity(): List<LocationEntity>
 }

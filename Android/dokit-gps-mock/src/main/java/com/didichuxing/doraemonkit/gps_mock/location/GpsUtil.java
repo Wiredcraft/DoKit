@@ -19,8 +19,7 @@ public class GpsUtil {
      * 获取LocationManager  > 24 推荐使用 gnss
      * **/
     public static LocationManager getLocationManager(Context context, GnssStatus.Callback gnssListener,
-                                                     GpsStatus.Listener gpsListener,
-                                                     LocationListener locationListener) {
+                                                     GpsStatus.Listener gpsListener) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // 为获取地理位置信息时设置查询条件
         String bestProvider = lm.getBestProvider(getCriteria(), true);
@@ -50,7 +49,7 @@ public class GpsUtil {
 
         // 1秒更新一次，或最小位移变化超过1米更新一次；
         // 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+       // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
         return lm;
     }
 
