@@ -12,7 +12,8 @@ data class FpsJsbridgeBean(
     val fps: Fps,
     val network: NetWorkBean,
     val launchTimeData: MutableList<CounterBean>,
-    val memoryLeakData: MutableList<MemoryLeak>
+    val memoryLeakData: MutableList<MemoryLeak>,
+    val locationData: LocationBean
 ) {
 
     data class Fps(

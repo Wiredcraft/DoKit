@@ -17,7 +17,7 @@ import com.didichuxing.doraemonkit.util.ScreenUtils
  * Created by jintai on 2018/10/23.
  * 浮标管理类
  */
-internal class DoKitViewManager : DoKitViewManagerInterface {
+class DoKitViewManager : DoKitViewManagerInterface {
 
     companion object {
         private const val TAG = "DoKitViewManager"

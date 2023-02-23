@@ -3,7 +3,12 @@ package com.didichuxing.doraemondemo
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.location.GnssStatus
+import android.location.GpsStatus
+import android.os.Build
+import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.multidex.MultiDex
 import com.baidu.mapapi.CoordType
 import com.baidu.mapapi.SDKInitializer
@@ -16,7 +21,11 @@ import com.didichuxing.doraemondemo.mc.SlideBar
 import com.didichuxing.doraemondemo.module.http.CustomInterceptor
 import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.DoKitCallBack
+import com.didichuxing.doraemonkit.database.LocationEntity
+import com.didichuxing.doraemonkit.gps_mock.location.GpsTimeUtil
+import com.didichuxing.doraemonkit.gps_mock.location.GpsUtil
 import com.didichuxing.doraemonkit.kit.AbstractKit
+import com.didichuxing.doraemonkit.kit.core.DoKitViewManager
 import com.didichuxing.doraemonkit.kit.core.McClientProcessor
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord
 import com.didichuxing.doraemonkit.kit.network.okhttp.interceptor.DokitExtInterceptor
@@ -39,15 +48,14 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //百度地图初始化
+        // 百度地图初始化
         SDKInitializer.initialize(this)
         SDKInitializer.setCoordType(CoordType.BD09LL)
-        //测试环境:a49842eeebeb1989b3f9565eb12c276b
-        //线上环境:749a0600b5e48dd77cf8ee680be7b1b7
-        //DoraemonKit.disableUpload()
-        //是否显示入口icon
+        // 测试环境:a49842eeebeb1989b3f9565eb12c276b
+        // 线上环境:749a0600b5e48dd77cf8ee680be7b1b7
+        // DoraemonKit.disableUpload()
+        // 是否显示入口icon
         // DoraemonKit.setAwaysShowMainIcon(false);
-
 
         val kits: MutableList<AbstractKit> = ArrayList()
         kits.add(DemoKit())
@@ -63,11 +71,9 @@ class App : Application() {
 
         mapKits["业务专区2"] = mutableListOf<AbstractKit>(DemoKit())
 
-
-
         DoKit.Builder(this)
             .productId("749a0600b5e48dd77cf8ee680be7b1b7")
-                //测试环境pid
+            // 测试环境pid
 //            .productId("277016abcc33bff1e6a4f1afdf14b8e1")
             .disableUpload()
             .blockThresholdMillis(200)
@@ -98,7 +104,6 @@ class App : Application() {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     return chain.proceed(chain.request())
                 }
-
             })
             .mcClientProcess(object : McClientProcessor {
                 override fun process(
@@ -118,18 +123,13 @@ class App : Application() {
                                     view.setMarginLeftExtra(it)
                                 }
                             }
-
                         }
                         else -> {
-
                         }
                     }
-
                 }
-
             })
             .build()
-
 
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(CustomInterceptor())
@@ -147,8 +147,8 @@ class App : Application() {
 //            "pk_test_TYooMQauvdEDq54NiTphI7jx"
 //        )
 
-        //严格检查模式
-        //StrictMode.enableDefaults();
+        // 严格检查模式
+        // StrictMode.enableDefaults();
 
         com.didichuxing.doraemonkit.util.LogUtils.getConfig()
             .setLogSwitch(true)
@@ -177,6 +177,39 @@ class App : Application() {
             .stackOffset = 1
 
         MatrixApplication.init(this)
+
+        GpsUtil.getLocationManager(
+            this,
+            @RequiresApi(Build.VERSION_CODES.N)
+            object : GnssStatus.Callback() {
+                override fun onStarted() {
+                    super.onStarted()
+                    GpsTimeUtil.start()
+                }
+
+                override fun onStopped() {
+                    super.onStopped()
+                    GpsTimeUtil.end()
+                    DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
+                }
+            },
+            object : GpsStatus.Listener {
+                override fun onGpsStatusChanged(event: Int) {
+                    if (event === GpsStatus.GPS_EVENT_STARTED) {
+                        Log.d("zmenaGPS", "GPS event started ")
+                        GpsTimeUtil.start()
+                    } else if (event === GpsStatus.GPS_EVENT_STOPPED) {
+                        Log.d("zmenaGPS", "GPS event stopped ")
+                        GpsTimeUtil.end()
+                        DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
+                    } else if (event === GpsStatus.GPS_EVENT_FIRST_FIX) {
+                        Log.d("zmenaGPS", "GPS fixace ")
+                    } else if (event === GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+                        Log.d("zmenaGPS", "GPS EVET NECO ")
+                    }
+                }
+            }
+        )
     }
 
     override fun attachBaseContext(base: Context) {
