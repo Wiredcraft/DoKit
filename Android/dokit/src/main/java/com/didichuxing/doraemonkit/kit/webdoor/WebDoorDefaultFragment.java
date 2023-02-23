@@ -17,6 +17,8 @@ import android.webkit.WebChromeClient;
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.database.Counter;
 import com.didichuxing.doraemonkit.database.FpsEntity;
+import com.didichuxing.doraemonkit.database.LocationEntity;
+import com.didichuxing.doraemonkit.database.LocationEntityKt;
 import com.didichuxing.doraemonkit.database.MemoryEntity;
 import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
@@ -63,6 +65,7 @@ public class WebDoorDefaultFragment extends BaseFragment {
         List<NetworkRecordDBEntity> networkRecordDBEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllNetWork();
         List<Counter> counters = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllCounter();
         List<MemoryEntity> memoryEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllMemoryEntity();
+        List<LocationEntity> locationEntities = DoKitViewManager.getINSTANCE().getCounterDb().wclDao().getAllLocationEntity();
 
         if (WebViewManager.INSTANCE.getUrl() != null && !WebViewManager.INSTANCE.getUrl().isEmpty()) {
             mWebView.loadUrl(WebViewManager.INSTANCE.getUrl());
@@ -75,7 +78,8 @@ public class WebDoorDefaultFragment extends BaseFragment {
                             FpsJsbridgeBeanKt.convertToFpsFromList(fpsEntities),
                             NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
                             CounterBeanKt.convertToCounters(counters),
-                            FpsJsbridgeBeanKt.convertToMemoryFromList(memoryEntities)
+                            FpsJsbridgeBeanKt.convertToMemoryFromList(memoryEntities),
+                            LocationEntityKt.convertToLocationFrom(locationEntities)
                             );
                     }
                     mWebView.callHandler("testJavascriptHandler", GsonUtils.toJson(fpsJsBridgeBean), new CallBackFunction() {
