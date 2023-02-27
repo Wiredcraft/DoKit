@@ -29,6 +29,7 @@
 #import "DoraemonFPSUtil.h"
 #import "DoraemonFPSModel.h"
 #import "DoraemonFPSDataManager.h"
+#import "DoraemonCPUManager.h"
 
 #if DoraemonWithGPS
 #import "DoraemonGPSMocker.h"
@@ -109,6 +110,7 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
         defaultPosition = DoraemonFullScreenStartingPosition;
     }
     [self installWithStartingPosition:defaultPosition];
+    [DoraemonCPUManager shareInstance];
 }
 
 - (void)installWithPid:(NSString *)pId{

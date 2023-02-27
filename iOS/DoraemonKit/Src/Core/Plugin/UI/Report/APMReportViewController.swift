@@ -33,7 +33,7 @@ open class APMReportViewController: UIViewController {
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
         let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
-//        let url = URL(string: "http://10.10.2.49:3000/wiredexam-react-app")!
+//        let url = URL(string: "http://192.168.31.109:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
     }
@@ -68,7 +68,10 @@ extension APMReportViewController: WKNavigationDelegate {
                     "network": netData,
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
-                    "locationData": locationData,
+                    "locationData": [
+                        "count": 5,
+                        "totalTime": "30"
+                    ],
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
