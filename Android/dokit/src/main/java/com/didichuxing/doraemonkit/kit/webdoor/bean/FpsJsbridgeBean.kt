@@ -4,12 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.didichuxing.doraemonkit.database.FpsEntity
 import com.didichuxing.doraemonkit.database.MemoryEntity
-import com.didichuxing.doraemonkit.util.TimeUtils
 
 data class FpsJsbridgeBean(
     val appName: String,
     val version: String,
-    val fps: Fps,
+    val fps: List<FpsJsbridgeBean.Fps>,
     val network: NetWorkBean,
     val launchTimeData: MutableList<CounterBean>,
     val memoryLeakData: MutableList<MemoryLeak>,
@@ -17,8 +16,9 @@ data class FpsJsbridgeBean(
 ) {
 
     data class Fps(
-        val xValues: ArrayList<String>,
-        val data: ArrayList<Int>
+        val value: String,
+        val time: String,
+        val topView: String
     )
 
     data class MemoryLeak(
@@ -47,15 +47,10 @@ fun convertToMemoryFromList(memoryLeaks: MutableList<MemoryEntity>): ArrayList<F
     return memoryList
 }
 
-fun convertToFpsFromList(fpsEntities: MutableList<FpsEntity>): FpsJsbridgeBean.Fps {
-    val timeList = arrayListOf<String>()
-    val valueList = arrayListOf<Int>()
+fun convertToFpsFromList(fpsEntities: MutableList<FpsEntity>): List<FpsJsbridgeBean.Fps> {
+    val data = arrayListOf<FpsJsbridgeBean.Fps>()
     fpsEntities.forEach {
-        timeList.add(TimeUtils.millis2String(it.time.toLong()))
-        valueList.add(it.value.toInt())
+        data.add(FpsJsbridgeBean.Fps(it.value, it.time, it.topView))
     }
-    return FpsJsbridgeBean.Fps(
-        timeList,
-        valueList
-    )
+    return data
 }
