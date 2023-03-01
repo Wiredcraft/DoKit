@@ -325,7 +325,9 @@ public class PerformanceDataManager {
         if (DoKitManager.INSTANCE.getCALLBACK() != null) {
             DoKitManager.INSTANCE.getCALLBACK().onFpsCallBack(mLastFrameRate, getFpsFilePath());
         }
-        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(new FpsEntity("" + TimeUtils.getNowMills(), "" + mLastFrameRate));
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(
+            new FpsEntity("" + TimeUtils.getNowMills(),
+                "" + mLastFrameRate, ActivityUtils.getTopActivity().getLocalClassName()));
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastFrameRate > 60 ? 60 : mLastFrameRate, PERFORMANCE_TYPE_FPS);
         }
@@ -353,9 +355,9 @@ public class PerformanceDataManager {
             String procStats[] = procStatString.split(" ");
             String appStats[] = appStatString.split(" ");
             cpuTime = Long.parseLong(procStats[2]) + Long.parseLong(procStats[3])
-                    + Long.parseLong(procStats[4]) + Long.parseLong(procStats[5])
-                    + Long.parseLong(procStats[6]) + Long.parseLong(procStats[7])
-                    + Long.parseLong(procStats[8]);
+                + Long.parseLong(procStats[4]) + Long.parseLong(procStats[5])
+                + Long.parseLong(procStats[6]) + Long.parseLong(procStats[7])
+                + Long.parseLong(procStats[8]);
             appTime = Long.parseLong(appStats[13]) + Long.parseLong(appStats[14]);
             if (mLastCpuTime == null && mLastAppCpuTime == null) {
                 mLastCpuTime = cpuTime;
