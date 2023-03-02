@@ -404,5 +404,6 @@
     <string name="dk_kit_h5_help">H5助手</string>
     <string name="dk_kit_dokit_for_web">DoKit Web</string>
     <string name="dk_kit_dokit_studio">DoKit Studio</string>
+    <string name="dk_page_tested">https://trailsquad.github.io/wiredexam-react-app/</string>
 
 </resources>

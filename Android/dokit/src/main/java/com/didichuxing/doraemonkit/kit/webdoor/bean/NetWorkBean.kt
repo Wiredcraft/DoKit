@@ -18,10 +18,12 @@ data class NetWorkBean(
 )
 
 fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
-    val downloadDataRank = ArrayList<DownloadDataRank>(5)
-    val failReqCountRank = ArrayList<FailReqCountRank>(5)
-    val reqCountRank = ArrayList<ReqCountRank>(5)
-    val reqTimeRank = ArrayList<ReqTimeRank>(5)
+    val maxSize = 5
+    val limiTime = 1000 * 60 * 60
+    val downloadDataRank = ArrayList<DownloadDataRank>(maxSize)
+    val failReqCountRank = ArrayList<FailReqCountRank>(maxSize)
+    val reqCountRank = ArrayList<ReqCountRank>(maxSize)
+    val reqTimeRank = ArrayList<ReqTimeRank>(maxSize)
     var requestAverageTime = 0.0
     var requestSucsessRate = 0.0
     var slowRequestCount = 0
@@ -29,19 +31,19 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
     var summaryRequestDownFlow = 0.0
     var summaryRequestTime = 0.0
     var summaryRequestUploadFlow = 0.0
-    val uploadDataRank = ArrayList<UploadDataRank>(5)
+    val uploadDataRank = ArrayList<UploadDataRank>(maxSize)
     list.forEach { net ->
         if (net.responseLength > 0) {
-            if (downloadDataRank.size < 5) {
+            if (downloadDataRank.size < maxSize) {
                 downloadDataRank.add(DownloadDataRank("${net.method} ${net.url}", net.responseLength))
             }
         } else {
-            if (failReqCountRank.size < 5) {
+            if (failReqCountRank.size < maxSize) {
                 failReqCountRank.add(FailReqCountRank("${net.method} ${net.url}", net.responseLength))
             }
         }
         if (net.requestLength > 0) {
-            if (uploadDataRank.size < 5) {
+            if (uploadDataRank.size < maxSize) {
                 uploadDataRank.add(UploadDataRank("${net.method} ${net.url}", net.requestLength))
             }
         }
@@ -63,12 +65,12 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
                 }
             }
         } else {
-            if (reqTimeRank.size < 5) {
+            if (reqTimeRank.size < maxSize) {
                 reqTimeRank.add(ReqTimeRank(net.url, (net.endTime - net.startTime)))
             }
         }
 
-        if (((net.startTime - net.endTime) / 1000 / 60 / 60) > 1000) {
+        if ((net.startTime - net.endTime) > limiTime) {
             slowRequestCount++
         }
         summaryRequestCount++
