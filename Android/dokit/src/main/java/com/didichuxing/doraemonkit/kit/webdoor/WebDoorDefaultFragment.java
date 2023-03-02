@@ -24,8 +24,9 @@ import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity;
 import com.didichuxing.doraemonkit.kit.core.BaseFragment;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.CounterBeanKt;
-import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBean;
-import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsJsbridgeBeanKt;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.FpsBeanKt;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.JsbridgeBean;
+import com.didichuxing.doraemonkit.kit.webdoor.bean.MemoryLeakBeanKt;
 import com.didichuxing.doraemonkit.kit.webdoor.bean.NetWorkBeanKt;
 import com.didichuxing.doraemonkit.kit.webview.WebViewManager;
 import com.didichuxing.doraemonkit.util.GsonUtils;
@@ -72,13 +73,13 @@ public class WebDoorDefaultFragment extends BaseFragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FpsJsbridgeBean fpsJsBridgeBean = null;
+                    JsbridgeBean fpsJsBridgeBean = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        fpsJsBridgeBean = new FpsJsbridgeBean("Android", "15",
-                            FpsJsbridgeBeanKt.convertToFpsFromList(fpsEntities),
+                        fpsJsBridgeBean = new JsbridgeBean("Android", "15",
+                            FpsBeanKt.convertToFpsFromList(fpsEntities),
                             NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
                             CounterBeanKt.convertToCounters(counters),
-                            FpsJsbridgeBeanKt.convertToMemoryFromList(memoryEntities),
+                            MemoryLeakBeanKt.convertToMemoryFromList(memoryEntities),
                             LocationEntityKt.convertToLocationFrom(locationEntities)
                             );
                     }
