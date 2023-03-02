@@ -3,6 +3,17 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: 'doraemonkit.gradle'
 //apply plugin: 'com.didiglobal.booster'
+apply plugin: 'io.github.wurensen.android-aspectjx'
+
+// ajx配置
+aspectjx {
+    // 是否debug，开启后会输出织入信息等相关日志（3.3.0版本新增）
+    debug = true
+    // 是否启动
+    enabled = true
+    // 仅处理app下的代码
+    include 'com.didichuxing.doraemondemo'
+}
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]

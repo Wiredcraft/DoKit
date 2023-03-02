@@ -1,7 +1,12 @@
 package com.didichuxing.doraemondemo
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -35,6 +40,14 @@ import com.didichuxing.doraemonkit.util.ToastUtils
 
 class MainDoKitActivity : BaseStatusBarActivity() {
 
+    private val sensorManager by lazy { getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+    private val sensorEventListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +62,25 @@ class MainDoKitActivity : BaseStatusBarActivity() {
                 }
             }
         }
+
+        initSensor()
     }
 
+    private fun initSensor() {
+        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        Log.i("TEST", "getDefaultSensor :$sensor")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        sensorManager.registerListener(sensorEventListener, sensor, 200_000_000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(sensorEventListener)
+    }
 
     private fun onItemClick(itemView: DoKitItemView, text: String) {
         Log.i("TEST", "onItemClick :$text")
