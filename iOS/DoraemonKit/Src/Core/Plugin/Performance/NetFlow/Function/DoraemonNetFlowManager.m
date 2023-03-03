@@ -104,10 +104,10 @@
 #pragma mark -- DoraemonNetworkInterceptorDelegate
 - (void)doraemonNetworkInterceptorDidReceiveData:(NSData *)data response:(NSURLResponse *)response request:(NSURLRequest *)request error:(NSError *)error startTime:(NSTimeInterval)startTime {
     [DoraemonNetFlowHttpModel dealWithResponseData:data response:response request:request complete:^(DoraemonNetFlowHttpModel *httpModel) {
-        httpModel.startTime = startTime;
-        httpModel.endTime = [[NSDate date] timeIntervalSince1970];
+        httpModel.startTime = startTime * 1000;
+        httpModel.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
         
-        httpModel.totalDuration = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] - startTime];
+        httpModel.totalDuration = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] * 1000 - startTime * 1000];
         httpModel.topVc = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
         
         [[DoraemonNetFlowDataSource shareInstance] addHttpModel:httpModel];

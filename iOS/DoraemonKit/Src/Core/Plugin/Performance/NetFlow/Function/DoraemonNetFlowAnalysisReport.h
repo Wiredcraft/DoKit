@@ -28,5 +28,6 @@
 -(instancetype)initWithRequestTimeThreshold: (NSTimeInterval)requestTimeThreshold;
 
 - (NSDictionary *)reportDic;
+- (NSArray *)reportFlowdata;
 - (NSString *)toJson;
 @end

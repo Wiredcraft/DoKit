@@ -30,6 +30,7 @@
 #import "DoraemonFPSModel.h"
 #import "DoraemonFPSDataManager.h"
 #import "DoraemonCPUManager.h"
+#import "UIViewController+Doraemon.h"
 
 #if DoraemonWithGPS
 #import "DoraemonGPSMocker.h"
@@ -229,6 +230,9 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
             model.timestamp = [[NSDate date] timeIntervalSince1970];
             model.modelId = [NSString stringWithFormat:@"%@", @(model.timestamp * 1000)];
             model.value = fps;
+            NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
+            model.topViewName = className;
+
             [[DoraemonFPSDataManager sharedInstance] appendData: model];
         }];
         
