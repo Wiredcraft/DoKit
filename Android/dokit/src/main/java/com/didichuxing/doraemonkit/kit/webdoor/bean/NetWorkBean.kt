@@ -17,13 +17,14 @@ data class NetWorkBean(
     val uploadDataRank: List<UploadDataRank>
 )
 
+private const val NETWORK_DATA_MAXSIZE = 5
+private const val ONE_HOUR_IN_MILLISECOND = 1000 * 60 * 60
+
 fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
-    val maxSize = 5
-    val limiTime = 1000 * 60 * 60
-    val downloadDataRank = ArrayList<DownloadDataRank>(maxSize)
-    val failReqCountRank = ArrayList<FailReqCountRank>(maxSize)
-    val reqCountRank = ArrayList<ReqCountRank>(maxSize)
-    val reqTimeRank = ArrayList<ReqTimeRank>(maxSize)
+    val downloadDataRank = ArrayList<DownloadDataRank>(NETWORK_DATA_MAXSIZE)
+    val failReqCountRank = ArrayList<FailReqCountRank>(NETWORK_DATA_MAXSIZE)
+    val reqCountRank = ArrayList<ReqCountRank>(NETWORK_DATA_MAXSIZE)
+    val reqTimeRank = ArrayList<ReqTimeRank>(NETWORK_DATA_MAXSIZE)
     var requestAverageTime = 0.0
     var requestSucsessRate = 0.0
     var slowRequestCount = 0
@@ -31,19 +32,19 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
     var summaryRequestDownFlow = 0.0
     var summaryRequestTime = 0.0
     var summaryRequestUploadFlow = 0.0
-    val uploadDataRank = ArrayList<UploadDataRank>(maxSize)
+    val uploadDataRank = ArrayList<UploadDataRank>(NETWORK_DATA_MAXSIZE)
     list.forEach { net ->
         if (net.responseLength > 0) {
-            if (downloadDataRank.size < maxSize) {
+            if (downloadDataRank.size < NETWORK_DATA_MAXSIZE) {
                 downloadDataRank.add(DownloadDataRank("${net.method} ${net.url}", net.responseLength))
             }
         } else {
-            if (failReqCountRank.size < maxSize) {
+            if (failReqCountRank.size < NETWORK_DATA_MAXSIZE) {
                 failReqCountRank.add(FailReqCountRank("${net.method} ${net.url}", net.responseLength))
             }
         }
         if (net.requestLength > 0) {
-            if (uploadDataRank.size < maxSize) {
+            if (uploadDataRank.size < NETWORK_DATA_MAXSIZE) {
                 uploadDataRank.add(UploadDataRank("${net.method} ${net.url}", net.requestLength))
             }
         }
@@ -65,18 +66,17 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
                 }
             }
         } else {
-            if (reqTimeRank.size < maxSize) {
+            if (reqTimeRank.size < NETWORK_DATA_MAXSIZE) {
                 reqTimeRank.add(ReqTimeRank(net.url, (net.endTime - net.startTime)))
             }
         }
-
-        if ((net.startTime - net.endTime) > limiTime) {
+        if ((net.startTime - net.endTime) / ONE_HOUR_IN_MILLISECOND > 1000) {
             slowRequestCount++
         }
         summaryRequestCount++
         summaryRequestDownFlow += net.requestLength
         summaryRequestUploadFlow += net.responseLength
-        summaryRequestTime += ((net.startTime - net.endTime) / 1000 / 60 / 60)
+        summaryRequestTime += ((net.startTime - net.endTime) / ONE_HOUR_IN_MILLISECOND)
     }
 
     requestAverageTime = summaryRequestTime / summaryRequestCount

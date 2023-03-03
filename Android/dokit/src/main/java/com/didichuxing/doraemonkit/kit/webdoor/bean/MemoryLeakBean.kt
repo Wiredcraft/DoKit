@@ -1,7 +1,5 @@
 package com.didichuxing.doraemonkit.kit.webdoor.bean
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.didichuxing.doraemonkit.database.MemoryEntity
 
 data class MemoryLeakBean(
@@ -9,7 +7,6 @@ data class MemoryLeakBean(
     val info: String
 )
 
-@RequiresApi(Build.VERSION_CODES.N)
 fun convertToMemoryFromList(memoryLeaks: MutableList<MemoryEntity>): ArrayList<MemoryLeakBean> {
     val memoryMap = mutableMapOf<Int, MemoryLeakBean>()
     val memoryList = arrayListOf<MemoryLeakBean>()

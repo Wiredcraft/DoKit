@@ -56,7 +56,6 @@ public class WebDoorDefaultFragment extends BaseFragment {
         //mUrl = getArguments() == null ? null : getArguments().getString(BundleKey.KEY_URL);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -74,7 +73,6 @@ public class WebDoorDefaultFragment extends BaseFragment {
                 @Override
                 public void onClick(View view) {
                     JsbridgeBean fpsJsBridgeBean = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         fpsJsBridgeBean = new JsbridgeBean("Android", "15",
                             FpsBeanKt.convertToFpsFromList(fpsEntities),
                             NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
@@ -82,7 +80,6 @@ public class WebDoorDefaultFragment extends BaseFragment {
                             MemoryLeakBeanKt.convertToMemoryFromList(memoryEntities),
                             LocationEntityKt.convertToLocationFrom(locationEntities)
                             );
-                    }
                     mWebView.callHandler("testJavascriptHandler", GsonUtils.toJson(fpsJsBridgeBean), new CallBackFunction() {
                         @Override
                         public void onCallBack(String data) {
