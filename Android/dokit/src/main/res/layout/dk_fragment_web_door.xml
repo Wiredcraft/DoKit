@@ -26,6 +26,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             android:gravity="top"
+            android:text="@string/dk_page_tested"
             android:hint="@string/dk_web_door_hint"
             android:inputType="textUri"
             android:padding="5dp" />

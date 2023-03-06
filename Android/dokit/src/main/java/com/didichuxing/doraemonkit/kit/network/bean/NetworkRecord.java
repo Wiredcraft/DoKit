@@ -15,7 +15,7 @@ public class NetworkRecord implements Serializable {
     public Request mRequest;
     public Response mResponse;
     public String mPlatform;
-    public String mResponseBody;
+    public String mResponseBody = "";
 
     public long requestLength;
     public long responseLength;

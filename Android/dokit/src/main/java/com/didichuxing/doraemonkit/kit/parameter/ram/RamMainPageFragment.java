@@ -61,6 +61,7 @@ public class RamMainPageFragment extends AbsParameterFragment {
                 if (on) {
                     startMonitor();
                     MatrixApplication.initMemoryCanary(getContext());
+
                 } else {
                     stopMonitor();
                 }

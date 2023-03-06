@@ -99,22 +99,10 @@ public class NetworkManager {
             mGetCount++;
         }
         mTotalCount++;
+        if (record.mRequest.encode == null){
+            record.mRequest.encode = "";
+        }
         mRecords.add(record);
-        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
-            record.mRequestId,
-            record.mRequest.url,
-            record.mRequest.method,
-            record.mRequest.headers,
-            record.mRequest.postData,
-            record.mRequest.encode,
-            record.mPlatform,
-            record.mResponseBody,
-            record.requestLength,
-            record.responseLength,
-            record.startTime,
-            record.endTime
-        ));
-
         updateRecord(record, true);
     }
 
@@ -127,6 +115,21 @@ public class NetworkManager {
             public void run() {
                 if (DoKitManager.INSTANCE.getCALLBACK() != null && add) {
                     DoKitManager.INSTANCE.getCALLBACK().onNetworkCallBack(record);
+                    DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
+                        record.mRequestId,
+                        record.mRequest.url,
+                        record.mRequest.method,
+                        record.mRequest.headers,
+                        record.mRequest.postData,
+                        record.mRequest.encode,
+                        record.mPlatform,
+                        record.mResponseBody,
+                        record.requestLength,
+                        record.responseLength,
+                        record.startTime,
+                        record.endTime
+                    ));
+
                 }
                 if (mOnNetworkInfoUpdateListener != null) {
                     mOnNetworkInfoUpdateListener.onNetworkInfoUpdate(record, add);
