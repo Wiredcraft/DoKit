@@ -1,18 +1,18 @@
 package com.didichuxing.doraemonkit.kit.webdoor;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.util.Log;
 import android.view.View;
 import android.webkit.ConsoleMessage;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.database.Counter;
@@ -34,6 +34,7 @@ import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by wanglikun on 2019/4/4
@@ -52,7 +53,6 @@ public class WebDoorDefaultFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //mUrl = getArguments() == null ? null : getArguments().getString(BundleKey.KEY_URL);
     }
 
@@ -73,17 +73,17 @@ public class WebDoorDefaultFragment extends BaseFragment {
                 @Override
                 public void onClick(View view) {
                     JsbridgeBean fpsJsBridgeBean = null;
-                        fpsJsBridgeBean = new JsbridgeBean("Android", "15",
-                            FpsBeanKt.convertToFpsFromList(fpsEntities),
-                            NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
-                            CounterBeanKt.convertToCounters(counters),
-                            MemoryLeakBeanKt.convertToMemoryFromList(memoryEntities),
-                            LocationEntityKt.convertToLocationFrom(locationEntities)
-                            );
+                    fpsJsBridgeBean = new JsbridgeBean("Android", "15",
+                        FpsBeanKt.convertToFpsFromList(fpsEntities),
+                        NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
+                        CounterBeanKt.convertToCounters(counters),
+                        MemoryLeakBeanKt.convertToMemoryFromList(memoryEntities),
+                        LocationEntityKt.convertToLocationFrom(locationEntities)
+                    );
                     mWebView.callHandler("testJavascriptHandler", GsonUtils.toJson(fpsJsBridgeBean), new CallBackFunction() {
                         @Override
                         public void onCallBack(String data) {
-                            Log.i(TAG,"call succeed,return value is "+data);
+                            Log.i(TAG, "call succeed,return value is " + data);
                         }
                     });
                 }
@@ -100,10 +100,12 @@ public class WebDoorDefaultFragment extends BaseFragment {
         mWebView.getSettings().setDatabaseEnabled(true);
         // 开启 localStorage
         mWebView.getSettings().setDomStorageEnabled(true);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         // 设置支持javascript
         mWebView.getSettings().setJavaScriptEnabled(true);
         // 进行缩放
         mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setAppCachePath(Objects.requireNonNull(getContext()).getCacheDir().getAbsolutePath());
         // 设置UserAgent
         mWebView.getSettings().setUserAgentString(mWebView.getSettings().getUserAgentString() + "app");
         // 设置不用系统浏览器打开,直接显示在当前WebView
@@ -116,7 +118,18 @@ public class WebDoorDefaultFragment extends BaseFragment {
                 return true;
             }
         });
+
+        // 2. 添加JavascriptInterface
+        DownloadBlobFileJSInterface mDownloadBlobFileJSInterface = new DownloadBlobFileJSInterface(getContext());
+        mWebView.addJavascriptInterface(mDownloadBlobFileJSInterface, "Android");
 //        mWebView.setWebViewClient(new MyWebViewClient(mWebView!!));
+        mWebView.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(String url, String s1, String s2, String s3, long l) {
+                // 3. 执行JS代码
+                mWebView.loadUrl(DownloadBlobFileJSInterface.getBase64StringFromBlobUrl(url));
+            }
+        });
     }
 
     @Override

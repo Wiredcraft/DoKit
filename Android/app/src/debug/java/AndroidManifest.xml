@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!--    tools:replace问题参考  https://developer.android.google.cn/studio/build/manifest-merge?hl=zh-cn tools:replace部分-->
     <!--    android:requestLegacyExternalStorage="true" 解决sd卡没有权限的问题-->
@@ -40,7 +41,6 @@
 
         <activity android:name=".mc.WebViewActivity" />
         <activity android:name=".comm.CommFragmentActivity" />
-
 
         <!--                <activity-->
         <!--                    android:name=".MainDebugActivityOkhttpV3"-->
