@@ -23,7 +23,7 @@
 
 - (NSString *)toJson;
 
-- (NSDictionary *)dicForReport;
+- (NSArray *)dicForReport;
 
 @end
 

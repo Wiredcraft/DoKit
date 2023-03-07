@@ -15,6 +15,7 @@ typedef void (^DoraemonFPSBlock)(NSInteger fps);
 
 - (void)start;
 - (void)end;
+- (NSInteger)getFps;
 - (void)addFPSBlock:(DoraemonFPSBlock)block;
 
 @end

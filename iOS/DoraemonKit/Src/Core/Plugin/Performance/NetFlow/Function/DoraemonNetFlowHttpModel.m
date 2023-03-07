@@ -42,7 +42,7 @@
     if (!httpModel.statusCode) httpModel.statusCode = @"0";
     httpModel.responseData = responseData;
     httpModel.responseBody = [DoraemonUrlUtil convertJsonFromData:responseData];
-    httpModel.totalDuration = [NSString stringWithFormat:@"%fs",[[NSDate date] timeIntervalSince1970] - request.startTime.doubleValue];
+    httpModel.totalDuration = [NSString stringWithFormat:@"%fs",[[NSDate date] timeIntervalSince1970] * 1000 - request.startTime.doubleValue * 1000];
     httpModel.downFlow = [NSString stringWithFormat:@"%lli",[DoraemonUrlUtil getResponseLength:(NSHTTPURLResponse *)response data:responseData]];
     [[DoraemonNetFlowManager shareInstance] httpBodyFromRequest:request bodyCallBack:^(NSData *body) {
         httpModel.requestBody = [DoraemonUrlUtil convertJsonFromData:body];

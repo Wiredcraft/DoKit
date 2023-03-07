@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString * modelId;
 @property(nonatomic, assign) NSTimeInterval timestamp;
 @property(nonatomic, assign) NSInteger value;
+@property(nonatomic, copy) NSString *topViewName;
 
 @end
 

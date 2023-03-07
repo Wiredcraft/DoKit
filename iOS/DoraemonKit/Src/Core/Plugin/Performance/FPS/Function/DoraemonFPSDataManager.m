@@ -47,4 +47,16 @@ static NSString *DoraemonFPSDataTable = @"DoraemonFPSDataTable";
     return (NSArray<DoraemonFPSModel *> *)[RealmUtil filterModelsWithPredicate:predicate tableName:DoraemonFPSDataTable objClass:DoraemonFPSModel.self];
 }
 
+- (NSArray *)dataForReport {
+    NSMutableArray *resArray = @[].mutableCopy;
+    for (DoraemonFPSModel *model in self.allData) {
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        dic[@"time"] = @(model.timestamp);
+        dic[@"value"] = @(model.value);
+        dic[@"topView"] = model.topViewName;
+        [resArray addObject:dic];
+    }
+    return resArray;
+}
+
 @end

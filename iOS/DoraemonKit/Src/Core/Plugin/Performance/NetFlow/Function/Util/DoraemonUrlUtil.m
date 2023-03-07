@@ -22,7 +22,9 @@
         // NSJSONSerialization escapes forward slashes. We want pretty json, so run through and unescape the slashes.
         jsonString = [jsonString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
     } else {
-        jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        if (data) {
+            jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
     }
     return jsonString.length > 0 ? jsonString : @"";
 }

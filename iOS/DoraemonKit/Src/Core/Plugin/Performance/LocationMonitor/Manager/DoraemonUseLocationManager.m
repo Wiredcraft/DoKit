@@ -69,16 +69,16 @@ static NSString *DoraemonUseLocationDataModelTable = @"DoraemonUseLocationDataMo
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
 }
 
-- (NSDictionary *)dicForReport {
+- (NSArray *)dicForReport {
     NSArray *modelArray = [self useModelArray];
-    double totalTime = 0;
+    NSMutableArray *resArray = @[].mutableCopy;
     for (DoraemonUseLocationDataModel *model in modelArray) {
-        totalTime += model.useDuration;
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        dic[@"time"] = @(model.timeStamp);
+        dic[@"duration"] = @(model.useDuration);
+        [resArray addObject:dic];
     }
-    return @{
-        @"count": @(modelArray.count),
-        @"totalTime": @(totalTime)
-    };
+    return resArray;
 }
 
 @end
