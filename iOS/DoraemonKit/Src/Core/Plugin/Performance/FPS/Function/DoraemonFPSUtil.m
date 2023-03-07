@@ -73,4 +73,8 @@
     self.block = block;
 }
 
+- (NSInteger)getFps {
+    return self.fps;
+}
+
 @end

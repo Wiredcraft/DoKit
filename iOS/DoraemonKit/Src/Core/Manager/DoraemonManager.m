@@ -80,6 +80,7 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
 
 // store FPS
 @property (nonatomic, copy) DoraemonFPSUtil *fpsUtil;
+@property (nonatomic, strong) NSTimer *fpsTimer;
 
 @end
 
@@ -220,23 +221,19 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
     }
     
     //记录 FPS 数据
-    if ([DoraemonCacheManager sharedInstance].storeFPS) {
-        if (!_fpsUtil) {
-            _fpsUtil = [[DoraemonFPSUtil alloc] init];
-        }
-        
-        [_fpsUtil addFPSBlock:^(NSInteger fps) {
+    if (!_fpsUtil) {
+        _fpsUtil = [[DoraemonFPSUtil alloc] init];
+        [_fpsUtil start];
+        [_fpsTimer invalidate];
+        _fpsTimer = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
             DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
             model.timestamp = [[NSDate date] timeIntervalSince1970];
             model.modelId = [NSString stringWithFormat:@"%@", @(model.timestamp * 1000)];
-            model.value = fps;
+            model.value = [_fpsUtil getFps];
             NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
             model.topViewName = className;
-
             [[DoraemonFPSDataManager sharedInstance] appendData: model];
         }];
-        
-        [_fpsUtil start];
     }
 }
 

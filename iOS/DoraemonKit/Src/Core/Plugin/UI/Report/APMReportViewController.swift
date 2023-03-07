@@ -27,11 +27,28 @@ open class APMReportViewController: UIViewController {
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
-//        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
+        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
 //        let url = URL(string: "http://192.168.31.109:3000/wiredexam-react-app")!
-        let url = URL(string: "http://192.168.31.109:3000/wiredexam-react-app")!
+//        let url = URL(string: "http://10.10.4.86:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
+    }
+
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        bridge.register(handlerName: "lookPdf") {[weak self] parameters, callback in
+            let str = (parameters?["pdfData"] as? String)?.replacingOccurrences(of: "data:application/pdf;base64,", with: "")
+            print(str?.count)
+            let data = Data(base64Encoded: str ?? "", options: .ignoreUnknownCharacters)
+            DispatchQueue.main.async {
+                self?.sharedPdf(data: (data ?? str?.data(using: .utf8)) ?? Data())
+            }
+        }
+    }
+
+    func sharedPdf(data: Data) {
+        let activityVC = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        self.present(activityVC, animated: true)
     }
 }
 
@@ -51,11 +68,12 @@ extension APMReportViewController: WKNavigationDelegate {
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
             let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
 
-            let netdataStr = self.getJSONStringFromArray(array: netFlowData ?? [])
-            let locationdataStr = self.getJSONStringFromArray(array: locationData ?? [])
-            print(netdataStr)
-            print("=====")
-            print(locationdataStr)
+//            let netDataStr = self.getJSONStringFromDictionary(dictionary: netData as! NSDictionary)
+//            let netdataStr = self.getJSONStringFromArray(array: netFlowData ?? [])
+//            let locationdataStr = self.getJSONStringFromArray(array: locationData ?? [])
+//            print(netDataStr)
+//            print("=====")
+//            print(locationdataStr)
 
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
