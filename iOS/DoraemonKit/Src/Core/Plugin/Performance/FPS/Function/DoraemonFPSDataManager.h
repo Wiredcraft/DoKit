@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)appendData:(DoraemonFPSModel *)data;
 - (NSArray<DoraemonFPSModel *> *)allData;
 - (NSArray<DoraemonFPSModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp;
+- (NSArray *)dataForReport;
 @end
 
 NS_ASSUME_NONNULL_END

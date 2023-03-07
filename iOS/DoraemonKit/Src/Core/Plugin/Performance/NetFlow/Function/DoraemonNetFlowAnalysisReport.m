@@ -243,4 +243,15 @@
     return pairs;
 }
 
+- (NSArray *)reportFlowdata {
+    NSMutableArray *resArray = @[].mutableCopy;
+    for (DoraemonNetFlowHttpModel *model in [self httpModelArray]) {
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        dic[@"time"] = @(model.startTime);
+        dic[@"duration"] = @([model.totalDuration doubleValue]);
+        [resArray addObject: dic];
+    }
+    return resArray;
+}
+
 @end

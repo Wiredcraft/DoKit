@@ -71,7 +71,7 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
         retainCycleStr = [retainCycleStr stringByReplacingOccurrencesOfString:@"(" withString:@""];
         retainCycleStr = [retainCycleStr stringByReplacingOccurrencesOfString:@")" withString:@""];
     }
-    NSString *leakInfo = [NSString stringWithFormat:@"className: %@\nviewStack:%@\nretainCycle:%@", STRING_NOT_NULL(className), STRING_NOT_NULL([viewStack componentsJoinedByString:@","]), retainCycleStr];
+    NSString *leakInfo = [NSString stringWithFormat:@"className: %@", STRING_NOT_NULL(className)];
     DoraemonMemoryLeakModel *leakModel = [[DoraemonMemoryLeakModel alloc] init];
     leakModel.uid = [[NSUUID UUID] UUIDString];
     leakModel.info = leakInfo;
@@ -165,7 +165,6 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
         item[@"count"] = dic[info];
         [resArray addObject:item];
     }
-//    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonLeakModelTable];
     return resArray;
 }
 
