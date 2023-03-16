@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit.kit.webdoor;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -73,7 +74,7 @@ public class WebDoorDefaultFragment extends BaseFragment {
                 @Override
                 public void onClick(View view) {
                     JsbridgeBean fpsJsBridgeBean = null;
-                    fpsJsBridgeBean = new JsbridgeBean("Android", "15",
+                    fpsJsBridgeBean = new JsbridgeBean("Android", Build.DEVICE +" , "+ Build.VERSION.SDK_INT,
                         FpsBeanKt.convertToFpsFromList(fpsEntities),
                         NetWorkBeanKt.convertToNetWorkFrom(networkRecordDBEntities),
                         CounterBeanKt.convertToCounters(counters),
