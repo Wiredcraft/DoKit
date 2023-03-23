@@ -58,10 +58,6 @@ static NSString *DoraemonUseLocationDataModelTable = @"DoraemonUseLocationDataMo
         dic[@"modelId"] = model.modelId;
         dic[@"timeStamp"] = @(model.timeStamp);
         dic[@"useDuration"] = @(model.useDuration);
-        dic[@"distanceFilter"] = @(model.distanceFilter);
-        dic[@"desiredAccuracy"] = @(model.desiredAccuracy);
-        dic[@"longitude"] = @(model.longitude);
-        dic[@"latitude"] = @(model.latitude);
         [dicArray addObject:dic];
     }
     NSError *error = nil;

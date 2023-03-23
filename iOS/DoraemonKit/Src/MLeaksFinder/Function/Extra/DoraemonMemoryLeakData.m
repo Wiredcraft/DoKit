@@ -75,9 +75,11 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
     DoraemonMemoryLeakModel *leakModel = [[DoraemonMemoryLeakModel alloc] init];
     leakModel.uid = [[NSUUID UUID] UUIDString];
     leakModel.info = leakInfo;
-    [RealmUtil addOrUpdateModel:leakModel queue:_serialQueue tableName:DoraemonLeakModelTable];
+    if (![leakInfo containsString:@"Doraemon"]) {
+        [RealmUtil addOrUpdateModel:leakModel queue:_serialQueue tableName:DoraemonLeakModelTable];
+        [_dataArray addObject:info];
+    }
 
-    [_dataArray addObject:info];
     [[DoraemonHealthManager sharedInstance] addLeak:info];
     
     if (self.block) {

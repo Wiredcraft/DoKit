@@ -158,10 +158,11 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
         [DoraemonCrashSignalExceptionHandler registerHandler];
     }
     //根据开关判断是否开启流量监控
-    if ([[DoraemonCacheManager sharedInstance] netFlowSwitch]) {
-        [[DoraemonNetFlowManager shareInstance] canInterceptNetFlow:YES];
-        //[[DoraemonNetFlowOscillogramWindow shareInstance] show];
-    }
+//    if ([[DoraemonCacheManager sharedInstance] netFlowSwitch]) {
+//        [[DoraemonNetFlowManager shareInstance] canInterceptNetFlow:YES];
+//        //[[DoraemonNetFlowOscillogramWindow shareInstance] show];
+//    }
+    [[DoraemonNetFlowManager shareInstance] canInterceptNetFlow:YES];
 
     //重新启动的时候，把帧率、CPU、内存和流量监控关闭
     [[DoraemonCacheManager sharedInstance] saveFpsSwitch:NO];
@@ -232,8 +233,11 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
             model.value = [_fpsUtil getFps];
             NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
             model.topViewName = className;
-            [[DoraemonFPSDataManager sharedInstance] appendData: model];
+            if (![className containsString:@"DoraemonKit"]) {
+                [[DoraemonFPSDataManager sharedInstance] appendData: model];
+            }
         }];
+        [[NSRunLoop currentRunLoop] addTimer:_fpsTimer forMode: NSRunLoopCommonModes];
     }
 }
 
