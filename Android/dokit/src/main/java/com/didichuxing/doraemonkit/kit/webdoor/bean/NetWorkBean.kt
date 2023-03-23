@@ -14,7 +14,7 @@ data class NetWorkBean(
     val summaryRequestDownFlow: String,
     val summaryRequestTime: Double,
     val summaryRequestUploadFlow: String,
-    val uploadDataRank: List<UploadDataRank>
+    val uploadDataRank: List<UploadDataRank>,
 )
 
 private const val NETWORK_DATA_MAXSIZE = 5
@@ -34,6 +34,11 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
     var summaryRequestUploadFlow = 0.0
     val uploadDataRank = ArrayList<UploadDataRank>(NETWORK_DATA_MAXSIZE)
     list.forEach { net ->
+
+        if (net.url.contains("dokit")) {
+            return@forEach
+        }
+
         if (net.responseLength > 0) {
             if (downloadDataRank.size < NETWORK_DATA_MAXSIZE) {
                 downloadDataRank.add(DownloadDataRank("${net.method} ${net.url}", net.responseLength))
@@ -93,31 +98,31 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
         "$summaryRequestDownFlow kb",
         summaryRequestTime,
         "$summaryRequestUploadFlow kb",
-        uploadDataRank
+        uploadDataRank,
     )
 }
 
 data class DownloadDataRank(
     val key: String,
-    val value: Long
+    val value: Long,
 )
 
 data class FailReqCountRank(
     val key: String,
-    val value: Long
+    val value: Long,
 )
 
 data class ReqCountRank(
     val key: String,
-    var value: Int
+    var value: Int,
 )
 
 data class ReqTimeRank(
     val key: String,
-    var value: Long
+    var value: Long,
 )
 
 data class UploadDataRank(
     val key: String,
-    val value: Long
+    val value: Long,
 )
