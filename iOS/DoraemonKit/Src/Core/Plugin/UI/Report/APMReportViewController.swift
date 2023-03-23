@@ -27,7 +27,7 @@ open class APMReportViewController: UIViewController {
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         bridge = WKWebViewJavascriptBridge(webView: webView)
         
-        let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
+       let url = URL(string: "https://trailsquad.github.io/wiredexam-react-app/index.html")!
 //        let url = URL(string: "http://192.168.31.109:3000/wiredexam-react-app")!
 //        let url = URL(string: "http://10.10.4.86:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
@@ -84,10 +84,7 @@ extension APMReportViewController: WKNavigationDelegate {
                     "networkFlowData": netFlowData,
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
-                    "locationData": [
-                        "count": 5,
-                        "totalTime": "30"
-                    ],
+                    "locationData": locationData,
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
