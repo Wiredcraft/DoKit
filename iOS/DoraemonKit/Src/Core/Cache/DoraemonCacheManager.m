@@ -345,13 +345,14 @@ static NSString * const kDoraemonHealthStartKey = @"doraemon_health_start_key";
     [_defaults synchronize];
 }
 - (BOOL)memoryLeak{
-    if (_firstReadMemoryLeakOn) {
-        return _memoryLeakOn;
-    }
-    _firstReadMemoryLeakOn = YES;
-    _memoryLeakOn = [_defaults boolForKey:kDoraemonMemoryLeakKey];
-     
-    return _memoryLeakOn;
+    return YES;
+//    if (_firstReadMemoryLeakOn) {
+//        return _memoryLeakOn;
+//    }
+//    _firstReadMemoryLeakOn = YES;
+//    _memoryLeakOn = [_defaults boolForKey:kDoraemonMemoryLeakKey];
+//     
+//    return _memoryLeakOn;
 }
 
 // 内存泄漏弹框开关

@@ -49,10 +49,6 @@
     DoraemonUseLocationDataModel *useModel = [[DoraemonUseLocationDataModel alloc] init];
     useModel.modelId = [[NSUUID UUID] UUIDString];
     useModel.timeStamp = currenntTimeStamp;
-    useModel.distanceFilter = locationManager.distanceFilter;
-    useModel.desiredAccuracy = locationManager.desiredAccuracy;
-    useModel.longitude = currentLocation.coordinate.longitude;
-    useModel.latitude = currentLocation.coordinate.latitude;
     useModel.useDuration = useDuration;
 
     [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp = currenntTimeStamp;
