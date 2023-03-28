@@ -17,6 +17,7 @@
 #import "DoraemonTimeProfiler.h"
 #import "DoraemonStartTimeProfilerViewController.h"
 #import "DoraemonLaunchTimeManager.h"
+#import "Aspects.h"
 
 static NSTimeInterval startTime;
 static NSTimeInterval endTime;
@@ -32,21 +33,24 @@ static NSTimeInterval endTime;
 
 + (void)load{
     startTime = [[NSDate date] timeIntervalSince1970];
-    NSString *startClass = [DoraemonManager shareInstance].startClass;
-    if (!startClass) {
-        startClass = @"AppDelegate";
-    }
-    NSString *namespace = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
-    Class class = NSClassFromString(startClass);
-    if (!class) {
-       NSString *className = [NSString stringWithFormat:@"%@.%@", namespace, startClass];
-       class = NSClassFromString(className);
-    }
+
+    [UIApplication aspect_hookSelector:@selector(setDelegate:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo, id<UIApplicationDelegate> delegate) {
+        NSObject *obj = (NSObject *)delegate;
+        [self hockDidFinishLaunchingWithOptions:obj];
+    } error:NULL];
+}
+
++ (void) hockDidFinishLaunchingWithOptions: (NSObject *)appDelegate {
+    Class class = appDelegate.class;
     Method originMethod = class_getInstanceMethod(class, @selector(application:didFinishLaunchingWithOptions:));
     Method swizzledMethod = class_getInstanceMethod([self class], @selector(doraemon_application:didFinishLaunchingWithOptions:));
     class_addMethod(class, method_getName(swizzledMethod), method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
     Method swizzledMethod2 = class_getInstanceMethod(class, @selector(doraemon_application:didFinishLaunchingWithOptions:));
     method_exchangeImplementations(originMethod, swizzledMethod2);
+
+    dispatch_after(1.0, dispatch_get_main_queue(), ^{
+        [[DoraemonManager shareInstance] install];
+    });
 }
 
 - (BOOL)doraemon_application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{

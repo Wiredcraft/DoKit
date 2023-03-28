@@ -14,6 +14,7 @@
 #import "DoraemonHomeWindow.h"
 #import "DoraemonStatusBarViewController.h"
 #import "DoraemonBuriedPointManager.h"
+#import "UIViewController+Doraemon.h"
 
 @interface DoraemonEntryWindow()
 
@@ -124,12 +125,16 @@
  进入工具主面板
  */
 - (void)entryClick:(UIButton *)btn{
-    if ([DoraemonHomeWindow shareInstance].hidden) {
-        [[DoraemonHomeWindow shareInstance] show];
-        DoKitBP(@"dokit_sdk_home_ck_entry")
-    }else{
-        [[DoraemonHomeWindow shareInstance] hide];
-    }
+    NSLog(@"点击悬浮按钮");
+//    if ([DoraemonHomeWindow shareInstance].hidden) {
+//        [[DoraemonHomeWindow shareInstance] show];
+//        DoKitBP(@"dokit_sdk_home_ck_entry")
+//    }else{
+//        [[DoraemonHomeWindow shareInstance] hide];
+//    }
+
+    UIViewController * vc = [[NSClassFromString(@"DoraemonKit.APMReportViewController") alloc] init];
+    [[UIViewController topViewControllerForKeyWindow] presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)pan{
