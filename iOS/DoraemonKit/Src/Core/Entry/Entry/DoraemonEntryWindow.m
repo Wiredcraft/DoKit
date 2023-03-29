@@ -125,16 +125,12 @@
  进入工具主面板
  */
 - (void)entryClick:(UIButton *)btn{
-    NSLog(@"点击悬浮按钮");
-//    if ([DoraemonHomeWindow shareInstance].hidden) {
-//        [[DoraemonHomeWindow shareInstance] show];
-//        DoKitBP(@"dokit_sdk_home_ck_entry")
-//    }else{
-//        [[DoraemonHomeWindow shareInstance] hide];
-//    }
-
-    UIViewController * vc = [[NSClassFromString(@"DoraemonKit.APMReportViewController") alloc] init];
-    [[UIViewController topViewControllerForKeyWindow] presentViewController:vc animated:YES completion:nil];
+    if ([DoraemonHomeWindow shareInstance].hidden) {
+        [[DoraemonHomeWindow shareInstance] show];
+        DoKitBP(@"dokit_sdk_home_ck_entry")
+    }else{
+        [[DoraemonHomeWindow shareInstance] hide];
+    }
 }
 
 - (void)pan:(UIPanGestureRecognizer *)pan{
