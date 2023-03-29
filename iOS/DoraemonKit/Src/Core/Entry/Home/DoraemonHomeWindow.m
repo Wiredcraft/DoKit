@@ -54,7 +54,8 @@
 }
 
 - (void)show{
-    DoraemonHomeViewController *vc = [[DoraemonHomeViewController alloc] init];
+    UIViewController * vc = [[NSClassFromString(@"DoraemonKit.APMReportViewController") alloc] init];
+//    DoraemonHomeViewController *vc = [[DoraemonHomeViewController alloc] init];
     [self setRootVc:vc];
     
     self.hidden = NO;
