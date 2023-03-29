@@ -32,6 +32,8 @@ open class APMReportViewController: UIViewController {
         // let url = URL(string: "http://10.10.4.86:3000/wiredexam-react-app")!
         let req = URLRequest(url: url)
         self.webView.load(req)
+
+        webView.scrollView.isScrollEnabled = false
     }
 
     open override func viewDidAppear(_ animated: Bool) {
