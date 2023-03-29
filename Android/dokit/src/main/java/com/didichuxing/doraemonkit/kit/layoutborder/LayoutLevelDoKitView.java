@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import androidx.fragment.app.Fragment;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.datapick.DataPickUtils;
 import com.didichuxing.doraemonkit.util.ActivityUtils;
 import com.didichuxing.doraemonkit.util.ToastUtils;
 import com.didichuxing.doraemonkit.R;
@@ -116,6 +117,8 @@ public class LayoutLevelDoKitView extends AbsDoKitView {
                     if (mScalpelFrameLayout != null) {
                         mScalpelFrameLayout.setLayerInteractionEnabled(true);
                     }
+//                    //发送埋点
+//                    DataPickManager.getInstance().addData("dokit_sdk_ui_ck_widget_3d", DataPickUtils.getCurrentPage());
                 } else {
                     if (mScalpelFrameLayout != null) {
                         mScalpelFrameLayout.setLayerInteractionEnabled(false);

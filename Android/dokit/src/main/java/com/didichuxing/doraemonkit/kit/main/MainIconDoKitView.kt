@@ -27,8 +27,13 @@ class MainIconDoKitView : AbsDoKitView() {
         doKitView?.id = R.id.float_icon_id
         //设置icon 点击事件
         doKitView?.setOnClickListener { //统计入口
+//            val pageId = DataPickUtils.getCurrentPage()
+//            DataPickUtils.setDoKitHomeClickPage(pageId)
+//            DataPickManager.getInstance().addData("dokit_sdk_home_ck_entry", pageId)
             DoKit.showToolPanel()
         }
+
+//        DataPickManager.getInstance().addData("dokit_sdk_home_show", DataPickUtils.getCurrentPage())
     }
 
     override fun onCreateView(context: Context, view: FrameLayout): View {
