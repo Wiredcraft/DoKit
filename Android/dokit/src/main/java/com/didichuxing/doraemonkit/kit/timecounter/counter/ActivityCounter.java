@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.os.SystemClock;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.database.Counter;
+import com.didichuxing.doraemonkit.kit.health.model.FileConstants;
+import com.didichuxing.doraemonkit.kit.health.model.LocalFile;
 import com.didichuxing.doraemonkit.util.ActivityUtils;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil;
