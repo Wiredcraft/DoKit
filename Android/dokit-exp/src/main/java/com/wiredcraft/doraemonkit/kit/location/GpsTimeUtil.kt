@@ -1,4 +1,4 @@
-package com.didichuxing.doraemonkit.gps_mock.location
+package com.wiredcraft.doraemonkit.kit.location
 
 object GpsTimeUtil {
     var startMS = 0L

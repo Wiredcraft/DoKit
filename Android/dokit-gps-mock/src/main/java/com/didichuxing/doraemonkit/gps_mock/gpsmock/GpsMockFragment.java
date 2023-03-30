@@ -58,7 +58,6 @@ import com.didichuxing.doraemonkit.config.GpsMockConfig;
 import com.didichuxing.doraemonkit.gps_mock.R;
 import com.didichuxing.doraemonkit.gps_mock.common.BdMapRouteData;
 import com.didichuxing.doraemonkit.gps_mock.common.Utils;
-import com.didichuxing.doraemonkit.gps_mock.location.GpsUtil;
 import com.didichuxing.doraemonkit.gps_mock.widget.CustomDialogFragment;
 import com.didichuxing.doraemonkit.gps_mock.widget.DrivingRouteOverlay;
 import com.didichuxing.doraemonkit.gps_mock.widget.OverlayManager;
@@ -152,7 +151,6 @@ public class GpsMockFragment extends BaseFragment implements View.OnClickListene
         public void onReceiveLocation(BDLocation bdLocation) {
             LogHelper.d(TAG, "onReceiveLocation latitude=" + bdLocation.getLatitude() + " longitude=" + bdLocation.getLongitude());
             // 接收到业务方的mock数据,并进行mock
-            GpsUtil.getLocation(getContext());
             if (checkPosMockToggle() || (checkRouteMockToggle() && GpsMockManager.getInstance().isMockingRoute())) {
                 // 定位到输入框的坐标点所在的地图位置
                 moveToLoc(bdLocation.getLatitude(), bdLocation.getLongitude(), mCurZoomLevel);

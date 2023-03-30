@@ -203,22 +203,6 @@ object DoKit {
         return DoKitReal.getMode()
     }
 
-    /**
-     * 开启性能数据记录
-     */
-    fun startPerformanceRecording()  {
-        // FPS
-        PerformanceDataManager.getInstance().init()
-        PerformanceDataManager.getInstance().startMonitorFrameInfo()
-        // Network
-        NetworkManager.get().startMonitor()
-        // GPS no need
-        // Launch Time
-        FileManager.startSave()
-        BlockMonitorManager.getInstance().start()
-        // Memory Leak no need
-    }
-
     class Builder(private val app: Application) {
         private var productId: String = ""
         private var mapKits: LinkedHashMap<String, List<AbstractKit>> = linkedMapOf()

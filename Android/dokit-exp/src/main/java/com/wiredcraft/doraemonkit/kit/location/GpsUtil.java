@@ -1,4 +1,4 @@
-package com.didichuxing.doraemonkit.gps_mock.location;
+package com.wiredcraft.doraemonkit.kit.location;
 
 import android.Manifest;
 import android.content.Context;
