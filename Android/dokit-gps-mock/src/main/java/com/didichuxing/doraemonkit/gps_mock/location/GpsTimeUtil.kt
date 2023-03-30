@@ -1,7 +1,7 @@
 package com.didichuxing.doraemonkit.gps_mock.location
 
 object GpsTimeUtil {
-    private var startMS = 0L
+    var startMS = 0L
     private var endMS = 0L
 
     fun start() {

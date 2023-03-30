@@ -130,6 +130,7 @@ class App : Application() {
                 }
             })
             .build()
+        DoKit.startPerformanceRecording()
 
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(CustomInterceptor())
@@ -190,7 +191,7 @@ class App : Application() {
                 override fun onStopped() {
                     super.onStopped()
                     GpsTimeUtil.end()
-                    DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
+                    DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration(), GpsTimeUtil.startMS))
                 }
             },
             object : GpsStatus.Listener {
@@ -201,7 +202,7 @@ class App : Application() {
                     } else if (event === GpsStatus.GPS_EVENT_STOPPED) {
                         Log.d("zmenaGPS", "GPS event stopped ")
                         GpsTimeUtil.end()
-                        DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
+                        DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration(), GpsTimeUtil.startMS))
                     } else if (event === GpsStatus.GPS_EVENT_FIRST_FIX) {
                         Log.d("zmenaGPS", "GPS fixace ")
                     } else if (event === GpsStatus.GPS_EVENT_SATELLITE_STATUS) {

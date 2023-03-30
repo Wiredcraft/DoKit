@@ -7,7 +7,7 @@ data class MemoryLeakBean(
     val info: String
 )
 
-fun convertToMemoryFromList(memoryLeaks: MutableList<MemoryEntity>): ArrayList<MemoryLeakBean> {
+fun convertToMemoryFromList(memoryLeaks: List<MemoryEntity>): ArrayList<MemoryLeakBean> {
     val memoryMap = mutableMapOf<Int, MemoryLeakBean>()
     val memoryList = arrayListOf<MemoryLeakBean>()
 
@@ -17,11 +17,27 @@ fun convertToMemoryFromList(memoryLeaks: MutableList<MemoryEntity>): ArrayList<M
             val memoryLeak = memoryMap[m.type]
             memoryLeak?.count = memoryLeak?.count?.plus(1) ?: 1
         } else {
-            memoryMap.put(m.type, MemoryLeakBean(1, m.info))
+            memoryMap.put(m.type, MemoryLeakBean(1, getActivityFromInfo(m.info)))
         }
     }
     memoryMap.forEach { (_, memoryLeak) ->
         memoryList.add(memoryLeak)
     }
     return memoryList
+}
+
+fun getActivityFromInfo(info: String): String {
+    val prefix = "\"activity\":\""
+    info.indexOf(prefix).let { indexStart ->
+        if (indexStart == -1) {
+            return info
+        } else {
+            val indexEnd = info.indexOf("\"", indexStart + prefix.length)
+            if (indexEnd == -1) {
+                return info
+            } else {
+                return info.substring(indexStart + prefix.length, indexEnd)
+            }
+        }
+    }
 }

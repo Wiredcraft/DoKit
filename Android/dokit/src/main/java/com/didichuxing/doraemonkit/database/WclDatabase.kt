@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase
         MemoryEntity::class,
         LocationEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class WclDatabase : RoomDatabase() {

@@ -8,7 +8,7 @@ data class FpsBean(
     val topView: String
 )
 
-fun convertToFpsFromList(fpsEntities: MutableList<FpsEntity>): List<FpsBean> {
+fun convertToFpsFromList(fpsEntities: List<FpsEntity>): List<FpsBean> {
     val data = arrayListOf<FpsBean>()
     fpsEntities.forEach {
         data.add(FpsBean(it.value, it.time, it.topView))

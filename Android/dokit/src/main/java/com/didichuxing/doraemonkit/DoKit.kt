@@ -6,8 +6,15 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.didichuxing.doraemonkit.kit.AbstractKit
-import com.didichuxing.doraemonkit.kit.core.*
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager
+import com.didichuxing.doraemonkit.kit.blockmonitor.core.BlockMonitorManager
+import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
+import com.didichuxing.doraemonkit.kit.core.BaseFragment
+import com.didichuxing.doraemonkit.kit.core.DoKitViewLaunchMode
+import com.didichuxing.doraemonkit.kit.core.McClientProcessor
+import com.didichuxing.doraemonkit.kit.network.NetworkManager
 import com.didichuxing.doraemonkit.kit.network.okhttp.interceptor.DokitExtInterceptor
+import com.didichuxing.doraemonkit.kit.performance.PerformanceDataManager
 import com.didichuxing.doraemonkit.kit.webdoor.WebDoorManager
 import kotlin.reflect.KClass
 
@@ -194,6 +201,22 @@ object DoKit {
     @JvmStatic
     fun mcMode(): String {
         return DoKitReal.getMode()
+    }
+
+    /**
+     * 开启性能数据记录
+     */
+    fun startPerformanceRecording()  {
+        // FPS
+        PerformanceDataManager.getInstance().init()
+        PerformanceDataManager.getInstance().startMonitorFrameInfo()
+        // Network
+        NetworkManager.get().startMonitor()
+        // GPS no need
+        // Launch Time
+        FileManager.startSave()
+        BlockMonitorManager.getInstance().start()
+        // Memory Leak no need
     }
 
     class Builder(private val app: Application) {
