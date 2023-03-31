@@ -86,6 +86,17 @@ allprojects {
                 url uri(localRepository())
             }
         }
+
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            credentials {
+                username '642677cf7dcfe0feff174479'
+                password 'c=w01)b)vvN1'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2359186-snapshot-2KppUX/'
+        }
     }
 }
 

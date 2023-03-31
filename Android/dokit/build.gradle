@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: '../upload.gradle'
+apply plugin: 'maven-publish'
 
 def dokitVersion = rootProject.ext.publish_config["version"]
 
@@ -200,10 +201,35 @@ dependencies {
 
 }
 
+publishing {
+    publications {
+        debug(MavenPublication) {
+            groupId = 'com.wiredcraft.doraemonkit'
+            artifactId = 'dokit'
+            version = '1.0.5-SNAPSHOT'
+            afterEvaluate {
+                from components.debug
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo2"
+        }
+        maven {
+            url = 'https://packages.aliyun.com/maven/repository/2359186-snapshot-2KppUX/'
+            credentials {
+                username = '642677cf7dcfe0feff174479'
+                password = 'c=w01)b)vvN1'
+            }
+        }
+    }
+}
 
-configurations.all {
+//configurations.all {
     //循环每个依赖库
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         //获取当前循环到的依赖库
 //        def requested = details.requested
 //        //如果这个依赖库群组的名字是com.android.support
@@ -225,8 +251,8 @@ configurations.all {
 //                details.useVersion '1.1.0'
 //            }
 //        }
-    }
-}
+//    }
+//}
 
 
 

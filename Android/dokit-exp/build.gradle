@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -32,5 +33,31 @@ android {
 
 dependencies {
     implementation rootProject.ext.dependencies["room_runtime"]
-    implementation project(':dokit')
+    compileOnly project(':dokit')
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.wiredcraft.doraemonkit'
+            artifactId = 'dokit-exp'
+            version = '1.0.5-SNAPSHOT'
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo2"
+        }
+        maven {
+            url = 'https://packages.aliyun.com/maven/repository/2359186-snapshot-2KppUX/'
+            credentials {
+                username = '642677cf7dcfe0feff174479'
+                password = 'c=w01)b)vvN1'
+            }
+        }
+    }
 }
