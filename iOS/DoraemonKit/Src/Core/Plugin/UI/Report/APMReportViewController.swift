@@ -72,15 +72,17 @@ extension APMReportViewController: WKNavigationDelegate {
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
             let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
 
+            let pageSpeedData = DoraemonPageSpeedManager.shareInstance().dataForReport()
+
 //            let netdataStr = self.getJSONStringFromArray(array: netFlowData ?? [])
 //            let locationdataStr = self.getJSONStringFromArray(array: locationData ?? [])
 //            print("=====")
 //            print(netdataStr)
 //            print("=====")
 //            print(locationdataStr)
-//            print("=====")
-//            print(self.getJSONStringFromArray(array: fpsData ?? []))
-//            print("=====")
+            print("=====")
+            print(self.getJSONStringFromArray(array: pageSpeedData ?? []))
+            print("=====")
 
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
