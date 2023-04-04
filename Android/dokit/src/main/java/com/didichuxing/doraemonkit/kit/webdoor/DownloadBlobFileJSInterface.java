@@ -49,7 +49,7 @@ public class DownloadBlobFileJSInterface {
 
     private void convertToPdfAndProcess(String base64) {
         File pdfFile = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DOWNLOADS) + "/anroid_check.pdf");
+            Environment.DIRECTORY_DOWNLOADS) + "/android_check_" + System.currentTimeMillis() + ".pdf");
         savePdfToPath(base64, pdfFile);
         Toast.makeText(mContext, pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         if (mDownloadPdfSuccessListener != null) {

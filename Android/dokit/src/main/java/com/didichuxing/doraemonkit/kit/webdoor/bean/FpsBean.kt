@@ -10,7 +10,7 @@ data class FpsBean(
 
 fun convertToFpsFromList(fpsEntities: List<FpsEntity>): List<FpsBean> {
     val data = arrayListOf<FpsBean>()
-    fpsEntities.forEach {
+    fpsEntities.filter { !isDoKitClass(it.topView) }.forEach {
         data.add(FpsBean(it.value, it.time, it.topView))
     }
     return data

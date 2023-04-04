@@ -204,9 +204,9 @@ dependencies {
 publishing {
     publications {
         debug(MavenPublication) {
-            groupId = 'com.wiredcraft.doraemonkit'
-            artifactId = 'dokit'
-            version = '1.0.5-SNAPSHOT'
+            groupId = 'io.github.didi.dokit'
+            artifactId = 'dokitx'
+            version = '3.7.20-SNAPSHOT'
             afterEvaluate {
                 from components.debug
             }

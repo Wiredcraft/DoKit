@@ -20,10 +20,14 @@ fun convertToMemoryFromList(memoryLeaks: List<MemoryEntity>): ArrayList<MemoryLe
             memoryMap.put(m.type, MemoryLeakBean(1, getActivityFromInfo(m.info)))
         }
     }
-    memoryMap.forEach { (_, memoryLeak) ->
+    memoryMap.filter { !isDoKitClass(it.value.info) }.forEach { (_, memoryLeak) ->
         memoryList.add(memoryLeak)
     }
     return memoryList
+}
+
+fun isDoKitClass(className: String): Boolean {
+    return className.contains("com.wiredcraft.doraemonkit") || className.contains("com.didichuxing.doraemonkit")
 }
 
 fun getActivityFromInfo(info: String): String {

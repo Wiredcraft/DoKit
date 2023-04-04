@@ -98,6 +98,10 @@ class App : Application() {
                 override fun onNetworkCallBack(record: NetworkRecord) {
                     super.onNetworkCallBack(record)
                 }
+
+                override fun onPdfCallBack(json: String) {
+                    super.onPdfCallBack(json)
+                }
             })
             .netExtInterceptor(object : DokitExtInterceptor.DokitExtInterceptorProxy {
                 override fun intercept(chain: Interceptor.Chain): Response {

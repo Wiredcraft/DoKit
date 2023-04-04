@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatButton
 import com.didichuxing.doraemonkit.R
 import com.didichuxing.doraemonkit.database.*
 import com.didichuxing.doraemonkit.kit.core.BaseFragment
+import com.didichuxing.doraemonkit.kit.core.DoKitManager
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager.Companion.INSTANCE
 import com.didichuxing.doraemonkit.kit.webdoor.bean.*
 import com.didichuxing.doraemonkit.util.AppUtils
@@ -61,8 +62,9 @@ class ReportFragment : BaseFragment() {
             convertToLocationFrom(locationEntities)
         )
         val b = GsonUtils.toJson(fpsJsBridgeBean)
+        DoKitManager.CALLBACK?.onPdfCallBack(b)
         mWebView.callHandler(
-            "testJavascriptHandler", b
+            "testJavascriptHandler", b.replace("%22","")
         ) { data -> Log.i(TAG, "call succeed,return value is $data") }
     }
 
