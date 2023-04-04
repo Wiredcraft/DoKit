@@ -325,9 +325,11 @@ public class PerformanceDataManager {
         if (DoKitManager.INSTANCE.getCALLBACK() != null) {
             DoKitManager.INSTANCE.getCALLBACK().onFpsCallBack(mLastFrameRate, getFpsFilePath());
         }
-        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(
-            new FpsEntity("" + TimeUtils.getNowMills(),
-                "" + mLastFrameRate, ActivityUtils.getTopActivity().getLocalClassName()));
+        if (ActivityUtils.getTopActivity() != null) {
+            DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(
+                new FpsEntity("" + TimeUtils.getNowMills(),
+                    "" + mLastFrameRate, ActivityUtils.getTopActivity().getLocalClassName()));
+        }
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastFrameRate > 60 ? 60 : mLastFrameRate, PERFORMANCE_TYPE_FPS);
         }

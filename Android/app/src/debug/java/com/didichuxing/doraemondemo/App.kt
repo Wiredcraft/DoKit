@@ -22,8 +22,6 @@ import com.didichuxing.doraemondemo.module.http.CustomInterceptor
 import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.DoKitCallBack
 import com.didichuxing.doraemonkit.database.LocationEntity
-import com.didichuxing.doraemonkit.gps_mock.location.GpsTimeUtil
-import com.didichuxing.doraemonkit.gps_mock.location.GpsUtil
 import com.didichuxing.doraemonkit.kit.AbstractKit
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager
 import com.didichuxing.doraemonkit.kit.core.McClientProcessor
@@ -34,6 +32,7 @@ import com.didichuxing.doraemonkit.util.LogUtils
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.lzy.okgo.OkGo
+import com.wiredcraft.doraemonkit.DoKitExp
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -98,6 +97,10 @@ class App : Application() {
 
                 override fun onNetworkCallBack(record: NetworkRecord) {
                     super.onNetworkCallBack(record)
+                }
+
+                override fun onPdfCallBack(json: String) {
+                    super.onPdfCallBack(json)
                 }
             })
             .netExtInterceptor(object : DokitExtInterceptor.DokitExtInterceptorProxy {
@@ -176,40 +179,7 @@ class App : Application() {
             .setStackDeep(1)
             .stackOffset = 1
 
-        MatrixApplication.init(this)
-
-        GpsUtil.getLocationManager(
-            this,
-            @RequiresApi(Build.VERSION_CODES.N)
-            object : GnssStatus.Callback() {
-                override fun onStarted() {
-                    super.onStarted()
-                    GpsTimeUtil.start()
-                }
-
-                override fun onStopped() {
-                    super.onStopped()
-                    GpsTimeUtil.end()
-                    DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
-                }
-            },
-            object : GpsStatus.Listener {
-                override fun onGpsStatusChanged(event: Int) {
-                    if (event === GpsStatus.GPS_EVENT_STARTED) {
-                        Log.d("zmenaGPS", "GPS event started ")
-                        GpsTimeUtil.start()
-                    } else if (event === GpsStatus.GPS_EVENT_STOPPED) {
-                        Log.d("zmenaGPS", "GPS event stopped ")
-                        GpsTimeUtil.end()
-                        DoKitViewManager.INSTANCE.counterDb.wclDao().insertLocation(LocationEntity(GpsTimeUtil.getDuration()))
-                    } else if (event === GpsStatus.GPS_EVENT_FIRST_FIX) {
-                        Log.d("zmenaGPS", "GPS fixace ")
-                    } else if (event === GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
-                        Log.d("zmenaGPS", "GPS EVET NECO ")
-                    }
-                }
-            }
-        )
+        DoKitExp.startPerformanceRecording(this)
     }
 
     override fun attachBaseContext(base: Context) {

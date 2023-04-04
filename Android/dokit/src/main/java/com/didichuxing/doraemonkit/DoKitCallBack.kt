@@ -28,4 +28,8 @@ interface DoKitCallBack {
     fun onNetworkCallBack(record: NetworkRecord) {
 
     }
+
+    fun onPdfCallBack(json: String) {
+
+    }
 }

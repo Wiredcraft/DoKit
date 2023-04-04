@@ -5,8 +5,9 @@ data class JsbridgeBean(
     val deviceInfo: String,
     val fps: List<FpsBean>,
     val network: NetWorkBean,
-    val launchTimeData: MutableList<CounterBean>,
-    val memoryLeakData: MutableList<MemoryLeakBean>,
-    val locationData: LocationBean
+    val networkFlowData: List<NetWorkFlowBean>,
+    val launchTimeData: List<CounterBean>,
+    val memoryLeakData: List<MemoryLeakBean>,
+    val locationData: List<LocationBean>
 )
 

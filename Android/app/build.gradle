@@ -160,6 +160,7 @@ dependencies {
     implementation project(path: ':dokit-mc')
     implementation project(path: ':dokit-autotest')
     implementation project(path: ':dokit-test')
+    implementation project(path: ':dokit-exp')
 
     testImplementation rootProject.ext.dependencies["junit"]
     implementation rootProject.ext.dependencies["constraintLayout"]

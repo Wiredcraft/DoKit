@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.didichuxing.doraemonkit.DoKit
+import com.didichuxing.doraemonkit.DoKit.launchFullScreen
 import com.didichuxing.doraemonkit.R
 import com.didichuxing.doraemonkit.config.FloatIconConfig
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
 import com.didichuxing.doraemonkit.kit.core.DoKitViewLayoutParams
+import com.didichuxing.doraemonkit.kit.webdoor.ReportFragment
+import com.didichuxing.doraemonkit.kit.webdoor.WebDoorDefaultFragment
 
 /**
  * 悬浮按钮
@@ -30,7 +33,8 @@ class MainIconDoKitView : AbsDoKitView() {
 //            val pageId = DataPickUtils.getCurrentPage()
 //            DataPickUtils.setDoKitHomeClickPage(pageId)
 //            DataPickManager.getInstance().addData("dokit_sdk_home_ck_entry", pageId)
-            DoKit.showToolPanel()
+//            DoKit.showToolPanel()
+            launchFullScreen(ReportFragment::class.java, context)
         }
 
 //        DataPickManager.getInstance().addData("dokit_sdk_home_show", DataPickUtils.getCurrentPage())

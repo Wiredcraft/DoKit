@@ -3,6 +3,7 @@ package com.didichuxing.doraemondemo;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
 import com.didichuxing.doraemondemo.dokit.DemoKit;
@@ -71,7 +72,10 @@ public class AopApp extends Application {
 
                     }
 
+                    @Override
+                    public void onPdfCallBack(@NonNull String json) {
 
+                    }
                 })
                 .build();
 

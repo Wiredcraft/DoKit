@@ -17,6 +17,11 @@ data class NetWorkBean(
     val uploadDataRank: List<UploadDataRank>,
 )
 
+data class NetWorkFlowBean(
+    val time: Long,
+    val duration: Long
+)
+
 private const val NETWORK_DATA_MAXSIZE = 5
 private const val ONE_HOUR_IN_MILLISECOND = 1000 * 60 * 60
 
@@ -84,8 +89,10 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
         summaryRequestTime += ((net.startTime - net.endTime) / ONE_HOUR_IN_MILLISECOND)
     }
 
-    requestAverageTime = summaryRequestTime / summaryRequestCount
-    requestSucsessRate = failReqCountRank.size.toDouble() / summaryRequestCount
+    if (summaryRequestCount != 0) {
+        requestAverageTime = summaryRequestTime / summaryRequestCount
+        requestSucsessRate = failReqCountRank.size.toDouble() / summaryRequestCount
+    }
     return NetWorkBean(
         downloadDataRank,
         failReqCountRank,
@@ -100,6 +107,12 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
         "$summaryRequestUploadFlow kb",
         uploadDataRank,
     )
+}
+
+fun convertToNetWorkFlowFrom(list: List<NetworkRecordDBEntity>): List<NetWorkFlowBean> {
+    return list.filter { !it.url.contains("dokit") }.map {
+        NetWorkFlowBean(it.startTime, it.endTime - it.startTime)
+    }
 }
 
 data class DownloadDataRank(

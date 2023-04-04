@@ -6,8 +6,15 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.didichuxing.doraemonkit.kit.AbstractKit
-import com.didichuxing.doraemonkit.kit.core.*
+import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager
+import com.didichuxing.doraemonkit.kit.blockmonitor.core.BlockMonitorManager
+import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
+import com.didichuxing.doraemonkit.kit.core.BaseFragment
+import com.didichuxing.doraemonkit.kit.core.DoKitViewLaunchMode
+import com.didichuxing.doraemonkit.kit.core.McClientProcessor
+import com.didichuxing.doraemonkit.kit.network.NetworkManager
 import com.didichuxing.doraemonkit.kit.network.okhttp.interceptor.DokitExtInterceptor
+import com.didichuxing.doraemonkit.kit.performance.PerformanceDataManager
 import com.didichuxing.doraemonkit.kit.webdoor.WebDoorManager
 import kotlin.reflect.KClass
 
