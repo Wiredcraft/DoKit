@@ -51,7 +51,7 @@ static NSString *DoraemonFPSDataTable = @"DoraemonFPSDataTable";
     NSMutableArray *resArray = @[].mutableCopy;
     for (DoraemonFPSModel *model in self.allData) {
         NSMutableDictionary *dic = @{}.mutableCopy;
-        dic[@"time"] = @(model.timestamp);
+        dic[@"time"] = @((long)model.timestamp);
         dic[@"value"] = @(model.value);
         dic[@"topView"] = model.topViewName;
         [resArray addObject:dic];

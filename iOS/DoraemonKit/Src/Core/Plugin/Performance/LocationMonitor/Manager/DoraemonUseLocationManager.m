@@ -70,8 +70,8 @@ static NSString *DoraemonUseLocationDataModelTable = @"DoraemonUseLocationDataMo
     NSMutableArray *resArray = @[].mutableCopy;
     for (DoraemonUseLocationDataModel *model in modelArray) {
         NSMutableDictionary *dic = @{}.mutableCopy;
-        dic[@"time"] = @(model.timeStamp);
-        dic[@"duration"] = @(model.useDuration);
+        dic[@"time"] = @((long)model.timeStamp);
+        dic[@"duration"] = @((long)model.useDuration);
         [resArray addObject:dic];
     }
     return resArray;

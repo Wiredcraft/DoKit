@@ -29,5 +29,4 @@
 
 - (NSDictionary *)reportDic;
 - (NSArray *)reportFlowdata;
-- (NSString *)toJson;
 @end

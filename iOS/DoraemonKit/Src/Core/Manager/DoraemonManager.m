@@ -228,7 +228,7 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
         [_fpsTimer invalidate];
         _fpsTimer = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
             DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
-            model.timestamp = [[NSDate date] timeIntervalSince1970];
+            model.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
             model.modelId = [NSString stringWithFormat:@"%@", @(model.timestamp * 1000)];
             model.value = [_fpsUtil getFps];
             NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);

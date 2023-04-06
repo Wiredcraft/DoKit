@@ -35,50 +35,6 @@
     return  [self httpModelArray].count;
 }
 
-- (NSTimeInterval)summaryRequestTime {
-    return [[[self reportDic] objectForKey:@"summaryRequestTime"] doubleValue];
-}
-
-- (NSString *)summaryRequestUploadFlow {
-    return [[self reportDic] objectForKey:@"summaryRequestUploadFlow"];
-}
-
-- (NSString *)summaryRequestDownFlow {
-    return [[self reportDic] objectForKey:@"summaryRequestDownFlow"];
-}
-
-- (NSTimeInterval)requestAverageTime {
-    return [[[self reportDic] objectForKey:@"requestAverageTime"] doubleValue];
-}
-
-- (double)requestSucsessRate {
-    return [[[self reportDic] objectForKey:@"requestSucsessRate"] doubleValue];
-}
-
-- (NSInteger)slowRequestCount {
-    return [[[self reportDic] objectForKey:@"slowRequestCount"] integerValue];
-}
-
-- (NSArray<NSDictionary *> *)reqCountRank {
-    return [[self reportDic] objectForKey:@"reqCountRank"];
-}
-
-- (NSArray<NSDictionary *> *)failReqCountRank {
-    return [[self reportDic] objectForKey:@"failReqCountRank"];
-}
-
-- (NSArray<NSDictionary *> *)reqTimeRank {
-    return [[self reportDic] objectForKey:@"reqTimeRank"];
-}
-
-- (NSArray<NSDictionary *> *)uploadDataRank {
-    return [[self reportDic] objectForKey:@"uploadDataRank"];
-}
-
-- (NSArray<NSDictionary *> *)downloadDataRank {
-    return [[self reportDic] objectForKey:@"downloadDataRank"];
-}
-
 - (NSDictionary *)reportDic {
     NSMutableArray<DoraemonNetFlowHttpModel *> * httpModelArray = [self httpModelArray];
     NSMutableDictionary *dic = @{}.mutableCopy;
@@ -122,7 +78,7 @@
             }
         }
 
-        if ([httpModel.totalDuration doubleValue] * 1000 > self.requestTimeThreshold) {
+        if ([httpModel.totalDuration doubleValue] > self.requestTimeThreshold) {
             slowRequestCount += 1;
         }
 
@@ -138,44 +94,42 @@
         if ([reqTimeRankDicAllKeys containsObject:rankKey]) {
             NSTimeInterval oldtime = [[reqTimeRankDic objectForKey:rankKey] doubleValue];
             NSTimeInterval time = (oldtime + [httpModel.totalDuration doubleValue]) / 2.0;
-            reqTimeRankDic[rankKey] = @(time);
+            reqTimeRankDic[rankKey] = @((long)time);
         } else {
-            reqTimeRankDic[rankKey] = @([httpModel.totalDuration doubleValue]);
+            reqTimeRankDic[rankKey] = @([httpModel.totalDuration longLongValue]);
         }
 
         NSArray<NSString *> *uploadDataRankDicAllKeys = [uploadDataRankDic allKeys];
         if ([uploadDataRankDicAllKeys containsObject:rankKey]) {
             CGFloat oldDataFlow = [[uploadDataRankDic objectForKey:rankKey] floatValue];
             CGFloat flow = (oldDataFlow + [httpModel.uploadFlow floatValue]) / 2.0;
-            uploadDataRankDic[rankKey] = @(flow);
+            uploadDataRankDic[rankKey] = @((long)flow);
         } else {
-            uploadDataRankDic[rankKey] = @([httpModel.uploadFlow floatValue]);
+            uploadDataRankDic[rankKey] = @([httpModel.uploadFlow longLongValue]);
         }
 
         NSArray<NSString *> *downloadDataRankDicAllKeys = [downloadDataRankDic allKeys];
         if ([downloadDataRankDicAllKeys containsObject:rankKey]) {
             CGFloat oldDataFlow = [[downloadDataRankDic objectForKey:rankKey] floatValue];
             CGFloat flow = (oldDataFlow + [httpModel.downFlow floatValue]) / 2.0;
-            downloadDataRankDic[rankKey] = @(flow);
+            downloadDataRankDic[rankKey] = @((long)flow);
         } else {
-            downloadDataRankDic[rankKey] = @([httpModel.downFlow floatValue]);
+            downloadDataRankDic[rankKey] = @([httpModel.downFlow longLongValue]);
         }
     }
-    NSString *upLoad = [DoraemonUtil formatByte:totalUploadFlow];
-    NSString *downLoad = [DoraemonUtil formatByte:totalDownFlow];
 
-    dic[@"summaryRequestTime"] = @(totalTime * 1000);
-    dic[@"summaryRequestUploadFlow"] = upLoad;
-    dic[@"summaryRequestDownFlow"] = downLoad;
+    dic[@"summaryRequestTime"] = @((long)totalTime);
+    dic[@"summaryRequestUploadFlow"] = @((long)totalUploadFlow);
+    dic[@"summaryRequestDownFlow"] = @((long)totalDownFlow);
 
     NSTimeInterval requestAverageTime = 0;
-    double requestSucsessRate = 0;
+    double requestSuccessRate = 0;
     if (summaryRequestCount != 0) {
-        requestAverageTime = totalTime * 1000 / (double)summaryRequestCount;
-        requestSucsessRate = (double)sucsessCount / (double)summaryRequestCount;
+        requestAverageTime = totalTime / (double)summaryRequestCount;
+        requestSuccessRate = (double)sucsessCount / (double)summaryRequestCount;
     }
-    dic[@"requestAverageTime"] = @(requestAverageTime);
-    dic[@"requestSucsessRate"] = @(requestSucsessRate);
+    dic[@"requestAverageTime"] = @((long)requestAverageTime);
+    dic[@"requestSuccessRate"] = @(requestSuccessRate);
     dic[@"slowRequestCount"] = @(slowRequestCount);
 
     // reqCountRank
@@ -225,12 +179,6 @@
     return dic;
 }
 
-- (NSString *)toJson {
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self reportDic] options:NSJSONWritingPrettyPrinted error:&error];
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];;
-}
-
 -(NSArray<NSDictionary*> *)getKVPairArayWith: (NSArray<NSString*>*)keys dic: (NSDictionary *)dic {
     NSMutableArray *pairs = @[].mutableCopy;
     for (NSInteger i = 0; i<keys.count; i++) {
@@ -247,8 +195,8 @@
     NSMutableArray *resArray = @[].mutableCopy;
     for (DoraemonNetFlowHttpModel *model in [self httpModelArray]) {
         NSMutableDictionary *dic = @{}.mutableCopy;
-        dic[@"time"] = @(model.startTime);
-        dic[@"duration"] = @([model.totalDuration doubleValue]);
+        dic[@"time"] = @((long)model.startTime);
+        dic[@"duration"] = @([model.totalDuration longLongValue]);
         [resArray addObject: dic];
     }
     return resArray;

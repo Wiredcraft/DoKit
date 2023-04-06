@@ -51,8 +51,8 @@ static NSString *DoraemonLaunchTimeDataTable = @"DoraemonLaunchTimeDataTable";
     for (DoraemonLaunchTimeModel *model in self.launchTimeModelArray) {
         NSMutableDictionary *dic = @{}.mutableCopy;
         dic[@"uid"] = model.uid;
-        dic[@"time"] = @(model.time);
-        dic[@"launchCost"] = @(model.launchCost);
+        dic[@"time"] = @((long)model.time);
+        dic[@"launchCost"] = @((long)model.launchCost);
         [dicArray addObject:dic];
     }
     return dicArray;
