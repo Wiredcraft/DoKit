@@ -134,7 +134,13 @@
 
     // reqCountRank
     NSArray<NSString *> *reqCountRank = [reqCountDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return NSOrderedDescending;
+        if ([obj1 integerValue] > [obj2 integerValue]) {
+            return NSOrderedAscending;
+        } else if ([obj1 integerValue] < [obj2 integerValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     if (reqCountRank.count > 5) {
         reqCountRank = [reqCountRank subarrayWithRange:NSMakeRange(0, 5)];
@@ -143,7 +149,13 @@
 
     // failReqCountRank
     NSArray<NSString *> *failReqCountRank = [failReqCountDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return NSOrderedDescending;
+        if ([obj1 integerValue] > [obj2 integerValue]) {
+            return NSOrderedAscending;
+        } else if ([obj1 integerValue] < [obj2 integerValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     if (failReqCountRank.count > 5) {
         failReqCountRank = [failReqCountRank subarrayWithRange:NSMakeRange(0, 5)];
@@ -152,7 +164,13 @@
 
     // reqTimeRank
     NSArray<NSString *> *reqTimeRank = [reqTimeRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return NSOrderedDescending;
+        if ([obj1 doubleValue] > [obj2 doubleValue]) {
+            return NSOrderedAscending;
+        } else if ([obj1 doubleValue] < [obj2 doubleValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     if (reqTimeRank.count > 5) {
         reqTimeRank = [reqTimeRank subarrayWithRange:NSMakeRange(0, 5)];
@@ -161,7 +179,13 @@
 
     // uploadDataRank
     NSArray<NSString *> *uploadDataRank = [uploadDataRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return NSOrderedDescending;
+        if ([obj1 longLongValue] > [obj2 longLongValue]) {
+            return NSOrderedAscending;
+        } else if ([obj1 longLongValue] < [obj2 longLongValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     if (uploadDataRank.count > 5) {
         uploadDataRank = [uploadDataRank subarrayWithRange:NSMakeRange(0, 5)];
@@ -170,7 +194,13 @@
 
     // downloadDataRank
     NSArray<NSString *> *downloadDataRank = [downloadDataRankDic keysSortedByValueUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return NSOrderedDescending;
+        if ([obj1 longLongValue] > [obj2 longLongValue]) {
+            return NSOrderedAscending;
+        } else if ([obj1 longLongValue] < [obj2 longLongValue]) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     if (downloadDataRank.count > 5) {
         downloadDataRank = [downloadDataRank subarrayWithRange:NSMakeRange(0, 5)];
