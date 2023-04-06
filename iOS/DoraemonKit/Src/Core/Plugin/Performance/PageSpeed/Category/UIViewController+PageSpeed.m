@@ -6,7 +6,6 @@
 //
 
 #import "UIViewController+PageSpeed.h"
-#import "Aspects.h"
 #import <objc/runtime.h>
 #import "PageLoadSpeedModel.h"
 #import "DoraemonPageSpeedManager.h"
@@ -32,40 +31,34 @@
     dispatch_once(&onceToken, ^{
         [[self class] doraemon_swizzleInstanceMethodWithOriginSel:@selector(viewDidLoad) swizzledSel:@selector(pageSpeed_viewDidLoad)];
         [[self class] doraemon_swizzleInstanceMethodWithOriginSel:@selector(viewDidAppear:) swizzledSel:@selector(pageSpeed_viewDidAppear:)];
-
-        [UIViewController aspect_hookSelector:@selector(pageSpeed_viewDidLoad) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
-            UIViewController* instance = aspectInfo.instance;
-            if ([instance isKindOfClass:[UINavigationController class]] || [instance isKindOfClass:[UITabBarController class]]) return;;
-            PageLoadSpeedModel *model = [[PageLoadSpeedModel alloc] init];
-            model.modelId = [[NSUUID UUID] UUIDString];
-            model.pageName = [[NSString alloc] initWithUTF8String: object_getClassName(instance)];
-            model.loadBeginTime = [[NSDate date] timeIntervalSince1970] * 1000;
-            instance.loadSpeedModel = model;
-        } error:NULL];
-
-        [UIViewController aspect_hookSelector:@selector(pageSpeed_viewDidAppear:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo, BOOL isAnimated) {
-            UIViewController* instance = aspectInfo.instance;
-            PageLoadSpeedModel *model = instance.loadSpeedModel;
-            if (model && !model.isLoadEnded) {
-                model.isLoadEnded = YES;
-                model.loadEndTime = [[NSDate date] timeIntervalSince1970] * 1000;
-                long duration = (long)(model.loadEndTime - model.loadBeginTime);
-                if (duration < 3000 && ![model.pageName containsString:@"DoraemonKit"]) {
-                    PageLoadSpeedModel *savedModel = [[PageLoadSpeedModel alloc] initWithValue:model];
-                    [[DoraemonPageSpeedManager shareInstance] addPageSpeedModel:savedModel];
-                }
-            }
-        } error:NULL];
     });
 }
 
 - (void)pageSpeed_viewDidLoad {
+    UIViewController* instance = self;
+    if ([instance isKindOfClass:[UINavigationController class]] || [instance isKindOfClass:[UITabBarController class]]) [self pageSpeed_viewDidLoad];
+    PageLoadSpeedModel *model = [[PageLoadSpeedModel alloc] init];
+    model.modelId = [[NSUUID UUID] UUIDString];
+    model.pageName = [[NSString alloc] initWithUTF8String: object_getClassName(instance)];
+    model.loadBeginTime = [[NSDate date] timeIntervalSince1970] * 1000;
+    instance.loadSpeedModel = model;
     [self pageSpeed_viewDidLoad];
 }
 
 
 - (void)pageSpeed_viewDidAppear:(BOOL)animated {
     [self pageSpeed_viewDidAppear:animated];
+    UIViewController* instance = self;
+    PageLoadSpeedModel *model = instance.loadSpeedModel;
+    if (model && !model.isLoadEnded) {
+        model.isLoadEnded = YES;
+        model.loadEndTime = [[NSDate date] timeIntervalSince1970] * 1000;
+        long duration = (long)(model.loadEndTime - model.loadBeginTime);
+        if (duration < 3000 && ![model.pageName containsString:@"DoraemonKit"]) {
+            PageLoadSpeedModel *savedModel = [[PageLoadSpeedModel alloc] initWithValue:model];
+            [[DoraemonPageSpeedManager shareInstance] addPageSpeedModel:savedModel];
+        }
+    }
 }
 
 @end
