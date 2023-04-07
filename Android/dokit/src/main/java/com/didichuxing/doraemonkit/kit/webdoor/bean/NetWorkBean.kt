@@ -3,18 +3,18 @@ package com.didichuxing.doraemonkit.kit.webdoor.bean
 import com.didichuxing.doraemonkit.database.NetworkRecordDBEntity
 
 data class NetWorkBean(
-    val downloadDataRank: List<DownloadDataRank>,
-    val failReqCountRank: List<FailReqCountRank>,
-    val reqCountRank: List<ReqCountRank>,
-    val reqTimeRank: List<ReqTimeRank>,
-    val requestAverageTime: Double,
-    val requestSucsessRate: Double,
+    val downloadDataRank: List<LongValuePair>,
+    val failReqCountRank: List<IntValuePair>,
+    val reqCountRank: List<IntValuePair>,
+    val reqTimeRank: List<LongValuePair>,
+    val requestAverageTime: Long,
+    val requestSuccessRate: Double,
     val slowRequestCount: Int,
     val summaryRequestCount: Int,
-    val summaryRequestDownFlow: String,
-    val summaryRequestTime: Double,
-    val summaryRequestUploadFlow: String,
-    val uploadDataRank: List<UploadDataRank>,
+    val summaryRequestDownFlow: Long,
+    val summaryRequestTime: Long,
+    val summaryRequestUploadFlow: Long,
+    val uploadDataRank: List<LongValuePair>,
 )
 
 data class NetWorkFlowBean(
@@ -23,21 +23,20 @@ data class NetWorkFlowBean(
 )
 
 private const val NETWORK_DATA_MAXSIZE = 5
-private const val ONE_HOUR_IN_MILLISECOND = 1000 * 60 * 60
 
 fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
-    val downloadDataRank = ArrayList<DownloadDataRank>(NETWORK_DATA_MAXSIZE)
-    val failReqCountRank = ArrayList<FailReqCountRank>(NETWORK_DATA_MAXSIZE)
-    val reqCountRank = ArrayList<ReqCountRank>(NETWORK_DATA_MAXSIZE)
-    val reqTimeRank = ArrayList<ReqTimeRank>(NETWORK_DATA_MAXSIZE)
-    var requestAverageTime = 0.0
-    var requestSucsessRate = 0.0
+    val failReqCountRank = mutableListOf<LongValueBean>()
+    val reqTimeRank = mutableListOf<LongValueBean>()
+    val uploadDataRank = mutableListOf<LongValueBean>()
+    val downloadDataRank = mutableListOf<LongValueBean>()
+    var requestAverageTime = 0L
+    var requestSuccessRate = 0.0
     var slowRequestCount = 0
     var summaryRequestCount = 0
-    var summaryRequestDownFlow = 0.0
-    var summaryRequestTime = 0.0
-    var summaryRequestUploadFlow = 0.0
-    val uploadDataRank = ArrayList<UploadDataRank>(NETWORK_DATA_MAXSIZE)
+    var failReqCount = 0
+    var summaryRequestDownFlow = 0L
+    var summaryRequestTime = 0L
+    var summaryRequestUploadFlow = 0L
     list.forEach { net ->
 
         if (net.url.contains("dokit")) {
@@ -45,68 +44,62 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
         }
 
         if (net.responseLength > 0) {
-            if (downloadDataRank.size < NETWORK_DATA_MAXSIZE) {
-                downloadDataRank.add(DownloadDataRank("${net.method} ${net.url}", net.responseLength))
-            }
-        } else {
-            if (failReqCountRank.size < NETWORK_DATA_MAXSIZE) {
-                failReqCountRank.add(FailReqCountRank("${net.method} ${net.url}", net.responseLength))
-            }
+            downloadDataRank.log("${net.method} ${net.url}", net.responseLength)
+        }
+        if (!net.isSuccess) {
+            failReqCountRank.log("${net.method} ${net.url}", net.responseLength)
+            failReqCount++
         }
         if (net.requestLength > 0) {
-            if (uploadDataRank.size < NETWORK_DATA_MAXSIZE) {
-                uploadDataRank.add(UploadDataRank("${net.method} ${net.url}", net.requestLength))
-            }
+            uploadDataRank.log("${net.method} ${net.url}", net.requestLength)
         }
 
-        if (reqCountRank.any { it.key == net.url }) {
-            reqCountRank.forEach {
-                if (it.key == net.url) {
-                    it.value++
-                }
-            }
-        } else {
-            reqCountRank.add(ReqCountRank(net.url, 1))
-        }
+        reqTimeRank.log("${net.method} ${net.url}", net.endTime - net.startTime)
 
-        if (reqTimeRank.any { it.key == net.url }) {
-            reqTimeRank.forEach {
-                if (it.key == net.url) {
-                    it.value = it.value + (net.endTime - net.startTime)
-                }
-            }
-        } else {
-            if (reqTimeRank.size < NETWORK_DATA_MAXSIZE) {
-                reqTimeRank.add(ReqTimeRank(net.url, (net.endTime - net.startTime)))
-            }
-        }
-        if ((net.startTime - net.endTime) / ONE_HOUR_IN_MILLISECOND > 1000) {
+        if ((net.endTime - net.startTime) > 1000) {
             slowRequestCount++
         }
         summaryRequestCount++
         summaryRequestDownFlow += net.requestLength
         summaryRequestUploadFlow += net.responseLength
-        summaryRequestTime += ((net.startTime - net.endTime) / ONE_HOUR_IN_MILLISECOND)
+        summaryRequestTime += net.endTime - net.startTime
     }
 
     if (summaryRequestCount != 0) {
         requestAverageTime = summaryRequestTime / summaryRequestCount
-        requestSucsessRate = failReqCountRank.size.toDouble() / summaryRequestCount
+        requestSuccessRate = (summaryRequestCount - failReqCount).toDouble() / summaryRequestCount
     }
     return NetWorkBean(
-        downloadDataRank,
-        failReqCountRank,
-        reqCountRank,
-        reqTimeRank,
-        requestAverageTime,
-        requestSucsessRate,
-        slowRequestCount,
-        summaryRequestCount,
-        "$summaryRequestDownFlow kb",
-        summaryRequestTime,
-        "$summaryRequestUploadFlow kb",
-        uploadDataRank,
+        downloadDataRank = downloadDataRank.toAvgRank(),
+        failReqCountRank = failReqCountRank.toCount(),
+        reqCountRank = reqTimeRank.toCount(),
+        reqTimeRank = reqTimeRank.toAvgRank(),
+        requestAverageTime = requestAverageTime,
+        requestSuccessRate = requestSuccessRate,
+        slowRequestCount = slowRequestCount,
+        summaryRequestCount = summaryRequestCount,
+        summaryRequestDownFlow = summaryRequestDownFlow,
+        summaryRequestTime = summaryRequestTime,
+        summaryRequestUploadFlow = summaryRequestUploadFlow,
+        uploadDataRank = uploadDataRank.toAvgRank(),
     )
+}
+
+fun MutableList<LongValueBean>.log(url: String, value: Long) {
+    firstOrNull { it.key == url }?.let {
+        it.value += value
+        it.count++
+    } ?: run {
+        add(LongValueBean(url, value, 1))
+    }
+}
+
+fun MutableList<LongValueBean>.toAvgRank(): List<LongValuePair> {
+    return map { LongValuePair(it.key, it.value / it.count) }.sortedByDescending { it.value }.take(NETWORK_DATA_MAXSIZE)
+}
+
+fun MutableList<LongValueBean>.toCount(): List<IntValuePair> {
+    return map { IntValuePair(it.key, it.count) }.sortedByDescending { it.value }.take(NETWORK_DATA_MAXSIZE)
 }
 
 fun convertToNetWorkFlowFrom(list: List<NetworkRecordDBEntity>): List<NetWorkFlowBean> {
@@ -115,27 +108,18 @@ fun convertToNetWorkFlowFrom(list: List<NetworkRecordDBEntity>): List<NetWorkFlo
     }
 }
 
-data class DownloadDataRank(
-    val key: String,
-    val value: Long,
-)
-
-data class FailReqCountRank(
-    val key: String,
-    val value: Long,
-)
-
-data class ReqCountRank(
-    val key: String,
-    var value: Int,
-)
-
-data class ReqTimeRank(
+data class LongValueBean(
     val key: String,
     var value: Long,
+    var count: Int,
 )
 
-data class UploadDataRank(
+data class LongValuePair(
     val key: String,
     val value: Long,
+)
+
+data class IntValuePair(
+    val key: String,
+    val value: Int,
 )

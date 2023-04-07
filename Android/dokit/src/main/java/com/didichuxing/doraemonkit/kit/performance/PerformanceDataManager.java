@@ -327,8 +327,8 @@ public class PerformanceDataManager {
         }
         if (ActivityUtils.getTopActivity() != null) {
             DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertFps(
-                new FpsEntity("" + TimeUtils.getNowMills(),
-                    "" + mLastFrameRate, ActivityUtils.getTopActivity().getLocalClassName()));
+                new FpsEntity(TimeUtils.getNowMills(),
+                    mLastFrameRate, ActivityUtils.getTopActivity().getLocalClassName()));
         }
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastFrameRate > 60 ? 60 : mLastFrameRate, PERFORMANCE_TYPE_FPS);
