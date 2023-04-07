@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class NetworkRecordDBEntity(
     @PrimaryKey(autoGenerate = true) val mRequestId: Int,
+    @ColumnInfo(name = "isSuccess") val isSuccess: Boolean,
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "method") val method: String,
     @ColumnInfo(name = "headers") val headers: String,

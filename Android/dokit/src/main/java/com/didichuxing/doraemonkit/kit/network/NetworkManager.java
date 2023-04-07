@@ -148,6 +148,7 @@ public class NetworkManager {
                     DoKitManager.INSTANCE.getCALLBACK().onNetworkCallBack(record);
                     DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
                         record.mRequestId,
+                        record.mResponse.status < 400,
                         record.mRequest.url,
                         record.mRequest.method,
                         record.mRequest.headers,
@@ -160,7 +161,6 @@ public class NetworkManager {
                         record.startTime,
                         record.endTime
                     ));
-
                 }
                 if (mOnNetworkInfoUpdateListener != null) {
                     mOnNetworkInfoUpdateListener.onNetworkInfoUpdate(record, add);

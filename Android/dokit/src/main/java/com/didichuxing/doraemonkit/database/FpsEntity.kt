@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class FpsEntity(
-    @PrimaryKey val time: String,
-    val value: String,
+    @PrimaryKey val time: Long,
+    val value: Int,
     val topView: String
 )

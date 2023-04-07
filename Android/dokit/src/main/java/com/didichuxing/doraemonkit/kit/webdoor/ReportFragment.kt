@@ -47,12 +47,12 @@ class ReportFragment : BaseFragment() {
         val memoryEntities = INSTANCE.counterDb.wclDao().getAllMemoryEntity()
         val locationEntities = INSTANCE.counterDb.wclDao().getAllLocationEntity()
 
-        var fpsJsBridgeBean: JsbridgeBean? = null
+        var jsBridgeBean: JsbridgeBean? = null
         val appName = "${AppUtils.getAppName()} v${
             AppUtils.getAppVersionName()
         }(${AppUtils.getAppVersionCode()})"
         val deviceInfo = "${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE}"
-        fpsJsBridgeBean = JsbridgeBean(
+        jsBridgeBean = JsbridgeBean(
             appName, deviceInfo,
             convertToFpsFromList(fpsEntities),
             convertToNetWorkFrom(networkRecordDBEntities),
@@ -61,7 +61,7 @@ class ReportFragment : BaseFragment() {
             convertToMemoryFromList(memoryEntities),
             convertToLocationFrom(locationEntities)
         )
-        val b = GsonUtils.toJson(fpsJsBridgeBean)
+        val b = GsonUtils.toJson(jsBridgeBean)
         DoKitManager.CALLBACK?.onPdfCallBack(b)
         mWebView.callHandler(
             "testJavascriptHandler", b.replace("%22","")
