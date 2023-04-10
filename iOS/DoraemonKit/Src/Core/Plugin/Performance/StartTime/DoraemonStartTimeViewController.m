@@ -32,7 +32,7 @@ static NSTimeInterval endTime;
 @implementation DoraemonStartTimeViewController
 
 + (void)load{
-    startTime = [[NSDate date] timeIntervalSince1970];
+    startTime = [[NSDate date] timeIntervalSince1970] * 1000;
 
     [UIApplication aspect_hookSelector:@selector(setDelegate:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo, id<UIApplicationDelegate> delegate) {
         NSObject *obj = (NSObject *)delegate;
@@ -57,16 +57,15 @@ static NSTimeInterval endTime;
     [DoraemonTimeProfiler startRecord];
     BOOL ret = [self doraemon_application:application didFinishLaunchingWithOptions:launchOptions];
     [DoraemonTimeProfiler stopRecord];
-    endTime = [[NSDate date] timeIntervalSince1970];
+    endTime = [[NSDate date] timeIntervalSince1970] * 1000;
     
-    [DoraemonHealthManager sharedInstance].startTime = (endTime-startTime)*1000;
-    NSLog(@"%lf", [DoraemonHealthManager sharedInstance].startTime);
+    [DoraemonHealthManager sharedInstance].startTime = endTime - startTime;
 
     // 存入数据库
     DoraemonLaunchTimeModel *timeModel = [[DoraemonLaunchTimeModel alloc] init];
     timeModel.uid = [[NSUUID UUID] UUIDString];
     timeModel.time = endTime;
-    timeModel.launchCost = (endTime - startTime) * 1000;
+    timeModel.launchCost = endTime - startTime;
     [[DoraemonLaunchTimeManager shareInstance] addOrUpdateUseModel:timeModel];
 
     return ret;
