@@ -148,7 +148,7 @@ public class NetworkManager {
                     DoKitManager.INSTANCE.getCALLBACK().onNetworkCallBack(record);
                     DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
                         record.mRequestId,
-                        record.mResponse.status < 400,
+                        record.mResponse != null && record.mResponse.status < 400,
                         record.mRequest.url,
                         record.mRequest.method,
                         record.mRequest.headers,
