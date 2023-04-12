@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit.kit.webdoor.bean
 
 import com.didichuxing.doraemonkit.database.Counter
+import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo
 
 data class CounterBean(
     val launchCost: Long,
@@ -8,10 +9,15 @@ data class CounterBean(
     val uid: String
 )
 
-fun convertToCounters(counter: List<Counter>): List<CounterBean> {
+data class ActivityCounterBean(
+    val duration: Long,
+    val pageName: String
+)
+
+fun convertToAppCounters(counter: List<Counter>): List<CounterBean> {
     val counters = arrayListOf<CounterBean>()
 
-    counter.forEach {
+    counter.filter { it.type == CounterInfo.TYPE_APP }.forEach {
         counters.add(
             CounterBean(
                 it.totalCost,
@@ -21,4 +27,27 @@ fun convertToCounters(counter: List<Counter>): List<CounterBean> {
         )
     }
     return counters
+}
+
+fun convertToActivityCounters(counter: List<Counter>): List<ActivityCounterBean> {
+    val counters = arrayListOf<ActivityCounterBean>()
+    counter.filter { it.type == CounterInfo.TYPE_ACTIVITY }.forEach {
+        counters.add(
+            ActivityCounterBean(
+                it.totalCost,
+                getActivityName(it.title)
+            )
+        )
+    }
+    return counters
+}
+
+private fun getActivityName(counterTitle: String): String {
+    counterTitle.split(" -> ").let {
+        return if (it.size == 2) {
+            it[1]
+        } else {
+            counterTitle
+        }
+    }
 }
