@@ -22,7 +22,7 @@
 -(instancetype)init {
     self = [super init];
     if (self) {
-        _requestTimeThreshold = 1000;
+        _requestTimeThreshold = 2000;
     }
     return self;
 }
