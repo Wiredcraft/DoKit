@@ -23,6 +23,7 @@ data class NetWorkFlowBean(
 )
 
 private const val NETWORK_DATA_MAXSIZE = 5
+private const val NETWORK_SLOW_REQUEST = 2000
 
 fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
     val failReqCountRank = mutableListOf<LongValueBean>()
@@ -56,7 +57,7 @@ fun convertToNetWorkFrom(list: List<NetworkRecordDBEntity>): NetWorkBean {
 
         reqTimeRank.log("${net.method} ${net.url}", net.endTime - net.startTime)
 
-        if ((net.endTime - net.startTime) > 1000) {
+        if ((net.endTime - net.startTime) >= NETWORK_SLOW_REQUEST) {
             slowRequestCount++
         }
         summaryRequestCount++
