@@ -210,7 +210,7 @@ publishing {
         debug(MavenPublication) {
             groupId = 'io.github.didi.dokit'
             artifactId = 'dokitx'
-            version = '3.7.22-SNAPSHOT'
+            version = '3.7.23-SNAPSHOT'
             afterEvaluate {
                 from components.debug
             }
