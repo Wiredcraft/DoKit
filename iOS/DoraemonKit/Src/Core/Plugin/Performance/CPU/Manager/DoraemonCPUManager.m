@@ -69,7 +69,7 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
 - (void)addCpuUsage: (CGFloat)rate {
     DoraemonCPUUsageModel *model = [[DoraemonCPUUsageModel alloc] init];
     model.uid = [[NSUUID UUID] UUIDString];
-    model.timeStamp = (long)[[NSDate date] timeIntervalSince1970] * 1000;
+    model.timestamp = (long)[[NSDate date] timeIntervalSince1970] * 1000;
     model.cpuUsageRate = (long)rate;
     [RealmUtil addOrUpdateModel:model queue:_serialQueue tableName:DoraemonUseCPUDataModelTable];
 }
@@ -83,7 +83,7 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
     for (NSInteger i = 0; i < array.count; i++) {
         DoraemonCPUUsageModel *model = array[i];
         NSMutableDictionary *dic = @{}.mutableCopy;
-        dic[@"time"] = @((long)model.timeStamp);
+        dic[@"time"] = @((long)model.timestamp);
         dic[@"usageRate"] = @(model.cpuUsageRate);
         [itemList addObject:dic];
 
@@ -93,7 +93,7 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
             if (reduceAvg > 50) {
                 long reduceMax = [self maxRateOfModelArray:temArray];
                 NSMutableDictionary *item = @{}.mutableCopy;
-                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timeStamp, temArray.firstObject.timeStamp];
+                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timestamp, temArray.firstObject.timestamp];
                 item[@"averageCpuUsageRate"] = @(reduceAvg);
                 item[@"maxCpuUsageRate"] = @(reduceMax);
                 [temporaryAnomalies addObject:item];
@@ -105,7 +105,7 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
             if (reduceAvg > 30) {
                 long reduceMax = [self maxRateOfModelArray:temArray];
                 NSMutableDictionary *item = @{}.mutableCopy;
-                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timeStamp, temArray.firstObject.timeStamp];
+                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timestamp, temArray.firstObject.timestamp];
                 item[@"averageCpuUsageRate"] = @(reduceAvg);
                 item[@"maxCpuUsageRate"] = @(reduceMax);
                 [anomalies addObject:item];

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DoraemonCPUUsageModel : RLMObject
 @property (nonatomic, copy) NSString* uid;
-@property (nonatomic, assign) long timeStamp;
+@property (nonatomic, assign) long timestamp;
 @property (nonatomic, assign) long cpuUsageRate;
 @end
 
