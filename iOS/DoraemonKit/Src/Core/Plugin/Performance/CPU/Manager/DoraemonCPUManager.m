@@ -17,8 +17,6 @@
 
 @implementation DoraemonCPUManager {
     dispatch_queue_t _serialQueue;
-    dispatch_semaphore_t _semaphore;
-    NSMutableArray *_temCpuUsageArray;
 }
 
 static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
@@ -36,8 +34,6 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
     self = [super init];
     if (self) {
         _serialQueue = dispatch_queue_create("com.wcl.DoraemonUseCPUDataModelTableQueue", NULL);
-        _semaphore = dispatch_semaphore_create(1);
-        _temCpuUsageArray = @[].mutableCopy;
         [self startRecord];
     }
     return self;
@@ -58,11 +54,12 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
 }
 
 - (void)timerFired:(NSTimer *)timer {
-    // get cpu usage rate
     CGFloat cpuUsage = [DoraemonCPUUtil cpuUsageForApp];
     if (cpuUsage * 100 > 100) {
         cpuUsage = 100;
-    }else{
+    } else if (cpuUsage * 100 < 0){
+        cpuUsage = 0;
+    } else {
         cpuUsage = cpuUsage * 100;
     }
 
@@ -70,39 +67,87 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
 }
 
 - (void)addCpuUsage: (CGFloat)rate {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    [_temCpuUsageArray addObject:@(rate)];
-    dispatch_semaphore_signal(_semaphore);
-
-    if (_temCpuUsageArray.count == 10) {
-        NSNumber *reduceAvg = [_temCpuUsageArray valueForKeyPath:@"@avg.self"];
-        NSNumber *reduceMax = [_temCpuUsageArray valueForKeyPath:@"@max.self"];
-
-        DoraemonCPUUsageModel *model = [[DoraemonCPUUsageModel alloc] init];
-        model.uid = [[NSUUID UUID] UUIDString];
-        model.timeStamp = [[NSDate date] timeIntervalSince1970];
-        model.averageCpuUsageRate = [reduceAvg floatValue];
-        model.maxCpuUsageRate = [reduceMax floatValue];
-        [RealmUtil addOrUpdateModel:model queue:_serialQueue tableName:DoraemonUseCPUDataModelTable];
-
-        dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-        [_temCpuUsageArray removeAllObjects];
-        dispatch_semaphore_signal(_semaphore);
-    }
+    DoraemonCPUUsageModel *model = [[DoraemonCPUUsageModel alloc] init];
+    model.uid = [[NSUUID UUID] UUIDString];
+    model.timestamp = (long)[[NSDate date] timeIntervalSince1970] * 1000;
+    model.cpuUsageRate = (long)rate;
+    [RealmUtil addOrUpdateModel:model queue:_serialQueue tableName:DoraemonUseCPUDataModelTable];
 }
 
-- (NSArray *)dataForReport {
+- (NSDictionary *)dataForReport {
     NSArray<DoraemonCPUUsageModel *> *array = [RealmUtil modelArrayWithTableName:DoraemonUseCPUDataModelTable objClass:DoraemonCPUUsageModel.class];
-    NSMutableArray *resArray = @[].mutableCopy;
-    for (DoraemonCPUUsageModel *model in array) {
+    NSMutableDictionary *res = @{}.mutableCopy;
+    NSMutableArray *itemList = @[].mutableCopy;
+    NSMutableArray *temporaryAnomalies = @[].mutableCopy;
+    NSMutableArray *anomalies = @[].mutableCopy;
+    for (NSInteger i = 0; i < array.count; i++) {
+        DoraemonCPUUsageModel *model = array[i];
         NSMutableDictionary *dic = @{}.mutableCopy;
-        dic[@"uid"] = model.uid;
-        dic[@"timeStamp"] = @(model.timeStamp);
-        dic[@"averageCpuUsageRate"] = @(model.averageCpuUsageRate);
-        dic[@"maxCpuUsageRate"] = @(model.maxCpuUsageRate);
-        [resArray addObject:dic];
+        dic[@"time"] = @((long)model.timestamp);
+        dic[@"usageRate"] = @(model.cpuUsageRate);
+        [itemList addObject:dic];
+
+        if (i >= 4) {
+            NSMutableArray<DoraemonCPUUsageModel *> *temArray = [array subarrayWithRange:NSMakeRange(i-4, 5)];
+            long reduceAvg = [self avgRateOfModelArray:temArray];
+            if (reduceAvg > 50) {
+                long reduceMax = [self maxRateOfModelArray:temArray];
+                NSMutableDictionary *item = @{}.mutableCopy;
+                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timestamp, temArray.firstObject.timestamp];
+                item[@"averageCpuUsageRate"] = @(reduceAvg);
+                item[@"maxCpuUsageRate"] = @(reduceMax);
+                [temporaryAnomalies addObject:item];
+            }
+        }
+        if (i >= 14) {
+            NSMutableArray<DoraemonCPUUsageModel *> *temArray = [array subarrayWithRange:NSMakeRange(i-14, 15)];
+            long reduceAvg = [self avgRateOfModelArray:temArray];
+            if (reduceAvg > 30) {
+                long reduceMax = [self maxRateOfModelArray:temArray];
+                NSMutableDictionary *item = @{}.mutableCopy;
+                item[@"beginEndTime"] = [NSString stringWithFormat:@"%ld-%ld", temArray.lastObject.timestamp, temArray.firstObject.timestamp];
+                item[@"averageCpuUsageRate"] = @(reduceAvg);
+                item[@"maxCpuUsageRate"] = @(reduceMax);
+                [anomalies addObject:item];
+            }
+        }
     }
-    return resArray;
+
+    // sort
+    NSComparator cmpr = ^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
+        long num1 = [[obj1 objectForKey:@"averageCpuUsageRate"] longValue];
+        long num2 = [[obj2 objectForKey:@"averageCpuUsageRate"] longValue];
+        if (num1 < num2) {
+            return NSOrderedDescending;
+        } else if (num1 > num2) {
+            return NSOrderedAscending;
+        } else {
+            return NSOrderedSame;
+        }
+    };
+    temporaryAnomalies = [temporaryAnomalies sortedArrayUsingComparator: cmpr];
+    anomalies = [anomalies sortedArrayUsingComparator: cmpr];
+
+    res[@"itemList"] = itemList;
+    res[@"temporaryAnomalies"] = temporaryAnomalies.count > 5 ? [temporaryAnomalies subarrayWithRange:NSMakeRange(0, 5)] : temporaryAnomalies;
+    res[@"anomalies"] = anomalies.count > 5 ? [anomalies subarrayWithRange:NSMakeRange(0, 5)] : anomalies;;
+    return res;
+}
+
+- (long)avgRateOfModelArray: (NSArray<DoraemonCPUUsageModel *> *)modelArray {
+    long sum = 0;
+    for (DoraemonCPUUsageModel *model in modelArray) {
+        sum += model.cpuUsageRate;
+    }
+    return (long)(sum / modelArray.count);
+}
+
+- (long)maxRateOfModelArray: (NSArray<DoraemonCPUUsageModel *> *)modelArray {
+    long max = 0;
+    for (DoraemonCPUUsageModel *model in modelArray) {
+        if (max < model.cpuUsageRate) max = model.cpuUsageRate;
+    }
+    return max;
 }
 
 @end

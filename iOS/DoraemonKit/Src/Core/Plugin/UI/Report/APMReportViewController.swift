@@ -71,8 +71,8 @@ extension APMReportViewController: WKNavigationDelegate {
             let launchTimeData = DoraemonLaunchTimeManager.shareInstance().modelDics()
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
             let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
-
             let pageSpeedData = DoraemonPageSpeedManager.shareInstance().dataForReport()
+            let cpuUsageData = DoraemonCPUManager.shareInstance().dataForReport()
 
 //            let netdataStr = self.getJSONStringFromArray(array: netFlowData ?? [])
 //            let locationdataStr = self.getJSONStringFromArray(array: locationData ?? [])
@@ -81,7 +81,7 @@ extension APMReportViewController: WKNavigationDelegate {
 //            print("=====")
 //            print(locationdataStr)
             print("=====")
-            print(self.getJSONStringFromArray(array: pageSpeedData ?? []))
+            print(self.getJSONStringFromDictionary(dictionary: cpuUsageData as NSDictionary))
             print("=====")
 
             DispatchQueue.main.async {
@@ -94,6 +94,7 @@ extension APMReportViewController: WKNavigationDelegate {
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
                     "locationData": locationData,
+                    "cpuData": cpuUsageData,
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }

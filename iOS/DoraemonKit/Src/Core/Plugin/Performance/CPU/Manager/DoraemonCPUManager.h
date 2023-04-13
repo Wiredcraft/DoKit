@@ -12,15 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DoraemonCPUUsageModel : RLMObject
 @property (nonatomic, copy) NSString* uid;
-@property (nonatomic, assign) double timeStamp;
-@property (nonatomic, assign) CGFloat averageCpuUsageRate;
-@property (nonatomic, assign) CGFloat maxCpuUsageRate;
+@property (nonatomic, assign) long timestamp;
+@property (nonatomic, assign) long cpuUsageRate;
 @end
 
 @interface DoraemonCPUManager : NSObject
 + (DoraemonCPUManager *)shareInstance;
 - (void)startRecord;
-- (NSArray *)dataForReport;
+- (NSDictionary *)dataForReport;
 @end
 
 NS_ASSUME_NONNULL_END
