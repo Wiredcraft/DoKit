@@ -1,8 +1,11 @@
 package com.didichuxing.doraemonkit
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.didichuxing.doraemonkit.kit.timecounter.TimeCounterManager
 import com.didichuxing.doraemonkit.util.LifecycleListenerUtil
 
 /**
@@ -15,11 +18,22 @@ import com.didichuxing.doraemonkit.util.LifecycleListenerUtil
  * ================================================
  */
 class DoKitFragmentLifecycleCallbacks : FragmentManager.FragmentLifecycleCallbacks() {
+
+    override fun onFragmentPreAttached(fm: FragmentManager, fragment: Fragment, context: Context) {
+        super.onFragmentPreAttached(fm, fragment, context)
+        TimeCounterManager.get().onFragmentLaunch()
+    }
+
     override fun onFragmentAttached(fm: FragmentManager, fragment: Fragment, context: Context) {
         super.onFragmentAttached(fm, fragment, context)
         for (listener in LifecycleListenerUtil.LIFECYCLE_LISTENERS) {
             listener.onFragmentAttached(fragment)
         }
+    }
+
+    override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
+        super.onFragmentViewCreated(fm, f, v, savedInstanceState)
+        TimeCounterManager.get().onFragmentLaunched(f, v)
     }
 
     override fun onFragmentDetached(fm: FragmentManager, fragment: Fragment) {

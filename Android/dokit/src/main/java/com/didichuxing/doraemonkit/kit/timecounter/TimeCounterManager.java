@@ -1,8 +1,12 @@
 package com.didichuxing.doraemonkit.kit.timecounter;
 
 import android.os.Looper;
+import android.view.View;
+
+import androidx.fragment.app.Fragment;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.kit.timecounter.counter.FragmentCounter;
 import com.didichuxing.doraemonkit.util.GsonUtils;
 import com.didichuxing.doraemonkit.aop.DokitPluginConfig;
 import com.didichuxing.doraemonkit.aop.method_stack.MethodStackUtil;
@@ -35,6 +39,7 @@ public class TimeCounterManager {
 
     private AppCounter mAppCounter = new AppCounter();
     private ActivityCounter mActivityCounter = new ActivityCounter();
+    private FragmentCounter mFragmentCounter = new FragmentCounter();
 
 
     /**
@@ -106,6 +111,14 @@ public class TimeCounterManager {
 
     public void onActivityLaunched() {
         mActivityCounter.launchEnd();
+    }
+
+    public void onFragmentLaunch() {
+        mFragmentCounter.launch();
+    }
+
+    public void onFragmentLaunched(Fragment f, View view) {
+        mFragmentCounter.launchEnd(f, view);
     }
 
     public void onEnterBackground() {
