@@ -26,6 +26,8 @@ object DoKitExp {
         BlockMonitorManager.getInstance().start()
         // Memory Leak
         MatrixApplication.init(app)
+        // CPU
+        PerformanceDataManager.getInstance().startMonitorCPUInfo()
     }
 
 }

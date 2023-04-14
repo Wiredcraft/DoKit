@@ -36,4 +36,10 @@ interface WclDao {
 
     @Query("SELECT * FROM locationentity")
     fun getAllLocationEntity(): List<LocationEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCpuEntity(cpuEntity: CpuEntity)
+
+    @Query("SELECT * FROM cpuEntity")
+    fun getAllCpuEntity(): List<CpuEntity>
 }
