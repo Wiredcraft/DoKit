@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import com.didichuxing.doraemonkit.DoKit;
 import com.didichuxing.doraemonkit.DoKitEnv;
 import com.didichuxing.doraemonkit.config.DokitMemoryConfig;
+import com.didichuxing.doraemonkit.database.CpuEntity;
 import com.didichuxing.doraemonkit.database.FpsEntity;
 import com.didichuxing.doraemonkit.kit.core.DoKitManager;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
@@ -304,7 +305,7 @@ public class PerformanceDataManager {
         if (DoKitManager.INSTANCE.getCALLBACK() != null) {
             DoKitManager.INSTANCE.getCALLBACK().onCpuCallBack(mLastCpuRate, getCpuFilePath());
         }
-
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCpuEntity(new CpuEntity(TimeUtils.getNowMills(), (long) mLastCpuRate));
         //保存cpu数据到app健康体检
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastCpuRate, PERFORMANCE_TYPE_CPU);

@@ -8,6 +8,7 @@ data class JsbridgeBean(
     val networkFlowData: List<NetWorkFlowBean>,
     val launchTimeData: List<CounterBean>,
     val memoryLeakData: List<MemoryLeakBean>,
-    val locationData: List<LocationBean>
+    val locationData: List<LocationBean>,
+    val cpuData: CpuBean,
 )
 
