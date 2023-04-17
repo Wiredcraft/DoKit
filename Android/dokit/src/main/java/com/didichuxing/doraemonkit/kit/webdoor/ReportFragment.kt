@@ -58,16 +58,17 @@ class ReportFragment : BaseFragment() {
             convertToFpsFromList(fpsEntities),
             convertToNetWorkFrom(networkRecordDBEntities),
             convertToNetWorkFlowFrom(networkRecordDBEntities),
-            convertToCounters(counters),
+            convertToAppCounters(counters),
             convertToMemoryFromList(memoryEntities),
             convertToLocationFrom(locationEntities),
+            convertToActivityCounters(counters),
             convertToCpuFrom(cpuEntities),
         )
         Log.i(TAG, "jsBridgeBean.cpuData: ${jsBridgeBean.cpuData}")
         val b = GsonUtils.toJson(jsBridgeBean)
         DoKitManager.CALLBACK?.onPdfCallBack(b)
         mWebView.callHandler(
-            "testJavascriptHandler", b.replace("%22","")
+            "testJavascriptHandler", b.replace("%22", "")
         ) { data -> Log.i(TAG, "call succeed,return value is $data") }
     }
 

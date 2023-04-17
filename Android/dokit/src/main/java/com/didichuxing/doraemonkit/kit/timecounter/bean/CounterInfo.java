@@ -9,6 +9,7 @@ public class CounterInfo {
 
     public static final int TYPE_APP = 0;
     public static final int TYPE_ACTIVITY = 1;
+    public static final int TYPE_FRAGMENT = 2;
 
     public long time;
     public int type;
