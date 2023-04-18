@@ -41,7 +41,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.wiredcraft.doraemonkit'
             artifactId = 'dokit-exp'
-            version = '1.0.5-SNAPSHOT'
+            version = '1.0.6-SNAPSHOT'
             afterEvaluate {
                 from components.release
             }

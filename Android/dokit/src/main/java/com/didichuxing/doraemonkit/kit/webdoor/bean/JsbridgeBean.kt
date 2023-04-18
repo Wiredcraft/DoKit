@@ -11,5 +11,6 @@ data class JsbridgeBean(
     val locationData: List<LocationBean>,
     val pageLaunchTime: List<ActivityCounterBean>,
     val cpuData: CpuBean,
+    val blockData: List<BlockBean>,
 )
 

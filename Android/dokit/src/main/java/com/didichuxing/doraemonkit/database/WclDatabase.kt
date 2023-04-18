@@ -12,11 +12,12 @@ import androidx.room.RoomDatabase
         MemoryEntity::class,
         LocationEntity::class,
         CpuEntity::class,
+        BlockEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
     autoMigrations = [
-//        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 1, to = 2),
     ]
 )
 abstract class WclDatabase : RoomDatabase() {
