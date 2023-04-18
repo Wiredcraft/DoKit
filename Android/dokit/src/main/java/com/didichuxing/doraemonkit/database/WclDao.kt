@@ -42,4 +42,10 @@ interface WclDao {
 
     @Query("SELECT * FROM cpuEntity")
     fun getAllCpuEntity(): List<CpuEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertBlockEntity(blockEntity: BlockEntity)
+
+    @Query("SELECT * FROM blockEntity")
+    fun getAllBlockEntity(): List<BlockEntity>
 }

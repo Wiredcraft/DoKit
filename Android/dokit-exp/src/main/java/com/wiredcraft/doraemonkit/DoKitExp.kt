@@ -23,11 +23,12 @@ object DoKitExp {
         LocationManager.init(app)
         // Launch Time
         FileManager.startSave()
-        BlockMonitorManager.getInstance().start()
         // Memory Leak
         MatrixApplication.init(app)
         // CPU
         PerformanceDataManager.getInstance().startMonitorCPUInfo()
+        // Block
+        BlockMonitorManager.getInstance().start()
     }
 
 }

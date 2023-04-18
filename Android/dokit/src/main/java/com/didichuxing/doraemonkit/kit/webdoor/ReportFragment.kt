@@ -47,6 +47,7 @@ class ReportFragment : BaseFragment() {
         val memoryEntities = INSTANCE.counterDb.wclDao().getAllMemoryEntity()
         val locationEntities = INSTANCE.counterDb.wclDao().getAllLocationEntity()
         val cpuEntities = INSTANCE.counterDb.wclDao().getAllCpuEntity()
+        val blockEntities = INSTANCE.counterDb.wclDao().getAllBlockEntity()
 
         var jsBridgeBean: JsbridgeBean? = null
         val appName = "${AppUtils.getAppName()} v${
@@ -63,8 +64,10 @@ class ReportFragment : BaseFragment() {
             convertToLocationFrom(locationEntities),
             convertToActivityCounters(counters),
             convertToCpuFrom(cpuEntities),
+            convertToBlockFrom(blockEntities),
         )
         Log.i(TAG, "jsBridgeBean.cpuData: ${jsBridgeBean.cpuData}")
+        Log.i(TAG, "jsBridgeBean.blockData: ${jsBridgeBean.blockData}")
         val b = GsonUtils.toJson(jsBridgeBean)
         DoKitManager.CALLBACK?.onPdfCallBack(b)
         mWebView.callHandler(
