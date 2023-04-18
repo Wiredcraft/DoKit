@@ -95,6 +95,7 @@ extension APMReportViewController: WKNavigationDelegate {
                     "memoryLeakData": leakData,
                     "locationData": locationData,
                     "cpuData": cpuUsageData,
+                    "pageSpeedData": pageSpeedData
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
