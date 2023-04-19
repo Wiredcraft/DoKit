@@ -40,7 +40,6 @@ open class APMReportViewController: UIViewController {
         super.viewDidAppear(animated)
         bridge.register(handlerName: "lookPdf") {[weak self] parameters, callback in
             let str = (parameters?["pdfData"] as? String)?.replacingOccurrences(of: "data:application/pdf;base64,", with: "")
-            print(str?.count)
             let data = Data(base64Encoded: str ?? "", options: .ignoreUnknownCharacters)
             DispatchQueue.main.async {
                 self?.sharedPdf(data: (data ?? str?.data(using: .utf8)) ?? Data())
@@ -72,17 +71,6 @@ extension APMReportViewController: WKNavigationDelegate {
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
             let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
             let pageSpeedData = DoraemonPageSpeedManager.shareInstance().dataForReport()
-            let cpuUsageData = DoraemonCPUManager.shareInstance().dataForReport()
-
-//            let netdataStr = self.getJSONStringFromArray(array: netFlowData ?? [])
-//            let locationdataStr = self.getJSONStringFromArray(array: locationData ?? [])
-//            print("=====")
-//            print(netdataStr)
-//            print("=====")
-//            print(locationdataStr)
-            print("=====")
-            print(self.getJSONStringFromDictionary(dictionary: cpuUsageData as NSDictionary))
-            print("=====")
 
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
@@ -94,7 +82,6 @@ extension APMReportViewController: WKNavigationDelegate {
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
                     "locationData": locationData,
-                    "cpuData": cpuUsageData,
                     "pageSpeedData": pageSpeedData
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")

@@ -30,7 +30,7 @@
 - (UIButton *)entryBtn {
     if (!_entryBtn) {
         _entryBtn = [[UIButton alloc] initWithFrame:self.bounds];
-        _entryBtn.backgroundColor = [UIColor clearColor];
+        _entryBtn.backgroundColor = [UIColor blueColor];
         UIImage *image = [UIImage doraemon_xcassetImageNamed:@"doraemon_logo"];
 #if defined(__IPHONE_13_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_13_0)
         if (@available(iOS 13.0, *)) {
