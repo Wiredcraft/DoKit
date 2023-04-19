@@ -42,7 +42,7 @@
     NSTimeInterval summaryRequestCount = httpModelArray.count;
     dic[@"summaryRequestCount"] = @(summaryRequestCount);
 
-    NSTimeInterval totalTime = 0;
+    long totalTime = 0;
     CGFloat totalDownFlow = 0.;
     CGFloat totalUploadFlow = 0.;
     CGFloat sucsessCount = 0.;
@@ -63,7 +63,7 @@
         totalUploadFlow += uploadFlow;
         CGFloat downFlow = [httpModel.downFlow floatValue];
         totalDownFlow += downFlow;
-        totalTime += [httpModel.totalDuration doubleValue];
+        totalTime += [httpModel.totalDuration longLongValue];
 
         NSInteger statusCode = [httpModel.statusCode integerValue];
         if (statusCode >= 200 && statusCode <= 399) {
@@ -118,7 +118,7 @@
         }
     }
 
-    dic[@"summaryRequestTime"] = @((long)totalTime);
+    dic[@"summaryRequestTime"] = @(totalTime);
     dic[@"summaryRequestUploadFlow"] = @((long)totalUploadFlow);
     dic[@"summaryRequestDownFlow"] = @((long)totalDownFlow);
 

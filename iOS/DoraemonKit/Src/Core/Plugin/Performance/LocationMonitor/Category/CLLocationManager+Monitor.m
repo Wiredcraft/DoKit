@@ -10,6 +10,7 @@
 #import "DoraemonUseLocationManager.h"
 #import "DoraemonUseLocationDataModel.h"
 #import "DoraemonUseLocationDataModel.h"
+#import <CoreLocation/CLLocationManager.h>
 
 @implementation CLLocationManager (Monitor)
 
@@ -39,12 +40,28 @@
 }
 
 + (void)handleUseLocationWith: (CLLocationManager *)locationManager locations: (NSArray<CLLocation *> *)locations{
-    CLLocation *currentLocation = locations.firstObject;
-
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusNotDetermined:
+            [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp = 0;
+            return;
+        case kCLAuthorizationStatusRestricted:
+            [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp = 0;
+            return;
+        case kCLAuthorizationStatusAuthorizedAlways:
+            break;;
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            break;
+        case kCLAuthorizationStatusDenied:
+            [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp = 0;
+            return;
+        default:
+            [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp = 0;
+            break;
+    }
     NSTimeInterval baseLineTimeStamp = [DoraemonUseLocationManager shareInstance].useLocationBaseTimeStamp;
     NSTimeInterval currenntTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     NSTimeInterval useDuration = currenntTimeStamp - baseLineTimeStamp;
-    if (!baseLineTimeStamp) useDuration = 0;
+    if (!baseLineTimeStamp) return;
 
     DoraemonUseLocationDataModel *useModel = [[DoraemonUseLocationDataModel alloc] init];
     useModel.modelId = [[NSUUID UUID] UUIDString];
