@@ -92,7 +92,7 @@ class DoraemonDemoNetViewController: DoraemonDemoBaseViewController, UITableView
         let manager = AFHTTPSessionManager()
         manager.requestSerializer = AFHTTPRequestSerializer()
         manager.responseSerializer = AFHTTPResponseSerializer()
-        manager.get("https://www.taobao.com/", parameters: nil, progress: nil, success: { (task, response) in
+        manager.get("https://www.taobao.com/", parameters: nil, headers: nil, progress: nil, success: { (task, response) in
             let result: String = String(data: response! as! Data, encoding: String.Encoding.utf8)!
             print("请求成功 = \(result)")
         }) { (task, error) in
