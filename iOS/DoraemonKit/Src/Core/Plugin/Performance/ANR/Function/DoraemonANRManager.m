@@ -141,7 +141,6 @@ static NSString *DoraemonANRDataModelTable = @"DoraemonANRDataModelTable";
         [res addObject:item];
     }
 
-    NSSortDescriptor *durationSort = [NSSortDescriptor sortDescriptorWithKey:@"age" ascending:YES];
     [res sortUsingComparator:^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
         long duration1 = [[obj1 objectForKey:@"duration"] longLongValue];
         long duration2 = [[obj2 objectForKey:@"duration"] longLongValue];
