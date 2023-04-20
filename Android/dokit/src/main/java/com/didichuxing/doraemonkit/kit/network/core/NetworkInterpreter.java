@@ -76,16 +76,16 @@ public class NetworkInterpreter {
         return new InputStreamProxy(availableInputStream, responseHandler);
     }
 
-    public NetworkRecord createRecord(int requestId, String platform, NetworkInterpreter.InspectorRequest request) {
+    public NetworkRecord createRecord(int requestId, String platform, NetworkInterpreter.InspectorRequest request, long startTime) {
         NetworkRecord record = new NetworkRecord();
         record.mRequestId = requestId;
         record.mPlatform = platform;
-        fetchRequestInfo(record, request);
+        fetchRequestInfo(record, request, startTime);
         NetworkManager.get().addRecord(requestId, record);
         return record;
     }
 
-    private void fetchRequestInfo(NetworkRecord record, NetworkInterpreter.InspectorRequest request) {
+    private void fetchRequestInfo(NetworkRecord record, NetworkInterpreter.InspectorRequest request, long startTime) {
         Request requestJSON = new Request();
         requestJSON.url = request.url();
         requestJSON.method = request.method();
@@ -93,7 +93,7 @@ public class NetworkInterpreter {
         requestJSON.encode = request.firstHeaderValue("Content-Encoding");
         requestJSON.postData = readBodyAsString(request);
         record.mRequest = requestJSON;
-        record.startTime = System.currentTimeMillis();
+        record.startTime = startTime;
         record.requestLength = readBodyLength(request);
         //Log.e(TAG, requestJSON.toString());
     }
