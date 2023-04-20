@@ -57,6 +57,7 @@ public class DokitCapInterceptor extends AbsDoKitInterceptor {
         Request request = chain.request();
         int requestId = mNetworkInterpreter.nextRequestId();
         Response response;
+        long startTime = System.currentTimeMillis();
         try {
             response = chain.proceed(request);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class DokitCapInterceptor extends AbsDoKitInterceptor {
         if (request.url().toString().contains("dokit_flag")) {
             platform = "web";
         }
-        NetworkRecord record = mNetworkInterpreter.createRecord(requestId, platform, inspectorRequest);
+        NetworkRecord record = mNetworkInterpreter.createRecord(requestId, platform, inspectorRequest, startTime);
 
         NetworkInterpreter.InspectorResponse inspectorResponse = new OkHttpInspectorResponse(
                 requestId,

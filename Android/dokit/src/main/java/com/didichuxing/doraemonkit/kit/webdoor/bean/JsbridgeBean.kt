@@ -9,7 +9,7 @@ data class JsbridgeBean(
     val launchTimeData: List<CounterBean>,
     val memoryLeakData: List<MemoryLeakBean>,
     val locationData: List<LocationBean>,
-    val pageLaunchTime: List<ActivityCounterBean>,
+    val pageLoadTimeData: List<ActivityCounterBean>,
     val cpuData: CpuBean,
     val blockData: List<BlockBean>,
 )

@@ -144,7 +144,7 @@ public class NetworkManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (DoKitManager.INSTANCE.getCALLBACK() != null && add) {
+                if (DoKitManager.INSTANCE.getCALLBACK() != null && !add) {
                     DoKitManager.INSTANCE.getCALLBACK().onNetworkCallBack(record);
                     DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
                         record.mRequestId,
