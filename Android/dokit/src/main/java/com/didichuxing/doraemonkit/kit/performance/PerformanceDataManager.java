@@ -15,7 +15,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 
-import com.didichuxing.doraemonkit.DoKit;
 import com.didichuxing.doraemonkit.DoKitEnv;
 import com.didichuxing.doraemonkit.config.DokitMemoryConfig;
 import com.didichuxing.doraemonkit.database.CpuEntity;
@@ -69,6 +68,10 @@ public class PerformanceDataManager {
      */
     private float mLastMemoryRate;
     /**
+     * 当前进程中CPU占比最高的线程的 Stack Trace
+     */
+    private StackTraceElement[] mLastStackTraces;
+    /**
      * 当前的帧率
      */
     private int mLastFrameRate = mMaxFrameRate;
@@ -104,6 +107,9 @@ public class PerformanceDataManager {
         } else {
             mLastCpuRate = getCPUData();
             writeCpuDataIntoFile();
+        }
+        if (mLastCpuRate >= CpuUtil.RECORD_STACK_THRESHOLD) {
+            mLastStackTraces = CpuUtil.INSTANCE.getStackTraceOfThreadWithHighestCpuUsage();
         }
     }
 
@@ -305,7 +311,8 @@ public class PerformanceDataManager {
         if (DoKitManager.INSTANCE.getCALLBACK() != null) {
             DoKitManager.INSTANCE.getCALLBACK().onCpuCallBack(mLastCpuRate, getCpuFilePath());
         }
-        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCpuEntity(new CpuEntity(TimeUtils.getNowMills(), (long) mLastCpuRate));
+        String stackString = StackTraceUtil.INSTANCE.concernStackString(mContext, mLastStackTraces);
+        DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCpuEntity(new CpuEntity(TimeUtils.getNowMills(), (long) mLastCpuRate, stackString));
         //保存cpu数据到app健康体检
         if (DoKitManager.APP_HEALTH_RUNNING) {
             addPerformanceDataInAppHealth(mLastCpuRate, PERFORMANCE_TYPE_CPU);

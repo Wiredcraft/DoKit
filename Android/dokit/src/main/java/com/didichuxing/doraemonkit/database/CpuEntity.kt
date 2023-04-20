@@ -9,4 +9,5 @@ data class CpuEntity(
     @PrimaryKey val time: Long,
     @ColumnInfo(defaultValue = "0")
     val usageRate: Long,
+    val stackString: String?
 )
