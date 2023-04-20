@@ -8,11 +8,17 @@
 #import "DoraemonCPUUtil.h"
 #import <mach/mach.h>
 #import <UIKit/UIKit.h>
+#import "DoraemonBacktraceLogger.h"
 //#import <sys/sysctl.h>
 
 @implementation DoraemonCPUUtil
 
 + (CGFloat)cpuUsageForApp {
+    DoraemonCPUUsageCallStackModel *model = [self cpuUsageAndCallstackForThread];
+    return model == nil ? 0 : model.totalUsage;
+}
+
++ (nullable DoraemonCPUUsageCallStackModel *)cpuUsageAndCallstackForThread {
     kern_return_t kr;
     thread_array_t         thread_list;
     mach_msg_type_number_t thread_count;
@@ -24,9 +30,9 @@
     //  获取当前进程中 线程列表
     kr = task_threads(mach_task_self(), &thread_list, &thread_count);
     if (kr != KERN_SUCCESS)
-        return -1;
+        return nil;
 
-    float tot_cpu = 0;
+    DoraemonCPUUsageCallStackModel *usageModel = [[DoraemonCPUUsageCallStackModel alloc] init];
     
     for (int j = 0; j < thread_count; j++) {
         thread_info_count = THREAD_INFO_MAX;
@@ -34,13 +40,22 @@
         kr = thread_info(thread_list[j], THREAD_BASIC_INFO,
                          (thread_info_t)thinfo, &thread_info_count);
         if (kr != KERN_SUCCESS)
-            return -1;
+            return nil;
         
         basic_info_th = (thread_basic_info_t)thinfo;
         if (!(basic_info_th->flags & TH_FLAGS_IDLE)) {
             // cpu_usage : Scaled cpu usage percentage. The scale factor is TH_USAGE_SCALE.
             //宏定义TH_USAGE_SCALE返回CPU处理总频率：
-            tot_cpu += basic_info_th->cpu_usage / (float)TH_USAGE_SCALE;
+            float usage = basic_info_th->cpu_usage / (float)TH_USAGE_SCALE;
+            usageModel.totalUsage += usage;
+            
+            if (usage > usageModel.maxUsageOfThread) {
+                NSString *callstack = [DoraemonBacktraceLogger doraemon_backtraceOfThread:thread_list[j]];
+                if (callstack.length > 0) {
+                    usageModel.maxUsageOfThread = usage;
+                    usageModel.callstackOfThread = callstack;
+                }
+            }
         }
         
     } // for each thread
@@ -49,11 +64,11 @@
     kr = vm_deallocate(mach_task_self(), (vm_offset_t)thread_list, thread_count * sizeof(thread_t));
     assert(kr == KERN_SUCCESS);
     
-    if (tot_cpu < 0) {
-        tot_cpu = 0.;
+    if (usageModel.totalUsage < FLT_EPSILON) {
+        return nil;
     }
     
-    return tot_cpu;
+    return usageModel;
 }
 
 /**

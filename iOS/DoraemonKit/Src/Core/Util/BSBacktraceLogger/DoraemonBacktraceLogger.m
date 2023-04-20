@@ -108,6 +108,10 @@ static mach_port_t main_thread_id;
     return [resultString copy];
 }
 
++ (NSString *)doraemon_backtraceOfThread:(thread_t)thread {
+    return _doraemon_backtraceOfThread(thread);
+}
+
 #pragma -mark Get call backtrace of a mach_thread
 NSString *_doraemon_backtraceOfThread(thread_t thread) {
     uintptr_t backtraceBuffer[50];
