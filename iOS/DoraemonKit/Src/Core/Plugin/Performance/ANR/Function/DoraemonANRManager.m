@@ -13,6 +13,9 @@
 #import "Doraemoni18NUtil.h"
 #import "DoraemonANRTool.h"
 #import "DoraemonHealthManager.h"
+#import "DotaemonANRModel.h"
+#import "RealmUtil.h"
+#import "UIViewController+Doraemon.h"
 
 //默认超时间隔
 static CGFloat const kDoraemonBlockMonitorTimeInterval = 0.2f;
@@ -24,7 +27,11 @@ static CGFloat const kDoraemonBlockMonitorTimeInterval = 0.2f;
 
 @end
 
-@implementation DoraemonANRManager
+@implementation DoraemonANRManager{
+    dispatch_queue_t _serialQueue;
+}
+
+static NSString *DoraemonANRDataModelTable = @"DoraemonANRDataModelTable";
 
 + (instancetype)sharedInstance {
     static id instance = nil;
@@ -40,17 +47,11 @@ static CGFloat const kDoraemonBlockMonitorTimeInterval = 0.2f;
     self = [super init];
     
     if (self) {
+        _serialQueue = dispatch_queue_create("com.wcl.DoraemonANRDataModelTableQueue", NULL);
         _doraemonANRTracker = [[DoraemonANRTracker alloc] init];
         _timeOut = kDoraemonBlockMonitorTimeInterval;
         _anrTrackOn = [DoraemonCacheManager sharedInstance].anrTrackSwitch;
-        if (_anrTrackOn) {
-            [self start];
-        } else {
-            [self stop];
-            // 如果是关闭的话，删除上一次的卡顿记录
-            NSFileManager *fm = [NSFileManager defaultManager];
-            [fm removeItemAtPath:[DoraemonANRTool anrDirectory] error:nil];
-        }
+        [self start];
     }
     
     return self;
@@ -60,21 +61,32 @@ static CGFloat const kDoraemonBlockMonitorTimeInterval = 0.2f;
     __weak typeof(self) weakSelf = self;
     [_doraemonANRTracker startWithThreshold:self.timeOut handler:^(NSDictionary *info) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf dumpWithInfo:info];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf dumpWithInfo:info];
+        });
     }];
 }
 
 - (void)dumpWithInfo:(NSDictionary *)info {
-    if (![info isKindOfClass:[NSDictionary class]]) {
+    long duration = [[info objectForKey:@"duration"] longLongValue];
+    if (![info isKindOfClass:[NSDictionary class]] || duration <= 200) {
         return;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[DoraemonHealthManager sharedInstance] addANRInfo:info];
-        if (self.block) {
-            self.block(info);
-        }
-        [DoraemonANRTool saveANRInfo:info];
-    });
+
+    NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
+    DotaemonANRModel *model = [[DotaemonANRModel alloc] init];
+    model.uid = [[NSUUID UUID] UUIDString];
+    model.duration = duration;
+    model.info = className;
+    [RealmUtil addOrUpdateModel:model queue:_serialQueue tableName:DoraemonANRDataModelTable];
+
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [[DoraemonHealthManager sharedInstance] addANRInfo:info];
+//        if (self.block) {
+//            self.block(info);
+//        }
+//        [DoraemonANRTool saveANRInfo:info];
+//    });
 
 }
 
@@ -94,6 +106,18 @@ static CGFloat const kDoraemonBlockMonitorTimeInterval = 0.2f;
 - (void)setAnrTrackOn:(BOOL)anrTrackOn {
     _anrTrackOn = anrTrackOn;
     [[DoraemonCacheManager sharedInstance] saveANRTrackSwitch:anrTrackOn];
+}
+
+- (NSArray*)dataForReport {
+    NSArray<DotaemonANRModel *> *modelArray = (NSArray<DotaemonANRModel *> *)[RealmUtil modelArrayWithTableName:DoraemonANRDataModelTable objClass:DotaemonANRModel.class];
+    NSMutableArray *res = @[].mutableCopy;
+    for (DotaemonANRModel *model in modelArray) {
+        NSMutableDictionary *item = @{}.mutableCopy;
+        item[@"duration"] = @(model.duration);
+        item[@"info"] = model.info;
+        [res addObject:item];
+    }
+    return res;
 }
 
 @end
