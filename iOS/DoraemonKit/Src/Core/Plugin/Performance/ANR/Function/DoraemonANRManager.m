@@ -110,12 +110,52 @@ static NSString *DoraemonANRDataModelTable = @"DoraemonANRDataModelTable";
 
 - (NSArray*)dataForReport {
     NSArray<DotaemonANRModel *> *modelArray = (NSArray<DotaemonANRModel *> *)[RealmUtil modelArrayWithTableName:DoraemonANRDataModelTable objClass:DotaemonANRModel.class];
-    NSMutableArray *res = @[].mutableCopy;
+
+    NSMutableDictionary *dic = @{}.mutableCopy;
     for (DotaemonANRModel *model in modelArray) {
         NSMutableDictionary *item = @{}.mutableCopy;
-        item[@"duration"] = @(model.duration);
-        item[@"info"] = model.info;
+        if ([dic objectForKey:model.info]) {
+            NSMutableArray *values = dic[model.info];
+            [values addObject:model];
+            dic[model.info] = values;
+        } else {
+            NSMutableArray *values = @[].mutableCopy;
+            [values addObject:model];
+            dic[model.info] = values;
+        }
+    }
+
+    NSMutableArray *res = @[].mutableCopy;
+    for (NSMutableArray *models in dic.allValues) {
+        if (!models.count) continue;
+        long sum = 0;
+        for (DotaemonANRModel *model in models) {
+            sum += model.duration;
+        }
+        long avgDuration = (long)(sum / models.count);
+
+        NSMutableDictionary *item = @{}.mutableCopy;
+        item[@"duration"] = @(avgDuration);
+        item[@"count"] = @(models.count);
+        item[@"info"] = [(DotaemonANRModel *)models.firstObject info];
         [res addObject:item];
+    }
+
+    NSSortDescriptor *durationSort = [NSSortDescriptor sortDescriptorWithKey:@"age" ascending:YES];
+    [res sortUsingComparator:^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
+        long duration1 = [[obj1 objectForKey:@"duration"] longLongValue];
+        long duration2 = [[obj2 objectForKey:@"duration"] longLongValue];
+        if (duration1 > duration2) {
+            return NSOrderedAscending;
+        } else if (duration1 < duration2) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+
+    if (res.count > 5) {
+        return [res subarrayWithRange:NSMakeRange(0, 5)];
     }
     return res;
 }
