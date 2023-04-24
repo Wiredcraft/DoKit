@@ -222,23 +222,23 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
     }
     
     //记录 FPS 数据
-    if (!_fpsUtil) {
-        _fpsUtil = [[DoraemonFPSUtil alloc] init];
-        [_fpsUtil start];
-        [_fpsTimer invalidate];
-        _fpsTimer = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
-            DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
-            model.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
-            model.modelId = [NSString stringWithFormat:@"%@", @(model.timestamp * 1000)];
-            model.value = [_fpsUtil getFps];
-            NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
-            model.topViewName = className;
-            if (![className containsString:@"DoraemonKit"]) {
-                [[DoraemonFPSDataManager sharedInstance] appendData: model];
-            }
-        }];
-        [[NSRunLoop currentRunLoop] addTimer:_fpsTimer forMode: NSRunLoopCommonModes];
-    }
+//    if (!_fpsUtil) {
+//        _fpsUtil = [[DoraemonFPSUtil alloc] init];
+//        [_fpsUtil start];
+//        [_fpsTimer invalidate];
+//        _fpsTimer = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+//            DoraemonFPSModel *model = [[DoraemonFPSModel alloc] init];
+//            model.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//            model.modelId = [NSString stringWithFormat:@"%@", @(model.timestamp * 1000)];
+//            model.value = [_fpsUtil getFps];
+//            NSString *className = NSStringFromClass([[UIViewController topViewControllerForKeyWindow] class]);
+//            model.topViewName = className;
+//            if (![className containsString:@"DoraemonKit"]) {
+//                [[DoraemonFPSDataManager sharedInstance] appendData: model];
+//            }
+//        }];
+//        [[NSRunLoop currentRunLoop] addTimer:_fpsTimer forMode: NSRunLoopCommonModes];
+//    }
 }
 
 
