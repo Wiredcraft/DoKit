@@ -64,26 +64,27 @@ extension APMReportViewController: WKNavigationDelegate {
 
             let appName = Bundle.main.infoDictionary?["CFBundleExecutable"]
             let deviceInfo = modelName + ", " + "iOS " + UIDevice.current.systemVersion
-            let fpsData = DoraemonFPSDataManager.sharedInstance().dataForReport()
             let netData = DoraemonNetFlowAnalysisReport().reportDic()
             let netFlowData = DoraemonNetFlowAnalysisReport().reportFlowdata()
             let launchTimeData = DoraemonLaunchTimeManager.shareInstance().modelDics()
             let leakData = DoraemonMemoryLeakData.shareInstance().dataForReport()
             let locationData = DoraemonUseLocationManager.shareInstance().dicForReport()
             let pageSpeedData = DoraemonPageSpeedManager.shareInstance().dataForReport()
-            //let jankData = DoraemonANRManager.sharedInstance().dataForReport()
+            let jankData = DoraemonANRManager.sharedInstance().dataForReport()
+            let cpuData = DoraemonCPUManager.shareInstance().dataForReport()
 
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
                     "appName": appName,
                     "deviceInfo": deviceInfo,
-                    "fps": fpsData,
                     "network": netData,
                     "networkFlowData": netFlowData,
                     "launchTimeData": launchTimeData,
                     "memoryLeakData": leakData,
                     "locationData": locationData,
-                    "pageLoadTimeData": pageSpeedData
+                    "pageLoadTimeData": pageSpeedData,
+                    "blockData": jankData,
+                    "cpuData": cpuData
                 ]) { responseData in
                     print("back from js: \(String(describing: responseData))")
                 }
