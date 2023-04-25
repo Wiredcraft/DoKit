@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.SystemClock;
 
 import com.didichuxing.doraemonkit.DoKit;
+import com.didichuxing.doraemonkit.DoKitCallBack;
 import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.database.Counter;
@@ -148,11 +149,20 @@ public class ActivityCounter {
         }
 
         mCounterInfos.add(counterInfo);
+        DoKitCallBack cb = DoKitManager.INSTANCE.getCALLBACK();
+        if (cb != null) {
+            cb.onCounterCallBack(counterInfo);
+        }
+
+        int type = CounterInfo.TYPE_ACTIVITY;
+        if (counterInfo.title.contains("null ->")) { // TODO workaround solution, need find out why AppCounter not work for target app
+            type = CounterInfo.TYPE_APP;
+        }
         DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCounter(new Counter(
             System.currentTimeMillis(),
             counterInfo.title,
             counterInfo.time,
-            counterInfo.type,
+            type,
             counterInfo.totalCost,
             counterInfo.pauseCost,
             counterInfo.launchCost,

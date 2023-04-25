@@ -1,6 +1,7 @@
 package com.didichuxing.doraemonkit
 
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord
+import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo
 
 /**
  * ================================================
@@ -30,6 +31,10 @@ interface DoKitCallBack {
     }
 
     fun onPdfCallBack(json: String) {
+
+    }
+
+    fun onCounterCallBack(counterInfo: CounterInfo) {
 
     }
 }
