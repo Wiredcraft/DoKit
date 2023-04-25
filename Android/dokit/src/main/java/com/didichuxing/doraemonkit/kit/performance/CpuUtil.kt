@@ -11,7 +11,8 @@ import java.io.InputStreamReader
 
 object CpuUtil {
 
-    const val RECORD_STACK_THRESHOLD = 30
+    const val RECORD_DATA_THRESHOLD = 10
+    const val RECORD_ANOMALY_THRESHOLD = 30L
 
     fun getStackTraceOfThreadWithHighestCpuUsage(): Array<StackTraceElement>? {
         return getTID()?.let { (tid, threadName) ->
