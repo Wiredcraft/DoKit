@@ -28,6 +28,7 @@ import com.didichuxing.doraemonkit.kit.core.McClientProcessor
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord
 import com.didichuxing.doraemonkit.kit.network.okhttp.interceptor.DokitExtInterceptor
 import com.didichuxing.doraemonkit.kit.parameter.matrix.MatrixApplication
+import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo
 import com.didichuxing.doraemonkit.util.LogUtils
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
@@ -101,6 +102,11 @@ class App : Application() {
 
                 override fun onPdfCallBack(json: String) {
                     super.onPdfCallBack(json)
+                }
+
+                override fun onCounterCallBack(counterInfo: CounterInfo) {
+                    super.onCounterCallBack(counterInfo)
+                    println("DoKit onCounterCallBack ${counterInfo.type}:${counterInfo.title}:${counterInfo.totalCost}")
                 }
             })
             .netExtInterceptor(object : DokitExtInterceptor.DokitExtInterceptorProxy {

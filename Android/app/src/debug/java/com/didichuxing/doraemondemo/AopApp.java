@@ -11,6 +11,7 @@ import com.didichuxing.doraemonkit.DoKit;
 import com.didichuxing.doraemonkit.DoKitCallBack;
 import com.didichuxing.doraemonkit.kit.AbstractKit;
 import com.didichuxing.doraemonkit.kit.network.bean.NetworkRecord;
+import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
@@ -75,6 +76,11 @@ public class AopApp extends Application {
                     @Override
                     public void onPdfCallBack(@NonNull String json) {
 
+                    }
+
+                    @Override
+                    public void onCounterCallBack(@NonNull CounterInfo counterInfo) {
+                        System.out.println("DoKit onCounterCallBack " + counterInfo.type + ":" + counterInfo.title + ":" + counterInfo.totalCost + "");
                     }
                 })
                 .build();

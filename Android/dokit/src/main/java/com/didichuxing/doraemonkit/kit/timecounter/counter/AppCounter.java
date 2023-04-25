@@ -1,5 +1,7 @@
 package com.didichuxing.doraemonkit.kit.timecounter.counter;
 
+import com.didichuxing.doraemonkit.DoKitCallBack;
+import com.didichuxing.doraemonkit.kit.core.DoKitManager;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager;
 import com.didichuxing.doraemonkit.database.Counter;
 import com.didichuxing.doraemonkit.kit.timecounter.bean.CounterInfo;
@@ -49,6 +51,10 @@ public class AppCounter {
         mCounterInfo.totalCost = mAttachCountTime + mStartCountTime;
         mCounterInfo.type = CounterInfo.TYPE_APP;
         mCounterInfo.time = System.currentTimeMillis();
+        DoKitCallBack cb = DoKitManager.INSTANCE.getCALLBACK();
+        if (cb != null) {
+            cb.onCounterCallBack(mCounterInfo);
+        }
         DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertCounter(new Counter(
             System.currentTimeMillis(),
             mCounterInfo.title,

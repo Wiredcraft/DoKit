@@ -7,6 +7,7 @@ import com.didichuxing.doraemonkit.DoKit.getDoKitView
 import com.didichuxing.doraemonkit.database.Counter
 import com.didichuxing.doraemonkit.kit.blockmonitor.FileManager.save
 import com.didichuxing.doraemonkit.kit.core.DoKitManager
+import com.didichuxing.doraemonkit.kit.core.DoKitManager.CALLBACK
 import com.didichuxing.doraemonkit.kit.core.DoKitViewManager.Companion.INSTANCE
 import com.didichuxing.doraemonkit.kit.health.AppHealthInfoUtil
 import com.didichuxing.doraemonkit.kit.health.model.AppHealthInfo.DataBean.PageLoadBean
@@ -111,6 +112,7 @@ class FragmentCounter {
             }
         }
         mCounterInfos.add(counterInfo)
+        CALLBACK?.onCounterCallBack(counterInfo)
         INSTANCE.counterDb.wclDao().insertCounter(
             Counter(
                 System.currentTimeMillis(),

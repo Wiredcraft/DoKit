@@ -31,7 +31,7 @@ fun convertToAppCounters(counter: List<Counter>): List<CounterBean> {
 
 fun convertToActivityCounters(counter: List<Counter>): List<ActivityCounterBean> {
     val counters = arrayListOf<ActivityCounterBean>()
-    counter.filter { it.type == CounterInfo.TYPE_ACTIVITY || it.type == CounterInfo.TYPE_FRAGMENT }.forEach {
+    counter.filter { (it.type == CounterInfo.TYPE_ACTIVITY || it.type == CounterInfo.TYPE_FRAGMENT) && !isDoKitClass(it.title) }.forEach {
         counters.add(
             ActivityCounterBean(
                 it.totalCost,
