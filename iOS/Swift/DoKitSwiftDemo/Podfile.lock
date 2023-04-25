@@ -50,7 +50,7 @@ DEPENDENCIES:
   - FBRetainCycleDetector (from `https://github.com/TrailSquad/FBRetainCycleDetector`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - AFNetworking
     - FMDB
     - GCDWebServer
@@ -77,6 +77,6 @@ SPEC CHECKSUMS:
   Realm: e6b04f15a814cb22aae621e7e15f2ccb27ac8f95
   WKWebViewJavascriptBridge: d7324badf8996486c71648f448617b09bf927b4b
 
-PODFILE CHECKSUM: e17cf033127c4c794eb1f8c03338caec8f8c1c7a
+PODFILE CHECKSUM: b7f7ed393b27712a66b3e2ed62804ddcbd31b125
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

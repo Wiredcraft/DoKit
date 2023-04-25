@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)doraemon_backtraceOfCurrentThread;
 + (NSString *)doraemon_backtraceOfMainThread;
 + (NSString *)doraemon_backtraceOfNSThread:(NSThread *)thread;
++ (NSString *)doraemon_backtraceOfThread:(thread_t)thread;
 
 @end
 
