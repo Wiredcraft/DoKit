@@ -140,4 +140,8 @@ static NSString *DoraemonUseCPUDataModelTable = @"DoraemonUseCPUDataModelTable";
     return max;
 }
 
+- (void)clear {
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonUseCPUDataModelTable];
+}
+
 @end

@@ -159,4 +159,8 @@ static NSString *DoraemonANRDataModelTable = @"DoraemonANRDataModelTable";
     return res;
 }
 
+- (void)clearData {
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonANRDataModelTable];
+}
+
 @end

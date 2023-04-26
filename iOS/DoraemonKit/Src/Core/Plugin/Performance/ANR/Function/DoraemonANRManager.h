@@ -26,5 +26,6 @@ typedef void (^DoraemonANRManagerBlock)(NSDictionary *anrInfo);
 - (void)stop;
 
 - (NSArray*)dataForReport;
+- (void)clearData;
 
 @end

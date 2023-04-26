@@ -15,6 +15,7 @@
 #import "DoraemonStatusBarViewController.h"
 #import "DoraemonBuriedPointManager.h"
 #import "UIViewController+Doraemon.h"
+#import "DataManager.h"
 
 @interface DoraemonEntryWindow()
 
@@ -39,9 +40,16 @@
             }
         }
 #endif
+        if (!image) {
+            NSString *path = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"dkLogo"];
+            image =  [UIImage imageWithContentsOfFile:path];
+        }
         [_entryBtn setImage:image forState:UIControlStateNormal];
         _entryBtn.layer.cornerRadius = 20.;
         [_entryBtn addTarget:self action:@selector(entryClick:) forControlEvents:UIControlEventTouchUpInside];
+        UILongPressGestureRecognizer*longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(entryLongPress:)];
+        longPress.minimumPressDuration = 1;
+        [_entryBtn addGestureRecognizer:longPress];
     }
 
     return _entryBtn;
@@ -130,6 +138,21 @@
         DoKitBP(@"dokit_sdk_home_ck_entry")
     }else{
         [[DoraemonHomeWindow shareInstance] hide];
+    }
+}
+
+- (void)entryLongPress:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Clear APM Data" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"Confirm" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            [DataManager clearAllData];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+
+        }];
+        [alert addAction:confirm];
+        [alert addAction:cancel];
+        [[UIViewController topViewControllerForKeyWindow] presentViewController:alert animated:YES completion:nil];
     }
 }
 
