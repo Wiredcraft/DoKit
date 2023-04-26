@@ -48,4 +48,8 @@ static NSString *DoraemonPageSpeedModelTable = @"DoraemonPageSpeedModelTable";
     return res;
 }
 
+- (void)clear {
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonPageSpeedModelTable];
+}
+
 @end

@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addOrUpdateUseModel:(DoraemonLaunchTimeModel *)timeModel;
 - (NSArray<DoraemonLaunchTimeModel *> *)filterModelsWithBeginStamp: (NSString *)beginStamp endStamp: (NSString *)endStamp;
 - (NSArray<NSDictionary *> *)modelDics;
+- (void)clear;
 @end
 
 NS_ASSUME_NONNULL_END

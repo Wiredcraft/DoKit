@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (DoraemonPageSpeedManager *)shareInstance;
 - (void)addPageSpeedModel:(PageLoadSpeedModel *)model;
 - (NSArray *)dataForReport;
+- (void)clear;
 @end
 
 NS_ASSUME_NONNULL_END

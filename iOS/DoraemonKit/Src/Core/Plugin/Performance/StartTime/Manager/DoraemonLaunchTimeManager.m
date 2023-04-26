@@ -58,4 +58,8 @@ static NSString *DoraemonLaunchTimeDataTable = @"DoraemonLaunchTimeDataTable";
     return dicArray;
 }
 
+- (void)clear {
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonLaunchTimeDataTable];
+}
+
 @end

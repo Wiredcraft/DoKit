@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (DoraemonCPUManager *)shareInstance;
 - (void)startRecord;
 - (NSDictionary *)dataForReport;
+- (void)clear;
 @end
 
 NS_ASSUME_NONNULL_END

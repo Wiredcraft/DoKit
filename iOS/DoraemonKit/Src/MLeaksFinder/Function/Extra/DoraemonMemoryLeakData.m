@@ -103,6 +103,7 @@ static NSString *DoraemonLeakModelTable = @"DoraemonLeakModelTable";
 
 - (void)clearResult{
     [_dataArray removeAllObjects];
+    [RealmUtil clearWithqueue:_serialQueue tableName:DoraemonLeakModelTable];
 }
 
 - (NSString *)getRetainCycleByObject:(id)object{
