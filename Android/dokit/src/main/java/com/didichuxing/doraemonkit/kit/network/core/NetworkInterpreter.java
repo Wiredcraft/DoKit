@@ -43,6 +43,7 @@ public class NetworkInterpreter {
         if (outputStream != null) {
             record.responseLength = outputStream.size();
             record.mResponseBody = outputStream.toString();
+            NetworkManager.get().updateRecord(record, false);
             //LogHelper.i(TAG, "[responseReadFinished] body: " + record.mResponseBody.toString().length());
         } else {
             //LogHelper.i(TAG, "[responseReadFinished] outputStream is null request id: " + requestId);
@@ -94,7 +95,7 @@ public class NetworkInterpreter {
         requestJSON.postData = readBodyAsString(request);
         record.mRequest = requestJSON;
         record.startTime = startTime;
-        record.requestLength = readBodyLength(request);
+        record.requestLength = readBodyLength(request) + readHeaderLength(request);
         //Log.e(TAG, requestJSON.toString());
     }
 
@@ -180,6 +181,18 @@ public class NetworkInterpreter {
                 return body.length;
             }
         } catch (IOException | OutOfMemoryError e) {
+        }
+        return 0;
+    }
+
+    private long readHeaderLength(NetworkInterpreter.InspectorRequest request) {
+        try {
+            long size = 0;
+            for (int i = 0; i < request.headerCount(); ++i) {
+                size += request.headerValue(i).getBytes().length;
+            }
+            return size;
+        } catch (OutOfMemoryError e) {
         }
         return 0;
     }
