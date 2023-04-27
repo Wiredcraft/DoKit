@@ -144,24 +144,24 @@ public class NetworkManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (DoKitManager.INSTANCE.getCALLBACK() != null && !add) {
+                if (DoKitManager.INSTANCE.getCALLBACK() != null) {
                     DoKitManager.INSTANCE.getCALLBACK().onNetworkCallBack(record);
-                    DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
-                        record.mRequestId,
-                        record.mResponse != null && record.mResponse.status < 400,
-                        record.mRequest.url,
-                        record.mRequest.method,
-                        record.mRequest.headers,
-                        record.mRequest.postData,
-                        record.mRequest.encode,
-                        record.mPlatform,
-                        record.mResponseBody,
-                        record.requestLength,
-                        record.responseLength,
-                        record.startTime,
-                        record.endTime
-                    ));
                 }
+                DoKitViewManager.getINSTANCE().getCounterDb().wclDao().insertNetworkRequest(new NetworkRecordDBEntity(
+                    record.mRequestId,
+                    record.mResponse != null && record.mResponse.status < 400,
+                    record.mRequest.url,
+                    record.mRequest.method,
+                    record.mRequest.headers,
+                    record.mRequest.postData,
+                    record.mRequest.encode,
+                    record.mPlatform,
+                    record.mResponseBody,
+                    record.requestLength,
+                    record.responseLength,
+                    record.startTime,
+                    record.endTime
+                ));
                 if (mOnNetworkInfoUpdateListener != null) {
                     mOnNetworkInfoUpdateListener.onNetworkInfoUpdate(record, add);
                 }
