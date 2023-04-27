@@ -55,7 +55,7 @@ class ReportFragment : BaseFragment() {
         }(${AppUtils.getAppVersionCode()})"
         val deviceInfo = "${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE}"
         jsBridgeBean = JsbridgeBean(
-            appName, deviceInfo,
+            appName, "android", deviceInfo,
             convertToFpsFromList(fpsEntities),
             convertToNetWorkFrom(networkRecordDBEntities),
             convertToNetWorkFlowFrom(networkRecordDBEntities),
