@@ -76,6 +76,7 @@ extension APMReportViewController: WKNavigationDelegate {
             DispatchQueue.main.async {
                 self.bridge.call(handlerName: "testJavascriptHandler", data: [
                     "appName": appName,
+                    "platform": "ios",
                     "deviceInfo": deviceInfo,
                     "network": netData,
                     "networkFlowData": netFlowData,
