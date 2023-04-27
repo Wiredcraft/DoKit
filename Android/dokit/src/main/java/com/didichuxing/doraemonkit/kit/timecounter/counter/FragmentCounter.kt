@@ -112,20 +112,20 @@ class FragmentCounter {
             }
         }
         mCounterInfos.add(counterInfo)
-        CALLBACK?.onCounterCallBack(counterInfo)
-        INSTANCE.counterDb.wclDao().insertCounter(
-            Counter(
-                System.currentTimeMillis(),
-                counterInfo.title,
-                counterInfo.time,
-                counterInfo.type,
-                counterInfo.totalCost,
-                counterInfo.pauseCost,
-                counterInfo.launchCost,
-                counterInfo.renderCost,
-                counterInfo.otherCost
-            )
-        )
+//        CALLBACK?.onCounterCallBack(counterInfo)
+//        INSTANCE.counterDb.wclDao().insertCounter(
+//            Counter(
+//                System.currentTimeMillis(),
+//                counterInfo.title,
+//                counterInfo.time,
+//                counterInfo.type,
+//                counterInfo.totalCost,
+//                counterInfo.pauseCost,
+//                counterInfo.launchCost,
+//                counterInfo.renderCost,
+//                counterInfo.otherCost
+//            )
+//        )
         val dokitView = getDoKitView(ActivityUtils.getTopActivity(), TimeCounterDoKitView::class.java)
         dokitView?.showInfo(counterInfo)
     }
