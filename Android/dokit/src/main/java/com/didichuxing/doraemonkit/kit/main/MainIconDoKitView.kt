@@ -1,17 +1,18 @@
 package com.didichuxing.doraemonkit.kit.main
 
 import android.content.Context
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import com.didichuxing.doraemonkit.DoKit
+import androidx.appcompat.app.AlertDialog
 import com.didichuxing.doraemonkit.DoKit.launchFullScreen
 import com.didichuxing.doraemonkit.R
 import com.didichuxing.doraemonkit.config.FloatIconConfig
+import com.didichuxing.doraemonkit.kit.console.ConsoleFragment
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitView
 import com.didichuxing.doraemonkit.kit.core.DoKitViewLayoutParams
 import com.didichuxing.doraemonkit.kit.webdoor.ReportFragment
-import com.didichuxing.doraemonkit.kit.webdoor.WebDoorDefaultFragment
 
 /**
  * 悬浮按钮
@@ -22,21 +23,21 @@ class MainIconDoKitView : AbsDoKitView() {
     init {
         viewProps.edgePinned = true
     }
+    var mClicks = LongArray(5)
 
     override fun onCreate(context: Context) {}
 
     override fun onViewCreated(view: FrameLayout) {
-        //设置id便于查找
+        // 设置id便于查找
         doKitView?.id = R.id.float_icon_id
-        //设置icon 点击事件
-        doKitView?.setOnClickListener { //统计入口
+        // 设置icon 点击事件
+        doKitView?.setOnClickListener { // 统计入口
 //            val pageId = DataPickUtils.getCurrentPage()
 //            DataPickUtils.setDoKitHomeClickPage(pageId)
 //            DataPickManager.getInstance().addData("dokit_sdk_home_ck_entry", pageId)
 //            DoKit.showToolPanel()
-            launchFullScreen(ReportFragment::class.java, context)
+            launchFullScreen(ConsoleFragment::class.java, context)
         }
-
 //        DataPickManager.getInstance().addData("dokit_sdk_home_show", DataPickUtils.getCurrentPage())
     }
 
@@ -57,4 +58,5 @@ class MainIconDoKitView : AbsDoKitView() {
             immInvalidate()
         }
     }
+
 }

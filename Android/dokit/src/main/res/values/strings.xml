@@ -405,5 +405,6 @@
     <string name="dk_kit_dokit_for_web">DoKit Web</string>
     <string name="dk_kit_dokit_studio">DoKit Studio</string>
     <string name="dk_page_tested">https://trailsquad.github.io/wiredexam-react-app/</string>
-
+    <string name="dk_clear_data_inquiry">是否清除数据</string>
+    <string name="dk_clear_data">清除数据</string>
 </resources>
