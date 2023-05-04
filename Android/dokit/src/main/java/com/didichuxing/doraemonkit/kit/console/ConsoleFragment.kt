@@ -21,7 +21,6 @@ class ConsoleFragment : BaseFragment() {
             DoKitReal.launchFullScreen(ReportFragment::class.java, context)
         }
         findViewById<Button>(R.id.btn_clear_data).setOnClickListener {
-            // 长按清除
             context?.let { con ->
                 AlertDialog.Builder(con)
                     .setMessage(R.string.dk_clear_data_inquiry)
