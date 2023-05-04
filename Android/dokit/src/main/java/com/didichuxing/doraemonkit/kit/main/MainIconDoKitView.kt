@@ -23,7 +23,6 @@ class MainIconDoKitView : AbsDoKitView() {
     init {
         viewProps.edgePinned = true
     }
-    var mClicks = LongArray(5)
 
     override fun onCreate(context: Context) {}
 
