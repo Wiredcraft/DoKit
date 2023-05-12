@@ -113,15 +113,16 @@ static NSString *DoraemonANRDataModelTable = @"DoraemonANRDataModelTable";
 
     NSMutableDictionary *dic = @{}.mutableCopy;
     for (DotaemonANRModel *model in modelArray) {
-        NSMutableDictionary *item = @{}.mutableCopy;
-        if ([dic objectForKey:model.info]) {
+        NSString *modelKey = model.info;
+        if (!modelKey) modelKey = @"no info";
+        if ([dic objectForKey:modelKey]) {
             NSMutableArray *values = dic[model.info];
             [values addObject:model];
-            dic[model.info] = values;
+            dic[modelKey] = values;
         } else {
             NSMutableArray *values = @[].mutableCopy;
             [values addObject:model];
-            dic[model.info] = values;
+            dic[modelKey] = values;
         }
     }
 

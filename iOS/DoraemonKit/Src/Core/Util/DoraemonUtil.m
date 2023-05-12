@@ -297,7 +297,7 @@
 
 + (UIWindow *)getKeyWindow{
     UIWindow *keyWindow = nil;
-    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(window)]) {
+    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(window)] && ![[UIApplication sharedApplication].delegate window]) {
         keyWindow = [[UIApplication sharedApplication].delegate window];
     }else{
         NSArray *windows = [UIApplication sharedApplication].windows;
